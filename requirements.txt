@@ -1,0 +1,9 @@
+# =============================================================================
+# DARS – Dynamic Adaptive Retention Scoring
+# Layer D Dependencies
+# =============================================================================
+
+qdrant-client>=1.7.0
+sentence-transformers>=2.2.0
+numpy>=1.24.0
+pytest>=7.4.0
