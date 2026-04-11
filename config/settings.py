@@ -8,6 +8,14 @@ Reference: DARS Specification §8 (Scoring Function), §9 (Retention Policy)
 """
 
 import os
+from pathlib import Path
+
+from dotenv import load_dotenv
+
+
+# Load environment variables from project root .env (if present)
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+load_dotenv(PROJECT_ROOT / ".env")
 
 
 class DARSConfig:
@@ -16,13 +24,11 @@ class DARSConfig:
     # ── Qdrant Connection ──────────────────────────────────────────────
     QDRANT_URL: str = os.getenv(
         "QDRANT_URL",
-        "https://42e448da-2232-49dc-9a5d-f4740f076d38.us-east-1-1.aws.cloud.qdrant.io:6333",
+        "",
     )
     QDRANT_API_KEY: str = os.getenv(
         "QDRANT_API_KEY",
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
-        ".eyJhY2Nlc3MiOiJtIn0"
-        ".AcM1v7exiTX1uTX81tmhnNjaI1Hc2DWt68x6gRDADGk",
+        "",
     )
 
     # ── Collection ─────────────────────────────────────────────────────

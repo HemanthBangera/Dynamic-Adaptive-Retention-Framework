@@ -168,10 +168,15 @@ class MemoryVault:
     def get_collection_info(self) -> Dict[str, Any]:
         """Return collection statistics (point count, config, etc.)."""
         info = self.client.get_collection(self.collection_name)
+        vectors_count = getattr(
+            info,
+            "vectors_count",
+            getattr(info, "indexed_vectors_count", 0),
+        )
         return {
             "name": self.collection_name,
             "points_count": info.points_count,
-            "vectors_count": info.vectors_count,
+            "vectors_count": vectors_count,
             "status": str(info.status),
             "vector_size": info.config.params.vectors.size,
             "distance": str(info.config.params.vectors.distance),
