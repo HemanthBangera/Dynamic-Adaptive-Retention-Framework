@@ -99,37 +99,37 @@ class TestMemoryPayload:
         assert p.predictive == 0.5
 
     def test_compute_utility_no_history(self):
-        """U = 0 / (0 + 0 + 1) = 0.0 for a fresh memory."""
+        """U = 1 / (0 + 0 + 2) = 0.5 for a fresh memory."""
         p = MemoryPayload(text_content="new")
         result = p.compute_utility()
-        assert result == 0.0
-        assert p.utility == 0.0
+        assert result == 0.5
+        assert p.utility == 0.5
 
     def test_compute_utility_all_success(self):
-        """U = 5 / (5 + 0 + 1) = 0.8333..."""
+        """U = 6 / (5 + 0 + 2) = 0.857..."""
         p = MemoryPayload(text_content="good", success_count=5, failure_count=0)
         result = p.compute_utility()
-        assert abs(result - 5 / 6) < 1e-6
+        assert abs(result - 6 / 7) < 1e-6
         assert p.utility == result
 
     def test_compute_utility_mixed(self):
-        """U = 3 / (3 + 1 + 1) = 0.6"""
+        """U = 4 / (3 + 1 + 2) = 0.666..."""
         p = MemoryPayload(text_content="mixed", success_count=3, failure_count=1)
         result = p.compute_utility()
-        assert abs(result - 0.6) < 1e-6
+        assert abs(result - 4 / 6) < 1e-6
 
     def test_compute_utility_all_failure(self):
-        """U = 0 / (0 + 5 + 1) = 0.0"""
+        """U = 1 / (0 + 5 + 2) = 0.142..."""
         p = MemoryPayload(text_content="bad", success_count=0, failure_count=5)
         result = p.compute_utility()
-        assert result == 0.0
+        assert abs(result - 1 / 7) < 1e-6
 
     def test_compute_utility_updates_in_place(self):
         """compute_utility should mutate the utility field."""
         p = MemoryPayload(text_content="test", success_count=2, failure_count=0)
         assert p.utility == 0.0  # initial default
         p.compute_utility()
-        assert abs(p.utility - 2 / 3) < 1e-6
+        assert abs(p.utility - 3 / 4) < 1e-6
 
 
 # ═══════════════════════════════════════════════════════════════════════════════

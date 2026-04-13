@@ -58,13 +58,20 @@ class EmbeddingEngine:
 
     def _load_model(self):
         """Load the sentence-transformer model on first use."""
+        import os
         if self._model is not None:
             return
         try:
             from sentence_transformers import SentenceTransformer
             logger.info("Loading embedding model: %s ...", self._model_name)
-            self._model = SentenceTransformer(self._model_name)
-            logger.info("Embedding model loaded. Dimension: %d", self.dimension)
+            
+            hf_token = os.getenv("HF_TOKEN")
+            if hf_token:
+                self._model = SentenceTransformer(self._model_name, token=hf_token)
+                logger.info("Embedding model loaded using HF_TOKEN. Dimension: %d", self.dimension)
+            else:
+                self._model = SentenceTransformer(self._model_name)
+                logger.info("Embedding model loaded. Dimension: %d", self.dimension)
         except ImportError:
             raise ImportError(
                 "sentence-transformers is required.  "

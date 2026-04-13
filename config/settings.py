@@ -21,6 +21,11 @@ load_dotenv(PROJECT_ROOT / ".env")
 class DARSConfig:
     """Master configuration for the DARS Memory Framework."""
 
+    # ── Gemini API Integration ─────────────────────────────────────────
+    GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
+    GEMINI_PROJECT_NUMBER: str = os.getenv("GEMINI_PROJECT_NUMBER", "805928140149")
+    GEMINI_MODEL: str = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+
     # ── Qdrant Connection ──────────────────────────────────────────────
     QDRANT_URL: str = os.getenv(
         "QDRANT_URL",
@@ -46,10 +51,28 @@ class DARSConfig:
     WEIGHT_UTILITY: float = 0.30         # w_u
     WEIGHT_PREDICTIVE: float = 0.20      # w_p
 
+    @classmethod
+    def validate_and_normalize(cls) -> None:
+        """Mathematically normalize DARS weights to guarantee they sum to 1.0 (with precision epsilon)."""
+        total = (
+            cls.WEIGHT_RECENCY +
+            cls.WEIGHT_FREQUENCY +
+            cls.WEIGHT_UTILITY +
+            cls.WEIGHT_PREDICTIVE
+        )
+        # Using a tighter epsilon (1e-7) to account for floating-point inaccuracies
+        # while preventing false positives during Ablation Studies with tiny weights.
+        if abs(total - 1.0) > 1e-7 and total > 0:
+            cls.WEIGHT_RECENCY /= total
+            cls.WEIGHT_FREQUENCY /= total
+            cls.WEIGHT_UTILITY /= total
+            cls.WEIGHT_PREDICTIVE /= total
+
     # ── DARS Parameters ────────────────────────────────────────────────
     RECENCY_DECAY_LAMBDA: float = 0.01   # λ  – decay rate (per hour)
     FREQUENCY_CAP: int = 50              # Normalisation ceiling for f
     DEFAULT_PREDICTIVE_VALUE: float = 0.5
+    GOAL_VECTOR: list[float] = [0.0] * 384
 
     # ── Retention Thresholds (§9) ──────────────────────────────────────
     THRESHOLD_RETAIN: float = 0.7        # S > 0.7  → Keep
@@ -63,3 +86,5 @@ class DARSConfig:
 
     # ── Distance Metric ────────────────────────────────────────────────
     DISTANCE_METRIC: str = "Cosine"      # Cosine | Euclid | Dot
+
+DARSConfig.validate_and_normalize()

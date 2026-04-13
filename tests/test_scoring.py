@@ -157,24 +157,24 @@ class TestUtility:
     """Tests for the utility credit assignment formula."""
 
     def test_no_history(self, vault):
-        """U = 0 / (0 + 0 + 1) = 0.0."""
+        """U = 1 / (0 + 0 + 2) = 0.5."""
         U = vault._compute_utility_score(0, 0)
-        assert U == 0.0
+        assert U == 0.5
 
     def test_perfect_success(self, vault):
-        """U = 10 / (10 + 0 + 1) ≈ 0.909."""
+        """U = 11 / (10 + 0 + 2) ≈ 0.916."""
         U = vault._compute_utility_score(10, 0)
-        assert abs(U - 10 / 11) < 1e-6
+        assert abs(U - 11 / 12) < 1e-6
 
     def test_equal_success_failure(self, vault):
-        """U = 5 / (5 + 5 + 1) ≈ 0.4545."""
+        """U = 6 / (5 + 5 + 2) = 0.5."""
         U = vault._compute_utility_score(5, 5)
-        assert abs(U - 5 / 11) < 1e-6
+        assert abs(U - 6 / 12) < 1e-6
 
     def test_all_failure(self, vault):
-        """U = 0 / (0 + 10 + 1) = 0.0."""
+        """U = 1 / (0 + 10 + 2) ≈ 0.083."""
         U = vault._compute_utility_score(0, 10)
-        assert U == 0.0
+        assert abs(U - 1 / 12) < 1e-6
 
     def test_utility_range(self, vault):
         """Utility should always be in [0, 1)."""
@@ -193,7 +193,7 @@ class TestDARSScore:
     """Tests for the composite DARS scoring function."""
 
     def test_fresh_memory(self, vault):
-        """Brand-new memory: R≈1, F=0, U=0, P=0.5 → known value."""
+        """Brand-new memory: R≈1, F=0, U=0.5, P=0.5 → known value."""
         now = time.time()
         payload = {
             "recency": now,
@@ -203,8 +203,8 @@ class TestDARSScore:
             "predictive": 0.5,
         }
         S = vault.compute_dars_score(payload, current_time=now)
-        # S = 0.3·1.0 + 0.2·0.0 + 0.3·0.0 + 0.2·0.5 = 0.3 + 0.1 = 0.4
-        assert abs(S - 0.4) < 1e-4
+        expected_s = vault.weights.w_r * 1.0 + vault.weights.w_f * 0.0 + vault.weights.w_u * 0.5 + vault.weights.w_p * 0.5
+        assert abs(S - expected_s) < 1e-4
 
     def test_perfect_memory(self, vault):
         """Maximum scores across all dimensions → S should be high."""

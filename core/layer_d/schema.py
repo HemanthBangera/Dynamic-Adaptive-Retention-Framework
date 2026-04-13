@@ -67,24 +67,31 @@ class MemoryPayload:
     is_compressed: bool = False
     source: str = ""
     tags: List[str] = field(default_factory=list)
+    original_vector: list[float] | None = field(default=None)
 
     # ── Serialisation ──────────────────────────────────────────────────
 
     def to_dict(self) -> Dict[str, Any]:
         """Flatten to a plain dict for Qdrant ``upsert``."""
-        return asdict(self)
+        data = asdict(self)
+        if data.get("original_vector") is None:
+            data.pop("original_vector", None)
+        return data
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> MemoryPayload:
         """Reconstruct from a Qdrant payload dict (tolerant of missing keys)."""
         known = {f.name for f in cls.__dataclass_fields__.values()}
-        return cls(**{k: v for k, v in data.items() if k in known})
+        parsed_data = {k: v for k, v in data.items() if k in known}
+        # Explicitly handle original_vector if needed, although kwargs handles it
+        return cls(**parsed_data)
 
     # ── Derived Values ─────────────────────────────────────────────────
 
     def compute_utility(self) -> float:
-        """Recompute utility in-place:  U = success / (success + failure + 1)."""
-        self.utility = self.success_count / (self.success_count + self.failure_count + 1)
+        """Recompute utility using Laplacian Smoothing in-place."""
+        total_attempts = self.success_count + self.failure_count
+        self.utility = (self.success_count + 1) / (total_attempts + 2)
         return self.utility
 
 

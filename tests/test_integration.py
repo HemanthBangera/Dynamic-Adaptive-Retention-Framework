@@ -75,7 +75,7 @@ class TestCollectionManagement:
         """Collection should exist after initialization."""
         info = vault.get_collection_info()
         assert info["name"] == vault.collection_name
-        assert info["status"] == "Status.GREEN"
+        assert info["status"] in ["Status.GREEN", "green"]
 
     def test_collection_vector_config(self, vault):
         """Vector size should match embedding dimension (384)."""
@@ -287,16 +287,17 @@ class TestAtomicUpdates:
         pid = vault.store_memory(text="Utility success test.")
         time.sleep(1)
         u1 = vault.update_utility(pid, success=True)
-        assert u1 > 0.0  # 1/(1+0+1) = 0.5
+        assert abs(u1 - (2 / 3)) < 1e-5  # (1+1)/(1+0+2) ≈ 0.667
         u2 = vault.update_utility(pid, success=True)
-        assert u2 > u1   # 2/(2+0+1) ≈ 0.667
+        assert abs(u2 - (3 / 4)) < 1e-5  # (2+1)/(2+0+2) = 0.75
+        assert u2 > u1
 
     def test_update_utility_failure(self, vault):
-        """Recording a failure should keep utility at 0 for new memory."""
+        """Recording a failure should decrease utility (using Laplacian smoothing)."""
         pid = vault.store_memory(text="Utility failure test.")
         time.sleep(1)
         u = vault.update_utility(pid, success=False)
-        assert u == 0.0   # 0/(0+1+1) = 0.0
+        assert abs(u - (1 / 3)) < 1e-5   # (0+1)/(0+1+2) ≈ 0.333
 
     def test_update_on_retrieval(self, vault):
         """Combined Layer B update should touch recency, frequency, utility."""

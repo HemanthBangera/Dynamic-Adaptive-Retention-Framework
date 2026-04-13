@@ -37,6 +37,8 @@ from qdrant_client.models import (
     Distance,
     FieldCondition,
     Filter,
+    HasIdCondition,
+    MatchValue,
     PointIdsList,
     PointStruct,
     Range,
@@ -154,14 +156,39 @@ class MemoryVault:
                     ),
                 ),
             )
+            
             logger.info(
                 "Collection created: %s  (dim=%d, distance=%s)",
                 self.collection_name,
                 self.config.VECTOR_DIMENSION,
                 self.config.DISTANCE_METRIC,
             )
-            return True
+            # Fall through to index creation below...
 
+        # Verify or Create payload indices for optimistic locking (even on existing)
+        for field in ["frequency", "success_count", "failure_count"]:
+            try:
+                self.client.create_payload_index(
+                    collection_name=self.collection_name,
+                    field_name=field,
+                    field_schema="integer"
+                )
+            except Exception as e:
+                # If the index already exists, it might throw, or just log info
+                logger.debug("Payload index for %s might already exist: %s", field, e)
+
+        try:
+            self.client.create_payload_index(
+                collection_name=self.collection_name,
+                field_name="utility",
+                field_schema="float"
+            )
+        except Exception as e:
+            logger.debug("Payload index for utility might already exist: %s", e)
+
+        if not exists:
+            return True
+            
         logger.info("Collection already exists: %s", self.collection_name)
         return False
 
@@ -233,6 +260,10 @@ class MemoryVault:
         vector = self.embedder.encode(text)
 
         # Build payload with initial DARS metadata
+        p_val = predictive_value
+        if p_val is None:
+            p_val = max(0.0, self.embedder.cosine_similarity(vector, self.config.GOAL_VECTOR))
+            
         payload = MemoryPayload(
             text_content=text,
             success_count=0,
@@ -240,8 +271,7 @@ class MemoryVault:
             utility=0.0,
             frequency=0,
             recency=now,
-            predictive=predictive_value if predictive_value is not None
-            else self.config.DEFAULT_PREDICTIVE_VALUE,
+            predictive=p_val,
             created_at=now,
             is_compressed=False,
             source=source,
@@ -288,11 +318,14 @@ class MemoryVault:
         for mem, vec in zip(memories, vectors):
             pid = MemoryPoint.generate_id()
             point_ids.append(pid)
+            
+            p_val = mem.get("predictive_value")
+            if p_val is None:
+                p_val = max(0.0, self.embedder.cosine_similarity(vec, self.config.GOAL_VECTOR))
+                
             payload = MemoryPayload(
                 text_content=mem["text"],
-                predictive=mem.get(
-                    "predictive_value", self.config.DEFAULT_PREDICTIVE_VALUE
-                ),
+                predictive=p_val,
                 recency=now,
                 created_at=now,
                 source=mem.get("source", ""),
@@ -335,8 +368,8 @@ class MemoryVault:
         )
 
     def get_all_memories(
-        self, limit: int = 100, with_vectors: bool = False
-    ) -> List[MemoryPoint]:
+        self, limit: int = 100, with_vectors: bool = False, scroll_yield: bool = False
+    ) -> Any:
         """
         Scroll through all memories in the collection.
 
@@ -345,10 +378,39 @@ class MemoryVault:
         Parameters
         ----------
         limit : int
-            Maximum number of points to return.
+            Maximum number of points to return per request/chunk.
         with_vectors : bool
             Whether to include the heavy embedding vectors.
+        scroll_yield : bool
+            If True, yields (chunk_of_MemoryPoints, next_offset) tuples in a loop.
+            If False, returns a single list of up to `limit` MemoryPoints.
         """
+        def _generator():
+            offset = None
+            while True:
+                records, next_offset = self.client.scroll(
+                    collection_name=self.collection_name,
+                    limit=limit,
+                    offset=offset,
+                    with_payload=True,
+                    with_vectors=with_vectors,
+                )
+                points = [
+                    MemoryPoint(
+                        point_id=str(r.id),
+                        vector=r.vector if r.vector else [],
+                        payload=MemoryPayload.from_dict(r.payload),
+                    )
+                    for r in records
+                ]
+                yield points, next_offset
+                if next_offset is None:
+                    break
+                offset = next_offset
+
+        if scroll_yield:
+            return _generator()
+        
         records, _next_offset = self.client.scroll(
             collection_name=self.collection_name,
             limit=limit,
@@ -404,15 +466,15 @@ class MemoryVault:
                 ]
             )
 
-        results = self.client.search(
+        results = self.client.query_points(
             collection_name=self.collection_name,
-            query_vector=query_vector,
+            query=query_vector,
             limit=top_k,
             query_filter=query_filter,
             score_threshold=score_threshold,
             with_payload=True,
             with_vectors=False,
-        )
+        ).points
 
         return [
             MemoryPoint(
@@ -468,14 +530,32 @@ class MemoryVault:
         if not candidates:
             return []
 
+        # Min-max scaling setup for vector similarities
+        # If variance is extremely low (e.g. 0.88 to 0.89), prevent Min-Max scaling from killing similarity weight
+        sim_scores = [c.score for c in candidates if c.score is not None]
+        min_sim = min(sim_scores) if sim_scores else 0.0
+        max_sim = max(sim_scores) if sim_scores else 1.0
+        range_sim = max_sim - min_sim
+        
         # Stage 2: Compute DARS score and combined score
-        for mem in candidates:
-            mem.dars_score = self.compute_dars_score(
-                mem.payload.to_dict(), current_time=now
-            )
-            # Combined:  α · cosine_sim + (1 − α) · DARS
-            sim = mem.score if mem.score is not None else 0.0
-            mem.score = alpha * sim + (1 - alpha) * mem.dars_score
+        if range_sim < 0.05:
+            # Bypass min-max by treating all similarities as 1.0, making DARS scores the primary decider
+            for mem in candidates:
+                mem.dars_score = self.compute_dars_score(
+                    mem.payload.to_dict(), current_time=now
+                )
+                mem.score = alpha * 1.0 + (1 - alpha) * mem.dars_score
+        else:
+            for mem in candidates:
+                mem.dars_score = self.compute_dars_score(
+                    mem.payload.to_dict(), current_time=now
+                )
+                # Min-max scaling the similarity score
+                raw_sim = mem.score if mem.score is not None else 0.0
+                norm_sim = (raw_sim - min_sim) / range_sim
+
+                # Combined:  α · normalized_cosine_sim + (1 − α) · DARS
+                mem.score = alpha * norm_sim + (1 - alpha) * mem.dars_score
 
         # Stage 3: Sort by combined score, take top-N
         candidates.sort(key=lambda m: m.score or 0.0, reverse=True)
@@ -534,8 +614,27 @@ class MemoryVault:
         mem = self.get_memory(point_id)
         if mem is None:
             raise ValueError(f"Memory not found: {point_id}")
-        new_freq = mem.payload.frequency + 1
-        self.patch_payload(point_id, {"frequency": new_freq})
+            
+        old_freq = mem.payload.frequency
+        new_freq = old_freq + 1
+        
+        res = self.client.set_payload(
+            collection_name=self.collection_name,
+            payload={"frequency": new_freq},
+            points=Filter(
+                must=[
+                    FieldCondition(key="frequency", match=MatchValue(value=old_freq)),
+                    HasIdCondition(has_id=[point_id])
+                ]
+            )
+        )
+        
+        if isinstance(res, dict) and res.get("updated") == 0:
+            raise RuntimeError(f"Optimistic lock conflict for incrementing frequency of {point_id}")
+        elif hasattr(res, "updated") and res.updated == 0:
+            raise RuntimeError(f"Optimistic lock conflict for incrementing frequency of {point_id}")
+            
+        logger.debug("Optimistic increment frequency for %s, %d -> %d", point_id, old_freq, new_freq)
         return new_freq
 
     def update_utility(self, point_id: str, success: bool) -> float:
@@ -564,20 +663,38 @@ class MemoryVault:
             raise ValueError(f"Memory not found: {point_id}")
 
         payload = mem.payload
+        old_success = payload.success_count
+        old_failure = payload.failure_count
+
         if success:
             payload.success_count += 1
         else:
             payload.failure_count += 1
         new_utility = payload.compute_utility()
 
-        self.patch_payload(
-            point_id,
-            {
-                "success_count": payload.success_count,
-                "failure_count": payload.failure_count,
-                "utility": new_utility,
-            },
+        updates = {
+            "success_count": payload.success_count,
+            "failure_count": payload.failure_count,
+            "utility": new_utility,
+        }
+
+        res = self.client.set_payload(
+            collection_name=self.collection_name,
+            payload=updates,
+            points=Filter(
+                must=[
+                    FieldCondition(key="success_count", match=MatchValue(value=old_success)),
+                    FieldCondition(key="failure_count", match=MatchValue(value=old_failure)),
+                    HasIdCondition(has_id=[point_id])
+                ]
+            )
         )
+        if isinstance(res, dict) and res.get("updated") == 0:
+            raise RuntimeError(f"Optimistic lock conflict for update_utility of {point_id}")
+        elif hasattr(res, "updated") and res.updated == 0:
+            raise RuntimeError(f"Optimistic lock conflict for update_utility of {point_id}")
+            
+        logger.debug("Optimistic updated utility for %s: %s", point_id, updates)
         return new_utility
 
     def update_on_retrieval(self, point_id: str, success: bool) -> Dict[str, Any]:
@@ -669,11 +786,12 @@ class MemoryVault:
         self, success_count: int, failure_count: int
     ) -> float:
         """
-        U = success / (success + failure + 1).
+        U = (success + 1) / (success + failure + 2).
+        Laplacian smoothing instead of standard average to avoid dropping utility to 0 instantly.
 
         Reference – DARS Specification §6.3.
         """
-        return success_count / (success_count + failure_count + 1)
+        return (success_count + 1) / (success_count + failure_count + 2)
 
     def compute_dars_score(
         self,
@@ -753,21 +871,21 @@ class MemoryVault:
             One decision per memory, sorted by DARS score ascending
             (worst memories first).
         """
-        memories = self.get_all_memories(limit=limit, with_vectors=False)
         now = time.time()
         decisions: List[RetentionDecision] = []
 
-        for mem in memories:
-            score = self.compute_dars_score(mem.payload.to_dict(), current_time=now)
-            action = self.classify_memory(score)
-            decisions.append(
-                RetentionDecision(
-                    action=action,
-                    dars_score=score,
-                    point_id=mem.point_id,
-                    text_preview=mem.payload.text_content[:80],
+        for chunk_points, _next_offset in self.get_all_memories(limit=limit, with_vectors=False, scroll_yield=True):
+            for mem in chunk_points:
+                score = self.compute_dars_score(mem.payload.to_dict(), current_time=now)
+                action = self.classify_memory(score)
+                decisions.append(
+                    RetentionDecision(
+                        action=action,
+                        dars_score=score,
+                        point_id=mem.point_id,
+                        text_preview=mem.payload.text_content[:80],
+                    )
                 )
-            )
 
         decisions.sort(key=lambda d: d.dars_score)
         return decisions
