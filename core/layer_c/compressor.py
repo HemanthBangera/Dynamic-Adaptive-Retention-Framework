@@ -73,6 +73,17 @@ class SemanticCompressor:
         }
         
         loop = asyncio.get_running_loop()
+        
+        # Remove the high priority tag
+        try:
+            pt = self.vault.get_memory(point_id)
+            if pt and hasattr(pt.payload, 'tags') and "system:high_priority_distillation" in pt.payload.tags:
+                new_tags = [t for t in pt.payload.tags if t != "system:high_priority_distillation"]
+                updates["tags"] = new_tags
+                logger.info(f"dars_high_priority_distillation_complete for memory ID {point_id}")
+        except Exception:
+            pass
+            
         await loop.run_in_executor(None, self.vault.patch_payload, point_id, updates)
         
         return True

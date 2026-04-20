@@ -34,8 +34,10 @@ class LearningEngine:
         success = (judgment == "YES")
         loop = asyncio.get_running_loop()
         
+        errors = []
         for mem in retrieved_memories:
             pid = mem.get("id")
+            if not pid: continue
             payload = mem.get("payload", {})
             
             updates = ScoreCalculator.calculate_updates(
@@ -45,9 +47,16 @@ class LearningEngine:
                 current_access_count=payload.get("frequency", 0)
             )
             
-            # Pushing blocking patch calls onto executor to avoid pausing Gateway IO
-            await loop.run_in_executor(None, self.vault.patch_payload, pid, updates)
-            logger.info(f"Asynchronously patched memory {pid} with learning updates.")
+            try:
+                # Pushing blocking patch calls onto executor to avoid pausing Gateway IO
+                await loop.run_in_executor(None, self.vault.patch_payload, pid, updates)
+                logger.info(f"Asynchronously patched memory {pid} with learning updates.")
+            except Exception as e:
+                logger.warning(f"Failed to patch memory {pid}: {e}. Continuing loop.")
+                errors.append(e)
+                
+        if errors:
+            raise errors[0]
             
     async def ingest_new_facts(self, new_facts: List[str]):
         """
@@ -56,7 +65,7 @@ class LearningEngine:
         loop = asyncio.get_running_loop()
         for fact in new_facts:
             # We calculate P here using static GOAL_VECTOR for completeness
-            vector = await loop.run_in_executor(None, self.embedder.encode, [fact])
+            vector = await loop.run_in_executor(None, self.embedder.encode, fact)
             # Handle mock returning 1D array vs real app returning list of lists
             vec = vector[0] if len(vector) > 0 and isinstance(vector[0], (list, np.ndarray)) else vector
             

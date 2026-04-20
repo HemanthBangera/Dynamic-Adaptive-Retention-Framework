@@ -76,3 +76,14 @@ The `core/layer_a` module operates as an asynchronous orchestrator mediating raw
 - **Loophole Audit Tests:** Intentionally stress contract boundaries between layers (A/B/C/D), fail-open behavior, optimistic-lock conflict handling, prompt safety, and docs/runtime consistency.
 - A **PASS** in baseline tests means the path is operational.
 - A **FAIL** in loophole audit tests means there is a real pre-production risk (schema drift, silent conflict, injection surface, or policy inconsistency) that should be fixed before trusting benchmark metrics.
+## Adversarial Input Handling
+Clamping predictive values and null-byte sanitation added.
+
+## Context Window Management
+Enforces 20,000 chars limit. Outliers tagged with system:high_priority_distillation.
+
+## Termination-Aware background tasks
+Graceful shutdown logic.
+
+## High-Priority Repair Loop
+With Semaphore-based rate limiting.

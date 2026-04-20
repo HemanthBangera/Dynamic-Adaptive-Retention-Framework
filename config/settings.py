@@ -69,10 +69,14 @@ class DARSConfig:
             cls.WEIGHT_PREDICTIVE /= total
 
     # ── DARS Parameters ────────────────────────────────────────────────
-    RECENCY_DECAY_LAMBDA: float = 0.01   # λ  – decay rate (per hour)
+    RECENCY_DECAY_LAMBDA: float = 0.025  # λ  – decay rate (per hour)
     FREQUENCY_CAP: int = 50              # Normalisation ceiling for f
     DEFAULT_PREDICTIVE_VALUE: float = 0.5
     GOAL_VECTOR: list[float] = [0.0] * 384
+    
+    # ── Layer C Resilience ─────────────────────────────────────────────
+    SHUTDOWN_TIMEOUT_SECONDS: float = 15.0
+    MAX_CONCURRENT_DISTILLATIONS: int = 3
 
     # ── Retention Thresholds (§9) ──────────────────────────────────────
     THRESHOLD_RETAIN: float = 0.7        # S > 0.7  → Keep

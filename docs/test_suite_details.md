@@ -8,9 +8,10 @@ This document explains every major test group in the project and, critically:
 Current verification split:
 - **Baseline functional suite:** 102 tests (latest baseline run: passing)
 - **Loophole audit suite:** 10 criticism-first contract tests (latest run: passing)
-- **Verifier research audit suite:** 6 research-grade tests (latest run: passing)
+- **Verifier research audit suite (Phase-1):** 6 research-grade tests (latest run: passing)
+- **Verifier lifecycle audit suite (Phase-2):** 7 adversarial production-risk tests (latest run: expected mixed/failing until hardened)
 
-Total tests verified: **118**
+Total tests present in repository: **125**
 
 These suites are complementary:
 - Baseline tests verify implemented behavior works.
@@ -131,9 +132,49 @@ Criticism-first verification suite intended to detect architecture drift before 
 | `test_docs_and_settings_have_single_epsilon_policy` | Docs drift creates wrong implementation assumptions. | Changelog/guide match runtime epsilon policy. | PASSED |
 
 ---
+## 10. Verifier Phase-2 Lifecycle Audit (`tests/test_verifier_phase2_lifecycle_audit.py`)
+Production-mimicking, dummy-data **adversarial verifier gate** validating memory-state evolution over time, payload rigidity under dirty inputs, idempotent maintenance re-entry, and cross-layer resilience. This suite is intentionally failure-seeking.
+
+| Test Case | Why it exists | What it validates | Current Result |
+| :--- | :--- | :--- | :--- |
+| `test_phase2_time_travel_neutral_memory_should_be_delete_candidate_by_day3` | Real systems age; stale neutral memory must decay fast enough. | Whether stale neutral memory becomes delete-eligible by day-3. | FAILED |
+| `test_phase2_payload_null_bytes_must_be_removed_from_prompt` | Dirty payloads can break downstream parser/tooling. | Null-byte sanitation in prompt construction. | FAILED |
+| `test_phase2_payload_large_text_must_respect_prompt_size_budget` | Production can send very large context blocks. | Prompt-size budget enforcement under stress. | FAILED |
+| `test_phase2_reentry_triage_should_continue_processing_despite_one_point_failure` | One bad record should not abort full maintenance cycle. | Best-effort per-point triage resilience in re-entry runs. | PASSED |
+| `test_phase2_ingest_new_facts_must_call_embedder_with_string_not_list` | Type-shape drift can break real embedding backends. | Strict single-text embedder invocation contract. | FAILED |
+| `test_phase2_store_memory_must_clamp_out_of_range_predictive_values` | Invalid predictive values can poison retention policy. | Input-bound clamping before persistence. | FAILED |
+| `test_phase2_feedback_loop_should_be_best_effort_when_one_patch_conflicts` | Partial conflicts happen in production concurrency. | Whether one conflict stops all downstream updates. | FAILED |
+
+### 10.1 Current Failure Report (for bug-fix planning)
+
+Latest run command:
+
+- `.venv\Scripts\pytest.exe tests/test_verifier_phase2_lifecycle_audit.py -q --tb=short`
+- Result: **6 failed, 1 passed**
+
+| Failed Test | What this test checks | Observed failure | What this failure means | Production risk if unresolved |
+| :--- | :--- | :--- | :--- | :--- |
+| `test_phase2_time_travel_neutral_memory_should_be_delete_candidate_by_day3` | A neutral, unused memory should decay enough by Day-3 to be delete-eligible. | Computed score at Day-3 is `0.396026` (expected `<= 0.3`). | Current decay/weight policy is too conservative for stale-neutral memories. | Stale memories may remain retrievable too long, increasing retrieval noise and outdated-context usage. |
+| `test_phase2_payload_null_bytes_must_be_removed_from_prompt` | Prompt builder should sanitize null bytes (`\x00`) from memory/query content. | Null byte remains in final prompt string. | XML escaping alone is insufficient for control-character hardening. | Downstream model parsers, logging sinks, or middleware can behave unpredictably with null bytes. |
+| `test_phase2_payload_large_text_must_respect_prompt_size_budget` | Prompt assembly should enforce a strict context-size budget under large payload stress. | Prompt length is `120893` (expected `<= 20000`). | No effective prompt-size guard/truncation policy is currently enforced. | Token explosion, latency spikes, higher cost, and context-window overflow failures in production. |
+| `test_phase2_ingest_new_facts_must_call_embedder_with_string_not_list` | `LearningEngine.ingest_new_facts()` should use single-text embed call contract. | Actual call is `encode(['fact-1'])` instead of `encode('fact-1')`. | API-contract mismatch between caller and embedder for single-item ingestion path. | Type/shape drift with real embedding backends; possible runtime errors or silent vector-shape inconsistencies. |
+| `test_phase2_store_memory_must_clamp_out_of_range_predictive_values` | Directly supplied predictive values must be clamped to `[0,1]` before write. | Stored payload predictive remains `3.7`. | Caller-provided predictive input is trusted without boundary enforcement. | Out-of-range predictive values can distort DARS score and triage policy decisions. |
+| `test_phase2_feedback_loop_should_be_best_effort_when_one_patch_conflicts` | Feedback loop should continue patching remaining memories after one conflict. | Updates attempted only for `['m1', 'm2']`; `m3` was not attempted. | Patch loop aborts on first exception; no best-effort continuation strategy. | Partial state updates during contention can bias utility/frequency history and reduce learning consistency. |
+
+### 10.2 Planning Notes for Remediation
+
+- Treat all six failures as **production-readiness blockers** rather than test-only issues.
+- Recommended code focus areas:
+	- `core/layer_d/storage.py` (predictive clamping and score/decay policy behavior)
+	- `core/layer_a/prompt_constructor.py` (control-character sanitation and size budgeting)
+	- `core/layer_b/engine.py` (embedder API contract and best-effort patch continuation)
+- Keep these tests adversarial; do not weaken assertions to achieve green status.
+
+---
 ### How to interpret this report
 - If a **baseline test** passes, implemented behavior is currently functional for that pathway.
 - If a **loophole audit test** fails, it indicates a contract, safety, or consistency risk that may not be visible in normal happy-path testing.
+- If a **Phase-2 lifecycle verifier test** fails, it indicates a production-risk vector (state-evolution, payload-rigidity, re-entry/idempotency, or conflict handling) that must be hardened before real-data rollout.
 - Progression to next stage should prioritize closing FAILED loophole gates before relying on benchmark outcomes.
 
-**Summary:** Baseline functional coverage remains stable at 99/99 pass. The loophole audit gate currently reports 10/10 pass, and the verifier research audit reports 6/6 pass, confirming that the architecture is now fully sound and hardened.
+**Summary:** Baseline functional coverage is 102 tests, loophole audit is 10 tests, Phase-1 verifier is 6 tests, and Phase-2 lifecycle verifier is 7 adversarial tests intentionally designed to expose pre-production failures.

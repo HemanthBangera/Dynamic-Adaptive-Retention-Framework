@@ -21,12 +21,25 @@ class DecisionEngine:
         now = time.time()
         payload = memory_point.payload
         
+        tags = getattr(payload, "tags", [])
+        is_priority = "system:high_priority_distillation" in tags
+
         # Guard: Do not triage memories created or accessed within the last 24 hours (86400s)
+        # UNLESS it is tagged for high priority distillation
         created_at = getattr(payload, "created_at", 0.0)
         recency = getattr(payload, "recency", 0.0)
         
-        if now - created_at < 86400 or now - recency < 86400:
+        if not is_priority and (now - created_at < 86400 or now - recency < 86400):
             logger.info(f"Skipping triage for {memory_point.point_id}: Under 24h grace period.")
+            return
+
+        loop = asyncio.get_running_loop()
+
+        if is_priority:
+            score = 0.5  # arbitrary for reporting
+            logger.info(f"Operation: COMPRESS (PRIORITY) | Memory: {memory_point.point_id} | Priority Override Active.")
+            text_to_compress = getattr(payload, "text_content", "")
+            await self.compressor.compress_memory(memory_point.point_id, text_to_compress)
             return
 
         # Explicitly calculate DARS score
@@ -38,8 +51,6 @@ class DecisionEngine:
         compress_lower = 0.3 - self.epsilon
         compress_upper = 0.7 + self.epsilon
         
-        loop = asyncio.get_running_loop()
-
         if score > retain_threshold:
             # RETAIN (> 0.7)
             updates = {"last_triage_timestamp": now}

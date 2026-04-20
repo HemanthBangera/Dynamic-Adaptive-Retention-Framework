@@ -263,6 +263,7 @@ class MemoryVault:
         p_val = predictive_value
         if p_val is None:
             p_val = max(0.0, self.embedder.cosine_similarity(vector, self.config.GOAL_VECTOR))
+        p_val = max(0.0, min(1.0, p_val))
             
         payload = MemoryPayload(
             text_content=text,
@@ -322,6 +323,7 @@ class MemoryVault:
             p_val = mem.get("predictive_value")
             if p_val is None:
                 p_val = max(0.0, self.embedder.cosine_similarity(vec, self.config.GOAL_VECTOR))
+            p_val = max(0.0, min(1.0, p_val))
                 
             payload = MemoryPayload(
                 text_content=mem["text"],

@@ -7,21 +7,19 @@ class PromptConstructor:
 
     @staticmethod
     def _escape_xml(text: str) -> str:
-        """Escapes XML special characters."""
+        """Escapes XML special characters and strips null bytes."""
+        text = text.replace("\x00", "")
         return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
 
     @staticmethod
     def build(query: str, memories: List[MemoryPoint]) -> str:
         """
         Constructs the structured XML-encapsulated prompt zero-latency f-strings.
-        
-        Args:
-            query: The original user question.
-            memories: DARS-selected MemoryPoint lists.
-            
-        Returns:
-            The structured prompt string ready to pass to Brain LLM inference.
+        Enforces a 20,000-character budget and truncates outliers.
         """
+        import logging
+        logger = logging.getLogger(__name__)
+
         system_context = (
             "<system_context>\n"
             "You are an AI assistant integrating long-term retention via DARS framework.\n"
@@ -35,21 +33,39 @@ class PromptConstructor:
         )
 
         memory_xml = ["<memory_stream>"]
+        
+        current_len = len(system_context) + len("<memory_stream>\n") + len("</memory_stream>\n") + len(query) + 50
+        MAX_PROMPT_CHARS = 20000
+        
         for m in memories:
-            # Safely get payload attributes, fallback if not set.
             mid = m.point_id
             u = getattr(m.payload, 'utility', 0.0)
             r = getattr(m.payload, 'recency', 0.0)
             
-            # Format elapsed time safely, to relative format if preferred or just standard unix
-            # We will just print the exact float logic for now.
-            escaped_text = PromptConstructor._escape_xml(m.payload.text_content)
+            raw_text = getattr(m.payload, 'text_content', "")
+            
+            if len(raw_text) > 10000:
+                raw_text = raw_text[:10000] + "\n[TRUNCATED FOR BUDGET - SEE ORIGINAL_TEXT_BACKUP]"
+                # Tag it
+                if not hasattr(m.payload, 'tags'):
+                    m.payload.tags = []
+                if "system:high_priority_distillation" not in m.payload.tags:
+                    m.payload.tags.append("system:high_priority_distillation")
+            
+            escaped_text = PromptConstructor._escape_xml(raw_text)
             xml_str = (
                 f"    <memory id=\"{mid}\" system_weight=\"{u:.2f}\" last_accessed=\"{r:.0f}\">\n"
                 f"        {escaped_text}\n"
                 f"    </memory>"
             )
+            
+            if current_len + len(xml_str) > MAX_PROMPT_CHARS:
+                logger.warning(f"dars_gateway_context_truncated_total: Skipped adding memory {mid} due to MAX_PROMPT_CHARS limit.")
+                break
+                
             memory_xml.append(xml_str)
+            current_len += len(xml_str)
+            
         memory_xml.append("</memory_stream>\n")
 
         # Join the memory sequence
