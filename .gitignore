@@ -20,6 +20,9 @@ htmlcov/
 .vscode/
 .idea/
 
+# Dataset caches
+data/groupA/cache/
+
 # OS generated files
 .DS_Store
 Thumbs.db

@@ -13,3 +13,6 @@ aiohttp>=3.9.0
 
 freezegun>=1.2.2
 tenacity>=8.2.0
+
+# Group A: MSC Dataset Training
+datasets>=2.14.0

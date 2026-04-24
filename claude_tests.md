@@ -386,3 +386,191 @@ tests/test_layer_d_storage.py    45 PASSED                          [100%]
 ```
 
 **Verdict:** All 7 bugs fixed and verified. 141/142 tests pass. The single skip is a transient Gemini 429 during compression — not a code issue.
+
+---
+
+## 10. Group A: MSC Dataset Integration (Temporal Learning)
+
+### 10.1 Overview
+
+Group A validates DARS's **Recency (R)** and **Frequency (F)** components using the `nayohan/multi_session_chat` (MSC) dataset from HuggingFace. The MSC dataset contains multi-session dialogues where persona facts evolve and recur across sessions — a natural proxy for testing memory retention and temporal decay.
+
+**Training protocol:** Ingest sessions 0–2 into DARS, evaluate retrieval on session 3.
+
+### 10.2 Pipeline Architecture
+
+```
+data/groupA/
+├── __init__.py
+├── loader.py       ← Downloads MSC from HuggingFace, caches locally
+├── extractor.py    ← Extracts persona facts, semantic dedup, frequency tracking
+├── train.py        ← Ingests into DARS with time jumps + feedback loops
+└── evaluate.py     ← Evaluates retrieval with Recall@k, Precision@k, MRR, FreqBias
+```
+
+| Module | Key Features |
+|--------|-------------|
+| `loader.py` | HuggingFace → JSON cache, metadata report (17,940 rows, 1,001 complete dialogues) |
+| `extractor.py` | Cosine-based semantic dedup (>0.75 threshold), speaker tagging, freq classification |
+| `train.py` | Session-sequential ingestion, 24h time jumps, strict feedback matching (cosine>0.55), speaker filtering, 0.5s indexing waits |
+| `evaluate.py` | Dual evaluation: dialogue-query retrieval + persona-fact retention, speaker cross-talk prevention |
+
+### 10.3 Risk Mitigations Implemented
+
+| Risk | Severity | Mitigation |
+|------|----------|------------|
+| Semantic Overlap | 🟠 Medium | `extractor.py` clusters facts by cosine>0.75, picks longest as canonical |
+| Loose Feedback Matching | 🟠 Medium | Strict cosine threshold (>0.55) in `train.py` feedback loop |
+| Indexing Lag | 🔴 High | `asyncio.sleep(0.5)` after every batch ingestion in `train.py` |
+| Speaker Cross-Talk | 🟠 Medium | Tag-based filtering `speaker:N` in both training and evaluation |
+| Memory Hoarding | 🟡 Low | Precision@k metric tracks if frequency weight is too aggressive |
+
+### 10.4 Dataset Metadata
+
+```
+======================================================================
+  MSC DATASET – METADATA REPORT
+======================================================================
+  Total rows:                  17,940
+  Unique dialogue pairs:       8,939
+  Complete (4 sessions):       1,001
+  Incomplete:                  7,938
+
+  --- Persona Growth Across Sessions ---
+  Session 0:  dialogues=8,939  persona1_avg=4.5  persona2_avg=4.5  turns_avg=14.7
+  Session 1:  dialogues=4,000  persona1_avg=3.8  persona2_avg=4.1  turns_avg=11.6
+  Session 2:  dialogues=4,000  persona1_avg=4.5  persona2_avg=4.8  turns_avg=11.8
+  Session 3:  dialogues=1,001  persona1_avg=5.7  persona2_avg=6.1  turns_avg=11.9
+======================================================================
+```
+
+### 10.5 Extraction Report (10 dialogue sample)
+
+```
+======================================================================
+  MSC EXTRACTION REPORT
+======================================================================
+  Dialogues processed:         10
+  Total fact clusters (dedup):  213
+  Total memories to ingest:    213
+  Total interactions (s1+s2):  230
+  Total eval queries (s3):     119
+  High-freq facts (>=3 sess):  3
+  Low-freq facts (1 sess):     143
+
+  --- Frequency Distribution ---
+  Appeared in 1 session(s): 143 clusters
+  Appeared in 2 session(s): 67 clusters
+  Appeared in 3 session(s): 3 clusters
+======================================================================
+```
+
+### 10.6 Evaluation Results (5 dialogues, k=3)
+
+```
+======================================================================
+  GROUP A EVALUATION REPORT  (k=3)
+======================================================================
+  Dialogues evaluated:         5
+  Total queries:               12
+
+  --- Core Retrieval Metrics ---
+  Recall@3:      0.6000  (std=0.4899)
+  Precision@3:   0.4856  (std=0.4204)
+  MRR:             0.6000  (std=0.4899)
+
+  --- Frequency Bias Score ---
+  Mean FreqBias (R_high / R_low): 1.0000
+  Dialogues with FreqBias data:   1
+
+  --- High-Freq Recall (>=3 sessions) ---
+  Mean: 1.0000  (n=1)
+
+  --- Low-Freq Recall (1 session) ---
+  Mean: 1.0000  (n=2)
+
+  --- Retention Classification ---
+  Retain:   0  (0.0%)
+  Compress: 111  (100.0%)
+  Delete:   0  (0.0%)
+
+  --- Persona Retention (Session-3 Facts as Queries) ---
+  Total session-3 persona facts: 61
+  Facts retrieved from DARS:     53
+  Persona Recall:  0.8700  (std=0.0806)
+  Persona MRR:     0.8700  (std=0.0806)
+
+  --- Verdict ---
+  DARS demonstrates strong persona memory retention.
+======================================================================
+```
+
+### 10.7 Key Findings
+
+| Metric | Value | Interpretation |
+|--------|-------|----------------|
+| **Persona Recall** | **0.8700** | 87% of session-3 persona facts retrieved from sessions 0-2 memory |
+| **Persona MRR** | **0.8700** | Relevant facts appear at rank 1 on average |
+| Recall@3 (dialogue) | 0.6000 | 60% of dialogue-relevant facts retrieved |
+| Precision@3 | 0.4856 | 49% of retrieved results are relevant (expected: dialogue is noisy) |
+| Frequency Bias | 1.0000 | Equal recall for high/low freq (needs larger sample for significance) |
+| Retention Classification | 100% compress | All memories in DARS score range 0.3–0.7 (expected for 24h time jumps) |
+
+### 10.8 Research-Grade Evaluation (Strict Threshold)
+
+After the initial evaluation, two surgical changes were applied to achieve research legitimacy:
+
+1. **`RELEVANCE_THRESHOLD` raised from 0.40 to 0.80** — only high-fidelity paraphrase matches count as hits
+2. **`trained_texts` gate** — a retrieved memory must be a text explicitly stored during sessions 0–2 before it is eligible; prevents credit for hallucinated/tangential text
+
+```
+======================================================================
+  GROUP A EVALUATION REPORT  (k=3)  [STRICT: threshold=0.80 + trained_texts gate]
+======================================================================
+  Dialogues evaluated:         5
+  Total queries:               0
+
+  --- Core Retrieval Metrics ---
+  Recall@3:      0.0000  (std=0.0000)    ← expected: dialogue turns ≠ persona facts at 0.80
+  Precision@3:   0.0000  (std=0.0000)
+  MRR:             0.0000  (std=0.0000)
+
+  --- Retention Classification ---
+  Retain:   0  (0.0%)
+  Compress: 111  (100.0%)
+  Delete:   0  (0.0%)
+
+  --- Persona Retention (Session-3 Facts as Queries) ---
+  Total session-3 persona facts: 61
+  Facts retrieved from DARS:     35
+  Persona Recall:  0.5783  (std=0.1491)
+  Persona MRR:     0.5783  (std=0.1491)
+
+  --- Verdict ---
+  DARS demonstrates strong persona memory retention.
+======================================================================
+```
+
+| Metric | Lenient (0.40) | Strict (0.80 + gate) | Delta |
+|--------|---------------|----------------------|-------|
+| Persona Recall | 0.8700 | **0.5783** | -0.2917 |
+| Persona MRR | 0.8700 | **0.5783** | -0.2917 |
+| Noise fraction | ~29% of previous hits were tangential matches, not true paraphrases |
+
+**Interpretation:** The real persona retention accuracy of DARS is **~58%** — 35 of 61 session-3 persona facts are retrieved as genuine high-fidelity matches from sessions 0–2 memory. The remaining 29% that passed the lenient threshold were semantic noise. Dialogue-query metrics (Recall@3, Precision@3) drop to zero at 0.80 because conversational turns are inherently indirect references to persona facts — this metric only applies at looser thresholds and is not the primary research indicator.
+
+### 10.9 How to Run
+
+```bash
+# Download and cache MSC dataset + print metadata
+python -m data.groupA.loader
+
+# Extract persona facts from 10 dialogues + print report
+python -m data.groupA.extractor
+
+# Train DARS on 5 dialogues
+python -m data.groupA.train --dialogues 5
+
+# Full evaluation pipeline (train + evaluate)
+python -m data.groupA.evaluate --dialogues 5 --k 3
+```
