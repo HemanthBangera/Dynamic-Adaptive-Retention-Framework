@@ -13,7 +13,9 @@ class TriageOrchestrator:
 
     def __init__(self, vault: Optional[MemoryVault] = None, janitor: Optional[DecisionEngine] = None):
         from config.settings import DARSConfig
-        self.vault = vault or MemoryVault()
+        if vault is None:
+            raise TypeError("TriageOrchestrator requires an explicit vault instance")
+        self.vault = vault
         self.janitor = janitor or DecisionEngine(vault=self.vault)
         self._active_tasks: set[asyncio.Task] = set()
         self.config = DARSConfig()

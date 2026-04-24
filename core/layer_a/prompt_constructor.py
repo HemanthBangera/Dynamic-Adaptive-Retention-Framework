@@ -1,9 +1,14 @@
+import logging
 from typing import List
 from core.layer_d.schema import MemoryPoint
-import time
+
+logger = logging.getLogger(__name__)
+
 
 class PromptConstructor:
     """Packages memories to prevent Prompt Confusion via XML tagging."""
+
+    _distillation_queue: List[str] = []
 
     @staticmethod
     def _escape_xml(text: str) -> str:
@@ -11,14 +16,16 @@ class PromptConstructor:
         text = text.replace("\x00", "")
         return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
 
-    @staticmethod
-    def build(query: str, memories: List[MemoryPoint]) -> str:
+    @classmethod
+    def build(cls, query: str, memories: List[MemoryPoint]) -> str:
         """
-        Constructs the structured XML-encapsulated prompt zero-latency f-strings.
+        Constructs the structured XML-encapsulated prompt.
         Enforces a 20,000-character budget and truncates outliers.
+
+        Pure function: does NOT mutate any input MemoryPoint objects.
+        Oversized memories are queued for distillation via get_distillation_queue().
         """
-        import logging
-        logger = logging.getLogger(__name__)
+        cls._distillation_queue = []
 
         system_context = (
             "<system_context>\n"
@@ -33,50 +40,48 @@ class PromptConstructor:
         )
 
         memory_xml = ["<memory_stream>"]
-        
+
         current_len = len(system_context) + len("<memory_stream>\n") + len("</memory_stream>\n") + len(query) + 50
         MAX_PROMPT_CHARS = 20000
-        
+
         for m in memories:
             mid = m.point_id
-            u = getattr(m.payload, 'utility', 0.0)
+            weight = m.dars_score if m.dars_score is not None else getattr(m.payload, 'utility', 0.0)
             r = getattr(m.payload, 'recency', 0.0)
-            
+
             raw_text = getattr(m.payload, 'text_content', "")
-            
+
             if len(raw_text) > 10000:
                 raw_text = raw_text[:10000] + "\n[TRUNCATED FOR BUDGET - SEE ORIGINAL_TEXT_BACKUP]"
-                # Tag it
-                if not hasattr(m.payload, 'tags'):
-                    m.payload.tags = []
-                if "system:high_priority_distillation" not in m.payload.tags:
-                    m.payload.tags.append("system:high_priority_distillation")
-            
-            escaped_text = PromptConstructor._escape_xml(raw_text)
+                cls._distillation_queue.append(mid)
+
+            escaped_text = cls._escape_xml(raw_text)
             xml_str = (
-                f"    <memory id=\"{mid}\" system_weight=\"{u:.2f}\" last_accessed=\"{r:.0f}\">\n"
+                f"    <memory id=\"{mid}\" system_weight=\"{weight:.2f}\" last_accessed=\"{r:.0f}\">\n"
                 f"        {escaped_text}\n"
                 f"    </memory>"
             )
-            
+
             if current_len + len(xml_str) > MAX_PROMPT_CHARS:
-                logger.warning(f"dars_gateway_context_truncated_total: Skipped adding memory {mid} due to MAX_PROMPT_CHARS limit.")
+                logger.warning("dars_gateway_context_truncated_total: Skipped adding memory %s due to MAX_PROMPT_CHARS limit.", mid)
                 break
-                
+
             memory_xml.append(xml_str)
             current_len += len(xml_str)
-            
-        memory_xml.append("</memory_stream>\n")
 
-        # Join the memory sequence
+        memory_xml.append("</memory_stream>\n")
         memory_section = "\n".join(memory_xml)
-        
-        escaped_query = PromptConstructor._escape_xml(query)
+
+        escaped_query = cls._escape_xml(query)
         user_query_xml = (
             f"<current_user_query>\n"
             f"{escaped_query}\n"
             f"</current_user_query>"
         )
 
-        # Stitch all components together
         return f"{system_context}\n{memory_section}\n{user_query_xml}"
+
+    @classmethod
+    def get_distillation_queue(cls) -> List[str]:
+        """Return point IDs of oversized memories that need compression."""
+        return list(cls._distillation_queue)

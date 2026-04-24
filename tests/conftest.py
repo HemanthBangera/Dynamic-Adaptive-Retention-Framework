@@ -1,138 +1,118 @@
 """
-DARS Layer D – Shared Test Fixtures
-=====================================
-Provides reusable fixtures for both unit and integration tests.
+DARS Test Infrastructure — Real API Fixtures
+=============================================
+All fixtures connect to real Qdrant and Gemini.  No mocks.
+
+Tests use gemini-2.5-flash-lite (15 RPM / 1000 RPD free tier) to avoid
+rate-limit failures that plague gemini-2.5-flash (10 RPM / 250 RPD).
 """
 
+import os
 import time
 import uuid
 import pytest
-
 from config.settings import DARSConfig
-from core.layer_d.schema import MemoryPayload, MemoryPoint, DARSWeights
+from core.layer_d.storage import MemoryVault
+from core.layer_d.schema import MemoryPayload, MemoryPoint
+from core.layer_d.embedding import EmbeddingEngine
+
+# Use the cheapest model for tests to avoid rate-limit storms.
+TEST_GEMINI_MODEL = "gemini-2.5-flash-lite"
+os.environ["GEMINI_MODEL"] = TEST_GEMINI_MODEL
+DARSConfig.GEMINI_MODEL = TEST_GEMINI_MODEL
+
+TEST_COLLECTION = f"dars_test_{uuid.uuid4().hex[:8]}"
 
 
-# ═══════════════════════════════════════════════════════════════════════════════
-#  Connectivity helper
-# ═══════════════════════════════════════════════════════════════════════════════
-
-def _qdrant_reachable() -> bool:
-    """Return True if the Qdrant cloud cluster responds."""
+@pytest.fixture(scope="session")
+def vault():
+    """Session-scoped MemoryVault pointing at a disposable test collection."""
+    v = MemoryVault(collection_name=TEST_COLLECTION)
+    v.initialize_collection(recreate=True)
+    yield v
     try:
-        from qdrant_client import QdrantClient
-        cfg = DARSConfig()
-        client = QdrantClient(url=cfg.QDRANT_URL, api_key=cfg.QDRANT_API_KEY, timeout=10)
-        client.get_collections()
-        return True
+        v.delete_collection()
     except Exception:
-        return False
+        pass
 
 
-# Evaluate once per session, cache result
-_QDRANT_OK = None
-
-def qdrant_available() -> bool:
-    global _QDRANT_OK
-    if _QDRANT_OK is None:
-        _QDRANT_OK = _qdrant_reachable()
-    return _QDRANT_OK
+@pytest.fixture(scope="session")
+def embedder():
+    return EmbeddingEngine()
 
 
-# Skip-marker for integration tests
-requires_qdrant = pytest.mark.skipif(
-    not qdrant_available(),
-    reason="Qdrant cloud cluster unreachable – skipping integration test",
-)
-
-
-# ═══════════════════════════════════════════════════════════════════════════════
-#  Config fixtures
-# ═══════════════════════════════════════════════════════════════════════════════
-
-@pytest.fixture
+@pytest.fixture(scope="session")
 def config():
-    """Return a DARSConfig instance."""
     return DARSConfig()
 
 
-@pytest.fixture
-def test_collection_name():
-    """Generate a unique collection name for test isolation."""
-    return f"dars_test_{uuid.uuid4().hex[:8]}"
+@pytest.fixture(autouse=True)
+def _clean_collection(vault, request):
+    """Wipe all points before each test unless marked preserve_data."""
+    if "preserve_data" in [m.name for m in request.node.iter_markers()]:
+        return
+    try:
+        vault.initialize_collection(recreate=True)
+    except Exception:
+        pass
 
 
-# ═══════════════════════════════════════════════════════════════════════════════
-#  Schema fixtures
-# ═══════════════════════════════════════════════════════════════════════════════
+@pytest.fixture(autouse=True)
+def _gemini_rate_limit_pause(request):
+    """4-second pause after every Gemini test to stay within 15 RPM."""
+    yield
+    markers = [m.name for m in request.node.iter_markers()]
+    if "asyncio" in markers:
+        time.sleep(4)
 
-@pytest.fixture
-def sample_payload():
-    """Return a realistic MemoryPayload for testing."""
-    now = time.time()
-    return MemoryPayload(
-        text_content="The client prefers Python 3.12 for all backend services.",
-        success_count=3,
-        failure_count=1,
-        utility=0.6,
-        frequency=5,
-        recency=now,
-        predictive=0.7,
-        created_at=now - 86400,  # created 1 day ago
-        is_compressed=False,
-        source="user",
-        tags=["python", "preference"],
+
+def _seed_memory(vault: MemoryVault, text: str, **overrides) -> str:
+    """Insert a memory and patch any payload overrides. Returns point_id."""
+    pid = vault.store_memory(text, source="test")
+    if overrides:
+        vault.patch_payload(pid, overrides)
+    return pid
+
+
+# ── Gemini reachability probe ────────────────────────────────────────────────
+
+def _gemini_reachable() -> bool:
+    cfg = DARSConfig()
+    if not cfg.GEMINI_API_KEY:
+        return False
+
+    import urllib.request
+    import urllib.error
+    import json as _json
+
+    url = (
+        f"https://generativelanguage.googleapis.com/v1beta/models/"
+        f"{TEST_GEMINI_MODEL}:generateContent"
     )
-
-
-@pytest.fixture
-def fresh_payload():
-    """Return a brand-new memory payload (zero scores)."""
-    now = time.time()
-    return MemoryPayload(
-        text_content="New observation with no history.",
-        recency=now,
-        created_at=now,
+    body = _json.dumps({"contents": [{"parts": [{"text": "Reply OK"}]}]}).encode()
+    req = urllib.request.Request(
+        url, data=body, method="POST",
+        headers={
+            "Content-Type": "application/json",
+            "X-goog-api-key": cfg.GEMINI_API_KEY,
+        },
     )
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(req, timeout=20) as resp:
+                return resp.status == 200
+        except urllib.error.HTTPError as e:
+            if e.code in (429, 503):
+                import time as _t
+                _t.sleep(3 * (attempt + 1))
+                continue
+            return False
+        except Exception:
+            return False
+    return True  # 429/503 after retries means API is reachable, just busy
 
 
-@pytest.fixture
-def default_weights():
-    """Return the default DARS weight vector."""
-    return DARSWeights()
-
-
-@pytest.fixture
-def sample_memories_data():
-    """Return a list of dict inputs suitable for batch-insert."""
-    return [
-        {
-            "text": "The project deadline is March 30, 2026.",
-            "predictive_value": 0.8,
-            "source": "user",
-            "tags": ["deadline", "timeline"],
-        },
-        {
-            "text": "The client prefers Python 3.12 for backend services.",
-            "predictive_value": 0.7,
-            "source": "user",
-            "tags": ["python", "preference"],
-        },
-        {
-            "text": "Budget for Phase 1 is capped at $50,000.",
-            "predictive_value": 0.6,
-            "source": "agent",
-            "tags": ["budget", "finance"],
-        },
-        {
-            "text": "Use PostgreSQL for the main relational database.",
-            "predictive_value": 0.5,
-            "source": "user",
-            "tags": ["database", "postgres"],
-        },
-        {
-            "text": "The team meets every Monday at 10 AM EST.",
-            "predictive_value": 0.4,
-            "source": "system",
-            "tags": ["meeting", "schedule"],
-        },
-    ]
+requires_gemini = pytest.mark.skipif(
+    not _gemini_reachable(),
+    reason="Gemini API unreachable or key invalid — skipping live LLM tests.",
+)

@@ -14,7 +14,9 @@ class DARSReranker:
     """
 
     def __init__(self, vault: Optional[MemoryVault] = None):
-        self.vault = vault or MemoryVault()
+        if vault is None:
+            raise TypeError("DARSReranker requires an explicit vault instance")
+        self.vault = vault
 
     def rerank(self, query: str, fetch_k: int = 15, top_n: int = 3, alpha: float = 0.5) -> List[MemoryPoint]:
         """

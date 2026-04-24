@@ -16,8 +16,10 @@ class CognitiveGateway:
     """
 
     def __init__(self, reformulator: Optional[QueryReformulator] = None, reranker: Optional[DARSReranker] = None, alpha: float = 0.5):
+        if reranker is None:
+            raise TypeError("CognitiveGateway requires an explicit reranker instance")
         self.reformulator = reformulator or QueryReformulator()
-        self.reranker = reranker or DARSReranker()
+        self.reranker = reranker
         self.alpha = alpha
 
     async def process_query(self, raw_query: str) -> str:

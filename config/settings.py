@@ -7,6 +7,7 @@ All tunable hyperparameters are defined here for reproducibility.
 Reference: DARS Specification §8 (Scoring Function), §9 (Retention Policy)
 """
 
+import logging
 import os
 from pathlib import Path
 
@@ -69,10 +70,51 @@ class DARSConfig:
             cls.WEIGHT_PREDICTIVE /= total
 
     # ── DARS Parameters ────────────────────────────────────────────────
-    RECENCY_DECAY_LAMBDA: float = 0.025  # λ  – decay rate (per hour)
+    RECENCY_DECAY_LAMBDA: float = 0.005  # λ  – decay rate (per hour); R ≈ 0.76 after 55 h
     FREQUENCY_CAP: int = 50              # Normalisation ceiling for f
-    DEFAULT_PREDICTIVE_VALUE: float = 0.5
-    GOAL_VECTOR: list[float] = [0.0] * 384
+    DEFAULT_PREDICTIVE_VALUE: float = 0.5  # fail-safe when GOAL_VECTOR cannot be computed
+
+    # ── Goal Alignment (Predictive Component P) ───────────────────────
+    #    Per-group presets avoid semantic dilution from a generic hybrid string.
+    #    Set TRAINING_GROUP in .env to select a preset, or override with GOAL_DESCRIPTION.
+    GOAL_PRESETS: dict[str, str] = {
+        "MSC": (
+            "Personal facts, preferences, and recurring conversation topics "
+            "that maintain long-term dialogue coherence and social understanding"
+        ),
+        "ALFWorld": (
+            "Effective action sequences, object locations, and task completion "
+            "strategies for interactive household environments"
+        ),
+    }
+    TRAINING_GROUP: str = os.getenv("TRAINING_GROUP", "ALFWorld")
+    GOAL_DESCRIPTION: str = os.getenv("GOAL_DESCRIPTION", "")
+    _goal_vector_cache: list[float] | None = None
+
+    @classmethod
+    def _resolve_goal_description(cls) -> str:
+        """Return the active goal description: explicit env var > preset > ALFWorld default."""
+        if cls.GOAL_DESCRIPTION:
+            return cls.GOAL_DESCRIPTION
+        return cls.GOAL_PRESETS.get(cls.TRAINING_GROUP, cls.GOAL_PRESETS["ALFWorld"])
+
+    @classmethod
+    def get_goal_vector(cls) -> list[float] | None:
+        """Lazily encode GOAL_DESCRIPTION into a 384-dim vector. Returns None on failure."""
+        if cls._goal_vector_cache is not None:
+            return cls._goal_vector_cache
+        try:
+            from core.layer_d.embedding import EmbeddingEngine
+            desc = cls._resolve_goal_description()
+            cls._goal_vector_cache = EmbeddingEngine().encode(desc)
+            return cls._goal_vector_cache
+        except Exception as exc:
+            logging.getLogger(__name__).warning(
+                "GOAL_VECTOR computation failed (%s); "
+                "predictive will use DEFAULT_PREDICTIVE_VALUE=%.2f",
+                exc, cls.DEFAULT_PREDICTIVE_VALUE,
+            )
+            return None
     
     # ── Layer C Resilience ─────────────────────────────────────────────
     SHUTDOWN_TIMEOUT_SECONDS: float = 15.0
@@ -87,6 +129,11 @@ class DARSConfig:
     DEFAULT_FETCH_K: int = 10            # Candidates from vector search
     DEFAULT_TOP_N: int = 3               # Finals after DARS reranking
     RERANK_ALPHA: float = 0.5            # α in  α·sim + (1−α)·DARS
+
+    # ── Gemini API Resilience ──────────────────────────────────────────
+    GEMINI_TIMEOUT: float = 30.0          # HTTP timeout (seconds)
+    GEMINI_MAX_RETRIES: int = 2           # Retry attempts on transient failures
+    GEMINI_MAX_EXPANSION_CHARS: int = 500 # Cap reformulator output length
 
     # ── Distance Metric ────────────────────────────────────────────────
     DISTANCE_METRIC: str = "Cosine"      # Cosine | Euclid | Dot

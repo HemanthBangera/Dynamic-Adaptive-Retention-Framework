@@ -273,7 +273,11 @@ class MemoryVault:
         # Build payload with initial DARS metadata
         p_val = predictive_value
         if p_val is None:
-            p_val = max(0.0, self.embedder.cosine_similarity(vector, self.config.GOAL_VECTOR))
+            goal_vec = self.config.get_goal_vector()
+            if goal_vec is not None:
+                p_val = max(0.0, self.embedder.cosine_similarity(vector, goal_vec))
+            else:
+                p_val = self.config.DEFAULT_PREDICTIVE_VALUE
         p_val = max(0.0, min(1.0, p_val))
             
         payload = MemoryPayload(
@@ -334,7 +338,11 @@ class MemoryVault:
             
             p_val = mem.get("predictive_value")
             if p_val is None:
-                p_val = max(0.0, self.embedder.cosine_similarity(vec, self.config.GOAL_VECTOR))
+                goal_vec = self.config.get_goal_vector()
+                if goal_vec is not None:
+                    p_val = max(0.0, self.embedder.cosine_similarity(vec, goal_vec))
+                else:
+                    p_val = self.config.DEFAULT_PREDICTIVE_VALUE
             p_val = max(0.0, min(1.0, p_val))
                 
             payload = MemoryPayload(
