@@ -7,11 +7,23 @@ from core.layer_c.triage import TriageOrchestrator
 from core.layer_c.janitor import DecisionEngine
 from core.layer_c.compressor import SemanticCompressor
 
-@pytest.fixture
+@pytest.fixture(scope="module")
 def vault():
     v = MemoryVault(collection_name="test_dars_layer_c")
     v.initialize_collection(recreate=True)
-    return v
+    yield v
+
+@pytest.fixture(autouse=True)
+def clear_vault(vault):
+    # clear points before each test
+    try:
+        from qdrant_client.models import Filter
+        vault.client.delete(
+            collection_name=vault.collection_name, 
+            points_selector=Filter()
+        )
+    except Exception:
+        pass
 
 @pytest.mark.asyncio
 async def test_retention_policy(vault):

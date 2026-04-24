@@ -53,6 +53,25 @@ def vault():
         pass
 
 
+@pytest.fixture(autouse=True)
+def clean_vault(vault, request):
+    """
+    Clear all points between tests to simulate a fresh collection
+    without the IO overhead of re-creating it on Qdrant Cloud.
+    Skip if test is marked with @pytest.mark.preserve_data.
+    """
+    if request.node.get_closest_marker("preserve_data"):
+        yield
+        return
+
+    from qdrant_client.models import Filter
+    vault.client.delete(
+        collection_name=vault.collection_name,
+        points_selector=Filter()  # Matches all points
+    )
+    yield
+
+
 @pytest.fixture
 def sample_texts():
     return [
@@ -323,10 +342,26 @@ class TestAtomicUpdates:
 # ═══════════════════════════════════════════════════════════════════════════════
 
 @requires_qdrant
+@pytest.mark.preserve_data
 class TestTriageScan:
 
-    def test_triage_all(self, vault):
+    @pytest.fixture(autouse=True, scope="class")
+    def setup_triage_data(self, vault):
+        """Populate initial data once for all triage tests."""
+        memories = [
+            {"text": "The project deadline is March 30, 2026.", "source": "user"},
+            {"text": "The client prefers Python 3.12 for backend services.", "source": "user"},
+            {"text": "Budget for Phase 1 is capped at $50,000.", "source": "agent"},
+            {"text": "Use PostgreSQL for the main relational database.", "source": "user"},
+            {"text": "The team meets every Monday at 10 AM EST.", "source": "system"}
+        ]
+        vault.store_memories_batch(memories)
+
+    @pytest.mark.asyncio
+    async def test_triage_all(self, vault):
         """triage_all_memories should return decisions for all memories."""
+        import asyncio
+        await asyncio.sleep(0.5)
         decisions = vault.triage_all_memories(limit=100)
         assert len(decisions) > 0
         for d in decisions:

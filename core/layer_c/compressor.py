@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 class SemanticCompressor:
     """The Distiller - Uses Gemini 2.5 Flash to distill memory content."""
 
-    def __init__(self, timeout: float = 5.0, vault: Optional[MemoryVault] = None):
+    def __init__(self, timeout: float = 65.0, vault: Optional[MemoryVault] = None):
         self.timeout = timeout
         self.api_key = DARSConfig.GEMINI_API_KEY
         self.model = DARSConfig.GEMINI_MODEL

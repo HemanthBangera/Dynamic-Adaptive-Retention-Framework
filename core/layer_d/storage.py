@@ -44,6 +44,7 @@ from qdrant_client.models import (
     Range,
     VectorParams,
 )
+from tenacity import retry, stop_after_attempt, wait_exponential
 
 from config.settings import DARSConfig
 from core.layer_d.embedding import EmbeddingEngine
@@ -90,9 +91,17 @@ class MemoryVault:
         self.collection_name = collection_name or self.config.COLLECTION_NAME
 
         # ── Qdrant client ──────────────────────────────────────────────
+        kwargs = {}
+        if self.config.QDRANT_URL.startswith("localhost") or self.config.QDRANT_URL.startswith("127.0.0.1"):
+            pass # Keep defaults
+        else:
+            kwargs["prefer_grpc"] = False
+
         self.client = QdrantClient(
             url=self.config.QDRANT_URL,
             api_key=self.config.QDRANT_API_KEY,
+            timeout=60.0,
+            **kwargs
         )
 
         # ── Embedding engine (lazy-loaded) ─────────────────────────────
@@ -120,6 +129,7 @@ class MemoryVault:
     #  1.  COLLECTION MANAGEMENT
     # ═══════════════════════════════════════════════════════════════════
 
+    @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=2, min=2, max=8), reraise=True)
     def initialize_collection(self, recreate: bool = False) -> bool:
         """
         Create the Qdrant collection for DARS memory storage.
@@ -223,6 +233,7 @@ class MemoryVault:
     #  2.  MEMORY CREATION
     # ═══════════════════════════════════════════════════════════════════
 
+    @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=2, min=2, max=8), reraise=True)
     def store_memory(
         self,
         text: str,
@@ -292,6 +303,7 @@ class MemoryVault:
         logger.debug("Stored memory %s: '%s...'", point_id, text[:60])
         return point_id
 
+    @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=2, min=2, max=8), reraise=True)
     def store_memories_batch(
         self,
         memories: List[Dict[str, Any]],
@@ -566,7 +578,7 @@ class MemoryVault:
     # ═══════════════════════════════════════════════════════════════════
     #  4.  ATOMIC PAYLOAD UPDATES  (Core Layer D Capability)
     # ═══════════════════════════════════════════════════════════════════
-
+    @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=2, min=2, max=8), reraise=True)
     def patch_payload(self, point_id: str, updates: Dict[str, Any]) -> None:
         """
         Atomic payload patch  –  update metadata WITHOUT re-uploading the vector.

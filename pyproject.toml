@@ -6,6 +6,7 @@ python_functions = ["test_*"]
 addopts = "-v --tb=short"
 markers = [
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "preserve_data: do not clear collection between tests",
 ]
 
 [project]

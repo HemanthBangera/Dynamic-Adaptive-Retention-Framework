@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 class QueryReformulator:
     """Expands underspecified queries into descriptive search vectors."""
 
-    def __init__(self, timeout: float = 3.0):
+    def __init__(self, timeout: float = 65.0):
         self.timeout = timeout
         self.api_key = DARSConfig.GEMINI_API_KEY
         self.model = DARSConfig.GEMINI_MODEL

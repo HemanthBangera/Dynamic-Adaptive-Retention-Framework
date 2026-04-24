@@ -21,13 +21,14 @@ class DecisionEngine:
         now = time.time()
         payload = memory_point.payload
         
-        tags = getattr(payload, "tags", [])
+        raw_tags = getattr(payload, "tags", [])
+        tags = raw_tags if raw_tags is not None else []
         is_priority = "system:high_priority_distillation" in tags
 
         # Guard: Do not triage memories created or accessed within the last 24 hours (86400s)
         # UNLESS it is tagged for high priority distillation
-        created_at = getattr(payload, "created_at", 0.0)
-        recency = getattr(payload, "recency", 0.0)
+        created_at = getattr(payload, "created_at", None) or 0.0
+        recency = getattr(payload, "recency", None) or 0.0
         
         if not is_priority and (now - created_at < 86400 or now - recency < 86400):
             logger.info(f"Skipping triage for {memory_point.point_id}: Under 24h grace period.")
@@ -48,7 +49,7 @@ class DecisionEngine:
         
         # Decision Policy boundaries (epsilon protected)
         retain_threshold = 0.7 - self.epsilon
-        compress_lower = 0.3 - self.epsilon
+        compress_lower = 0.3 + self.epsilon
         compress_upper = 0.7 + self.epsilon
         
         if score > retain_threshold:
