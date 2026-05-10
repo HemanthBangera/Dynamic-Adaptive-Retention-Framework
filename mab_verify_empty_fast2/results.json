@@ -1,0 +1,50 @@
+[
+  {
+    "output": "Answer: ",
+    "input_len": 39,
+    "output_len": 3,
+    "memory_construction_time": 1.1920928955078125e-06,
+    "query_time_len": 75.49914050102234,
+    "parsed_output": "",
+    "exact_match": false,
+    "f1": 0,
+    "substring_exact_match": false,
+    "rougeL_f1": 0.0,
+    "rougeL_recall": 0.0,
+    "rougeLsum_f1": 0.0,
+    "rougeLsum_recall": 0.0,
+    "answer": [
+      "France",
+      "France",
+      "France",
+      "France"
+    ],
+    "query": "Search Archival Memory and answer my question. Only give me the answer and do not output any other words. \n\nQuestion: In what country is Normandy located? \n\n Answer:",
+    "query_id": 0,
+    "qa_pair_id": "ruler_qa1_197K_no0"
+  },
+  {
+    "output": "Answer: ",
+    "input_len": 40,
+    "output_len": 3,
+    "memory_construction_time": 0.0,
+    "query_time_len": 55.06673526763916,
+    "parsed_output": "",
+    "exact_match": false,
+    "f1": 0,
+    "substring_exact_match": false,
+    "rougeL_f1": 0.0,
+    "rougeL_recall": 0.0,
+    "rougeLsum_f1": 0.0,
+    "rougeLsum_recall": 0.0,
+    "answer": [
+      "10th and 11th centuries",
+      "in the 10th and 11th centuries",
+      "10th and 11th centuries",
+      "10th and 11th centuries"
+    ],
+    "query": "Search Archival Memory and answer my question. Only give me the answer and do not output any other words. \n\nQuestion: When were the Normans in Normandy? \n\n Answer:",
+    "query_id": 1,
+    "qa_pair_id": "ruler_qa1_197K_no1"
+  }
+]

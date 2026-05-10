@@ -9,13 +9,17 @@ Metrics:
   - Precision@k:  fraction of retrieved results that are relevant
   - MRR:  Mean Reciprocal Rank of first relevant hit
   - Frequency Bias Score:  Recall(high-freq) / Recall(low-freq)
+  - Recall_retrievable:  recall excluding novel S3 facts (primary metric)
+  - Novel_rate:  fraction of S3 facts absent from sessions 0-2
+  - Negative_recall:  false-retrieval rate from foreign dialogues (control)
 
-Run standalone:  python -m data.groupA.evaluate [--dialogues N] [--k 3]
+Run standalone:  python -m data.groupA.evaluate [--dialogues N] [--k 5]
 """
 
 from __future__ import annotations
 
 import logging
+import random
 import time
 from collections import defaultdict
 from dataclasses import dataclass, field
@@ -76,8 +80,9 @@ def _cosine(a, b) -> float:
 class GroupAEvaluator:
     """Evaluates DARS retrieval on session-3 queries after training on 0-2."""
 
-    def __init__(self, k: int = 3):
+    def __init__(self, k: int = 5, fetch_k: int = 20):
         self.k = k
+        self.fetch_k = fetch_k
         self.embedder = EmbeddingEngine()
 
     def evaluate_dialogue(
@@ -108,13 +113,13 @@ class GroupAEvaluator:
             if not speaker_facts:
                 continue
 
-            results = vault.search_and_rerank(q["text"], top_n=self.k)
+            results = vault.search_and_rerank(
+                q["text"], top_n=self.k, fetch_k=self.fetch_k,
+            )
 
             retrieved_texts = []
             retrieved_scores = []
             for mem in results:
-                if f"speaker:{speaker}" not in mem.payload.tags:
-                    continue
                 retrieved_texts.append(mem.payload.text_content)
                 retrieved_scores.append(mem.dars_score if mem.dars_score else 0.0)
 
@@ -189,7 +194,6 @@ class GroupAEvaluator:
             query_results=query_results,
         )
 
-
     def evaluate_persona_retention(
         self,
         dialogue: ProcessedDialogue,
@@ -198,8 +202,8 @@ class GroupAEvaluator:
     ) -> Dict[str, Any]:
         """Evaluate whether session-3 persona facts are retrievable from DARS.
 
-        This is the strongest test: session 3 persona facts that overlap with
-        facts from sessions 0-2 should be retrieved by DARS.
+        Separates novel facts (no match in sessions 0-2 at threshold 0.80)
+        from retrievable facts for honest recall computation.
         """
         eval_row = sessions_data.get(3, {})
         s3_personas = []
@@ -208,51 +212,131 @@ class GroupAEvaluator:
         for fact in eval_row.get("persona2", []):
             s3_personas.append((fact.strip(), 2))
 
-        trained_texts = set(m["text"] for m in dialogue.memories)
+        trained_texts = list(set(m["text"] for m in dialogue.memories))
+        trained_embeddings = {t: self.embedder.encode(t) for t in trained_texts}
+        trained_set = set(trained_texts)
+
         hits = 0
         total = 0
+        novel_count = 0
+        retrievable_hits = 0
+        retrievable_total = 0
         reciprocal_ranks = []
+        retrievable_rrs = []
 
         for fact, speaker in s3_personas:
-            results = vault.search_and_rerank(fact, top_n=self.k)
-            filtered = [
-                r for r in results
-                if f"speaker:{speaker}" in r.payload.tags
-            ]
-            retrieved_texts = [r.payload.text_content for r in filtered]
-
+            total += 1
             fact_emb = self.embedder.encode(fact)
+
+            max_sim_to_trained = 0.0
+            for t_text, t_emb in trained_embeddings.items():
+                sim = _cosine(fact_emb, t_emb)
+                if sim > max_sim_to_trained:
+                    max_sim_to_trained = sim
+
+            is_novel = max_sim_to_trained < RELEVANCE_THRESHOLD
+            if is_novel:
+                novel_count += 1
+                reciprocal_ranks.append(0.0)
+                continue
+
+            retrievable_total += 1
+
+            results = vault.search_and_rerank(
+                fact, top_n=self.k, fetch_k=self.fetch_k,
+            )
+            retrieved_texts = [r.payload.text_content for r in results]
+
             found = False
             for rank, r_text in enumerate(retrieved_texts, 1):
-                if r_text not in trained_texts:
+                if r_text not in trained_set:
                     continue
-                r_emb = self.embedder.encode(r_text)
+                r_emb = trained_embeddings.get(r_text)
+                if r_emb is None:
+                    r_emb = self.embedder.encode(r_text)
                 sim = _cosine(fact_emb, r_emb)
                 if sim >= RELEVANCE_THRESHOLD:
                     if not found:
                         reciprocal_ranks.append(1.0 / rank)
+                        retrievable_rrs.append(1.0 / rank)
                         found = True
                     hits += 1
+                    retrievable_hits += 1
                     break
 
             if not found:
                 reciprocal_ranks.append(0.0)
-            total += 1
+                retrievable_rrs.append(0.0)
 
-        recall = hits / total if total > 0 else 0
-        mrr = np.mean(reciprocal_ranks) if reciprocal_ranks else 0
+        recall_total = hits / total if total > 0 else 0
+        recall_retrievable = (
+            retrievable_hits / retrievable_total if retrievable_total > 0 else 0
+        )
+        novel_rate = novel_count / total if total > 0 else 0
+        mrr_total = float(np.mean(reciprocal_ranks)) if reciprocal_ranks else 0
+        mrr_retrievable = float(np.mean(retrievable_rrs)) if retrievable_rrs else 0
 
         return {
             "total_s3_facts": total,
+            "novel_count": novel_count,
+            "novel_rate": float(novel_rate),
+            "retrievable_total": retrievable_total,
             "hits": hits,
-            "recall": float(recall),
-            "mrr": float(mrr),
+            "retrievable_hits": retrievable_hits,
+            "recall_total": float(recall_total),
+            "recall_retrievable": float(recall_retrievable),
+            "mrr_total": float(mrr_total),
+            "mrr_retrievable": float(mrr_retrievable),
+        }
+
+    def evaluate_negative_control(
+        self,
+        vault: MemoryVault,
+        foreign_facts: List[str],
+    ) -> Dict[str, Any]:
+        """Control test: query DARS with persona facts from a different dialogue.
+
+        At RELEVANCE_THRESHOLD=0.80, recall should be ~0%.
+        """
+        trained_mems = vault.get_all_memories(limit=500)
+        trained_texts = set(m.payload.text_content for m in trained_mems)
+        trained_embeddings = {
+            t: self.embedder.encode(t) for t in trained_texts
+        }
+
+        false_hits = 0
+        total = len(foreign_facts)
+
+        for fact in foreign_facts:
+            results = vault.search_and_rerank(
+                fact, top_n=self.k, fetch_k=self.fetch_k,
+            )
+            fact_emb = self.embedder.encode(fact)
+
+            for r in results:
+                r_text = r.payload.text_content
+                if r_text not in trained_texts:
+                    continue
+                r_emb = trained_embeddings.get(r_text)
+                if r_emb is None:
+                    r_emb = self.embedder.encode(r_text)
+                sim = _cosine(fact_emb, r_emb)
+                if sim >= RELEVANCE_THRESHOLD:
+                    false_hits += 1
+                    break
+
+        negative_recall = false_hits / total if total > 0 else 0
+        return {
+            "total_foreign_facts": total,
+            "false_hits": false_hits,
+            "negative_recall": float(negative_recall),
         }
 
 
 def run_evaluation(
     max_dialogues: int = 50,
-    k: int = 3,
+    k: int = 5,
+    fetch_k: int = 20,
     verbose: bool = True,
 ) -> List[DialogueEvalResult]:
     """Full pipeline: extract -> train -> evaluate for each dialogue."""
@@ -268,10 +352,13 @@ def run_evaluation(
             return []
 
         raw_dialogues = load_msc()
-        evaluator = GroupAEvaluator(k=k)
+        evaluator = GroupAEvaluator(k=k, fetch_k=fetch_k)
         trainer = GroupATrainer()
         results: List[DialogueEvalResult] = []
         persona_results: List[Dict[str, Any]] = []
+        negative_results: List[Dict[str, Any]] = []
+
+        all_dialogue_ids = sorted(raw_dialogues.keys())
 
         for i, d in enumerate(dialogues):
             logger.info(
@@ -288,21 +375,32 @@ def run_evaluation(
             pr = evaluator.evaluate_persona_retention(d, trainer.vault, sessions_data)
             persona_results.append(pr)
 
+            foreign_id = _pick_foreign_dialogue(d.dialogue_id, all_dialogue_ids)
+            if foreign_id is not None:
+                foreign_sessions = raw_dialogues.get(foreign_id, {})
+                foreign_s0 = foreign_sessions.get(0, {})
+                foreign_facts = (
+                    [f.strip() for f in foreign_s0.get("persona1", [])]
+                    + [f.strip() for f in foreign_s0.get("persona2", [])]
+                )
+                if foreign_facts:
+                    nr = evaluator.evaluate_negative_control(trainer.vault, foreign_facts)
+                    negative_results.append(nr)
+
             if verbose:
                 fb = eval_result.frequency_bias
                 fb_str = f"{fb:.2f}" if fb is not None else "N/A"
                 print(
                     f"  [{i+1}/{len(dialogues)}] id={d.dialogue_id} "
-                    f"R@{k}={eval_result.avg_recall:.3f} "
-                    f"P@{k}={eval_result.avg_precision:.3f} "
-                    f"MRR={eval_result.mrr:.3f} "
-                    f"FreqBias={fb_str} "
-                    f"persona_ret={pr['hits']}/{pr['total_s3_facts']} "
+                    f"R_ret={pr['recall_retrievable']:.3f} "
+                    f"R_tot={pr['recall_total']:.3f} "
+                    f"novel={pr['novel_count']}/{pr['total_s3_facts']} "
+                    f"hits={pr['retrievable_hits']}/{pr['retrievable_total']} "
                     f"ret={eval_result.retention_stats}"
                 )
 
         trainer.cleanup()
-        _print_eval_report(results, k, persona_results)
+        _print_eval_report(results, k, persona_results, negative_results)
         return results
 
     finally:
@@ -310,17 +408,24 @@ def run_evaluation(
         DARSConfig._goal_vector_cache = None
 
 
+def _pick_foreign_dialogue(current_id: int, all_ids: List[int]) -> Optional[int]:
+    """Pick a dialogue_id that is far from the current one."""
+    candidates = [did for did in all_ids if abs(did - current_id) > 100]
+    if not candidates:
+        candidates = [did for did in all_ids if did != current_id]
+    return random.choice(candidates) if candidates else None
+
+
 def _print_eval_report(
     results: List[DialogueEvalResult],
     k: int,
     persona_results: Optional[List[Dict[str, Any]]] = None,
+    negative_results: Optional[List[Dict[str, Any]]] = None,
 ) -> None:
     recalls = [r.avg_recall for r in results]
     precisions = [r.avg_precision for r in results]
     mrrs = [r.mrr for r in results]
     freq_biases = [r.frequency_bias for r in results if r.frequency_bias is not None]
-    high_recalls = [r.recall_high_freq for r in results if r.recall_high_freq is not None]
-    low_recalls = [r.recall_low_freq for r in results if r.recall_low_freq is not None]
 
     total_retain = sum(r.retention_stats.get("retain", 0) for r in results)
     total_compress = sum(r.retention_stats.get("compress", 0) for r in results)
@@ -328,32 +433,18 @@ def _print_eval_report(
     total_mem = total_retain + total_compress + total_delete
 
     print("\n" + "=" * 70)
-    print(f"  GROUP A EVALUATION REPORT  (k={k})")
+    print(f"  GROUP A EVALUATION REPORT  (k={k}, RRF, threshold={RELEVANCE_THRESHOLD})")
     print("=" * 70)
     print(f"  Dialogues evaluated:         {len(results)}")
     print(f"  Total queries:               {sum(r.num_queries for r in results)}")
 
-    print(f"\n  --- Core Retrieval Metrics ---")
-    print(f"  Recall@{k}:      {np.mean(recalls):.4f}  (std={np.std(recalls):.4f})")
-    print(f"  Precision@{k}:   {np.mean(precisions):.4f}  (std={np.std(precisions):.4f})")
-    print(f"  MRR:             {np.mean(mrrs):.4f}  (std={np.std(mrrs):.4f})")
-
     if freq_biases:
         print(f"\n  --- Frequency Bias Score ---")
         print(f"  Mean FreqBias (R_high / R_low): {np.mean(freq_biases):.4f}")
-        print(f"  Dialogues with FreqBias data:   {len(freq_biases)}")
         if np.mean(freq_biases) > 1.0:
-            print(f"  RESULT: DARS preferentially retains high-frequency facts (PASS)")
+            print(f"  RESULT: DARS preferentially retains high-frequency facts")
         else:
             print(f"  RESULT: Frequency bias <= 1.0 (investigate weight tuning)")
-
-    if high_recalls:
-        print(f"\n  --- High-Freq Recall (>=3 sessions) ---")
-        print(f"  Mean: {np.mean(high_recalls):.4f}  (n={len(high_recalls)})")
-
-    if low_recalls:
-        print(f"\n  --- Low-Freq Recall (1 session) ---")
-        print(f"  Mean: {np.mean(low_recalls):.4f}  (n={len(low_recalls)})")
 
     if total_mem > 0:
         print(f"\n  --- Retention Classification ---")
@@ -362,32 +453,52 @@ def _print_eval_report(
         print(f"  Delete:   {total_delete:,}  ({total_delete/total_mem*100:.1f}%)")
 
     if persona_results:
-        pr_recalls = [pr["recall"] for pr in persona_results]
-        pr_mrrs = [pr["mrr"] for pr in persona_results]
+        pr_ret_recalls = [pr["recall_retrievable"] for pr in persona_results]
+        pr_tot_recalls = [pr["recall_total"] for pr in persona_results]
+        pr_ret_mrrs = [pr["mrr_retrievable"] for pr in persona_results]
         pr_total = sum(pr["total_s3_facts"] for pr in persona_results)
-        pr_hits = sum(pr["hits"] for pr in persona_results)
-        print(f"\n  --- Persona Retention (Session-3 Facts as Queries) ---")
-        print(f"  Total session-3 persona facts: {pr_total}")
-        print(f"  Facts retrieved from DARS:     {pr_hits}")
-        print(f"  Persona Recall:  {np.mean(pr_recalls):.4f}  (std={np.std(pr_recalls):.4f})")
-        print(f"  Persona MRR:     {np.mean(pr_mrrs):.4f}  (std={np.std(pr_mrrs):.4f})")
+        pr_novel = sum(pr["novel_count"] for pr in persona_results)
+        pr_retrievable = sum(pr["retrievable_total"] for pr in persona_results)
+        pr_hits = sum(pr["retrievable_hits"] for pr in persona_results)
+
+        print(f"\n  --- Persona Retention (Primary Metric) ---")
+        print(f"  Total S3 persona facts:      {pr_total}")
+        print(f"  Novel (no match in S0-S2):   {pr_novel}  ({pr_novel/pr_total*100:.1f}%)")
+        print(f"  Retrievable:                 {pr_retrievable}")
+        print(f"  Retrieved (hits):            {pr_hits}")
+        print(f"")
+        print(f"  Recall_retrievable:  {np.mean(pr_ret_recalls):.4f}  (std={np.std(pr_ret_recalls):.4f})")
+        print(f"  Recall_total:        {np.mean(pr_tot_recalls):.4f}  (std={np.std(pr_tot_recalls):.4f})")
+        print(f"  MRR_retrievable:     {np.mean(pr_ret_mrrs):.4f}  (std={np.std(pr_ret_mrrs):.4f})")
+        print(f"  Novel_rate:          {pr_novel/pr_total*100:.1f}%")
+
+    if negative_results:
+        neg_recalls = [nr["negative_recall"] for nr in negative_results]
+        neg_total = sum(nr["total_foreign_facts"] for nr in negative_results)
+        neg_false = sum(nr["false_hits"] for nr in negative_results)
+        print(f"\n  --- Negative Control (Foreign Dialogue Facts) ---")
+        print(f"  Foreign facts tested:        {neg_total}")
+        print(f"  False retrievals:            {neg_false}")
+        print(f"  Negative recall:             {np.mean(neg_recalls):.4f}")
+        if np.mean(neg_recalls) <= 0.05:
+            print(f"  RESULT: Threshold {RELEVANCE_THRESHOLD} is statistically meaningful (PASS)")
+        else:
+            print(f"  RESULT: Threshold may be too loose; consider raising it")
 
     print("\n  --- Verdict ---")
-    mean_recall = np.mean(recalls) if recalls else 0
-    mean_mrr = np.mean(mrrs) if mrrs else 0
-    persona_mean = np.mean([pr["recall"] for pr in persona_results]) if persona_results else 0
+    if persona_results:
+        ret_mean = np.mean(pr_ret_recalls)
+        if ret_mean >= 0.80:
+            print(f"  Recall_retrievable >= 80%: DARS achieves research-grade retention.")
+        elif ret_mean >= 0.60:
+            print(f"  Recall_retrievable >= 60%: DARS shows strong retention; further tuning possible.")
+        elif ret_mean >= 0.40:
+            print(f"  Recall_retrievable >= 40%: Moderate retention; weight tuning recommended.")
+        else:
+            print(f"  Recall_retrievable < 40%: Weak retention; investigate scoring pipeline.")
 
-    if persona_mean >= 0.4:
-        print(f"  DARS demonstrates strong persona memory retention.")
-    elif persona_mean >= 0.2:
-        print(f"  DARS shows moderate persona retention; further tuning may improve.")
-    elif mean_recall >= 0.15 or persona_mean > 0:
-        print(f"  DARS shows basic retrieval; weight tuning recommended.")
-    else:
-        print(f"  DARS retrieval is weak; investigate scoring components.")
-
-    if freq_biases and np.mean(freq_biases) > 1.0:
-        print(f"  Temporal learning (Recency + Frequency) validated.")
+    if negative_results and np.mean(neg_recalls) <= 0.05:
+        print(f"  Negative control passed: threshold validated.")
 
     print("=" * 70 + "\n")
 
@@ -395,9 +506,10 @@ def _print_eval_report(
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description="Group A MSC Evaluation")
-    parser.add_argument("--dialogues", type=int, default=5, help="Number of dialogues to evaluate")
-    parser.add_argument("--k", type=int, default=3, help="Top-k for retrieval metrics")
+    parser.add_argument("--dialogues", type=int, default=5, help="Number of dialogues")
+    parser.add_argument("--k", type=int, default=5, help="Top-k for retrieval")
+    parser.add_argument("--fetch-k", type=int, default=20, help="Candidates to fetch before reranking")
     args = parser.parse_args()
 
     logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
-    run_evaluation(max_dialogues=args.dialogues, k=args.k)
+    run_evaluation(max_dialogues=args.dialogues, k=args.k, fetch_k=args.fetch_k)

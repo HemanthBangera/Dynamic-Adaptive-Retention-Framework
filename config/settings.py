@@ -138,4 +138,8 @@ class DARSConfig:
     # ── Distance Metric ────────────────────────────────────────────────
     DISTANCE_METRIC: str = "Cosine"      # Cosine | Euclid | Dot
 
+    # ── MemoryAgentBench driver defaults (benchmarks/memory_agent_bench) ─
+    MAB_HF_REVISION: str = os.getenv("MAB_HF_REVISION", "main")
+    MAB_TIKTOKEN_MODEL: str = os.getenv("MAB_TIKTOKEN_MODEL", "gpt-4o-mini")
+
 DARSConfig.validate_and_normalize()

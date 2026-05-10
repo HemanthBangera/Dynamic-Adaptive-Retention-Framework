@@ -1,0 +1,57 @@
+{
+  "exact_match": {
+    "mean": 0.0,
+    "std": 0.0,
+    "n": 2
+  },
+  "f1": {
+    "mean": 0.0,
+    "std": 0.0,
+    "n": 2
+  },
+  "substring_exact_match": {
+    "mean": 0.0,
+    "std": 0.0,
+    "n": 2
+  },
+  "rougeL_f1": {
+    "mean": 0.0,
+    "std": 0.0,
+    "n": 2
+  },
+  "rougeL_recall": {
+    "mean": 0.0,
+    "std": 0.0,
+    "n": 2
+  },
+  "rougeLsum_f1": {
+    "mean": 0.0,
+    "std": 0.0,
+    "n": 2
+  },
+  "rougeLsum_recall": {
+    "mean": 0.0,
+    "std": 0.0,
+    "n": 2
+  },
+  "input_len": {
+    "mean": 39.5,
+    "std": 0.5,
+    "n": 2
+  },
+  "output_len": {
+    "mean": 3.0,
+    "std": 0.0,
+    "n": 2
+  },
+  "memory_construction_time": {
+    "mean": 5.960464477539062e-07,
+    "std": 5.960464477539062e-07,
+    "n": 2
+  },
+  "query_time_len": {
+    "mean": 65.28293788433075,
+    "std": 10.21620261669159,
+    "n": 2
+  }
+}

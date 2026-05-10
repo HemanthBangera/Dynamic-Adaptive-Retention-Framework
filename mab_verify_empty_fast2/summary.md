@@ -1,0 +1,47 @@
+# MemoryAgentBench pilot Accurate_Retrieval / ruler_qa1_197K
+
+## Manifest
+
+```json
+{
+  "benchmark": "MemoryAgentBench",
+  "hf_dataset": "ai-hyz/MemoryAgentBench",
+  "hf_revision": "main",
+  "upstream_mab_eval_utils_pin": "main",
+  "split": "Accurate_Retrieval",
+  "metadata_source": "ruler_qa1_197K",
+  "chunk_size_tokens": 8192,
+  "tiktoken_model": "gpt-4o-mini",
+  "max_test_samples": 1,
+  "seed": 42,
+  "path_mode": "b",
+  "dars_fetch_k": 10,
+  "dars_top_n": 3,
+  "dars_rerank_alpha": 0.5,
+  "baseline_mode": "empty",
+  "max_qa_per_context": 2,
+  "gemini_inter_qa_sleep_s": 3.0,
+  "gemini_max_retries": 3,
+  "gemini_model": "gemini-2.5-flash",
+  "embedding_model": "all-MiniLM-L6-v2",
+  "goal_description_set": false,
+  "training_group": "ALFWorld",
+  "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "created_unix": 1778406967.5630903
+}
+```
+
+## Metrics
+
+- **exact_match**: mean=0.0000 std=0.0000 (n=2)
+- **f1**: mean=0.0000 std=0.0000 (n=2)
+- **input_len**: mean=39.5000 std=0.5000 (n=2)
+- **memory_construction_time**: mean=0.0000 std=0.0000 (n=2)
+- **output_len**: mean=3.0000 std=0.0000 (n=2)
+- **query_time_len**: mean=65.2829 std=10.2162 (n=2)
+- **rougeL_f1**: mean=0.0000 std=0.0000 (n=2)
+- **rougeL_recall**: mean=0.0000 std=0.0000 (n=2)
+- **rougeLsum_f1**: mean=0.0000 std=0.0000 (n=2)
+- **rougeLsum_recall**: mean=0.0000 std=0.0000 (n=2)
+- **substring_exact_match**: mean=0.0000 std=0.0000 (n=2)

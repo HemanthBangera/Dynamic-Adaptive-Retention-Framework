@@ -2,6 +2,7 @@ import logging
 import asyncio
 from typing import Optional, List
 
+from config.settings import DARSConfig
 from core.layer_a.reformulator import QueryReformulator
 from core.layer_a.reranker import DARSReranker
 from core.layer_a.prompt_constructor import PromptConstructor
@@ -15,12 +16,22 @@ class CognitiveGateway:
     Non-blocking async implementation.
     """
 
-    def __init__(self, reformulator: Optional[QueryReformulator] = None, reranker: Optional[DARSReranker] = None, alpha: float = 0.5):
+    def __init__(
+        self,
+        reformulator: Optional[QueryReformulator] = None,
+        reranker: Optional[DARSReranker] = None,
+        alpha: float = 0.5,
+        fetch_k: Optional[int] = None,
+        top_n: Optional[int] = None,
+    ):
         if reranker is None:
             raise TypeError("CognitiveGateway requires an explicit reranker instance")
+
         self.reformulator = reformulator or QueryReformulator()
         self.reranker = reranker
         self.alpha = alpha
+        self.fetch_k = int(fetch_k) if fetch_k is not None else int(DARSConfig.DEFAULT_FETCH_K)
+        self.top_n = int(top_n) if top_n is not None else int(DARSConfig.DEFAULT_TOP_N)
 
     async def process_query(self, raw_query: str) -> str:
         """
@@ -43,11 +54,11 @@ class CognitiveGateway:
         memories = await loop.run_in_executor(
             None,
             lambda: self.reranker.rerank(
-                query=expanded_query, 
-                fetch_k=15, 
-                top_n=3, 
-                alpha=self.alpha
-            )
+                query=expanded_query,
+                fetch_k=self.fetch_k,
+                top_n=self.top_n,
+                alpha=self.alpha,
+            ),
         )
         
         # 3. XML Injection 

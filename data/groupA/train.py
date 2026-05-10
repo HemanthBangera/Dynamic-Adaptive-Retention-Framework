@@ -63,6 +63,7 @@ class GroupATrainer:
                 text=mem["text"],
                 source=mem["source"],
                 tags=mem["tags"],
+                vector_override=mem.get("centroid_embedding"),
             )
             self._pid_map[mem["text"]] = pid
             pids.append(pid)

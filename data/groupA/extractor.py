@@ -25,7 +25,7 @@ from data.groupA.loader import load_msc
 logger = logging.getLogger(__name__)
 
 DEDUP_THRESHOLD = 0.75
-FEEDBACK_MATCH_THRESHOLD = 0.55
+FEEDBACK_MATCH_THRESHOLD = 0.45
 
 
 @dataclass
@@ -93,6 +93,7 @@ def _cluster_facts(
         if assigned[i]:
             continue
 
+        variant_indices = [i]
         cluster = FactCluster(
             canonical=text_i,
             canonical_embedding=embeddings[i],
@@ -111,12 +112,14 @@ def _cluster_facts(
             sim = _cosine_sim(emb_array[i], emb_array[j])
             if sim >= DEDUP_THRESHOLD:
                 assigned[j] = True
+                variant_indices.append(j)
                 cluster.variants.append(text_j)
                 cluster.sessions.add(sid_j)
                 if len(text_j) > len(cluster.canonical):
                     cluster.canonical = text_j
-                    cluster.canonical_embedding = embeddings[j]
 
+        centroid = np.mean(emb_array[variant_indices], axis=0).tolist()
+        cluster.canonical_embedding = centroid
         clusters.append(cluster)
 
     return clusters
@@ -161,6 +164,7 @@ def extract_dialogue(
             "speaker": cluster.speaker,
             "first_session": first_session,
             "frequency_ground_truth": cluster.frequency,
+            "centroid_embedding": cluster.canonical_embedding,
         })
 
     interactions: List[Dict[str, Any]] = []

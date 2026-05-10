@@ -240,6 +240,7 @@ class MemoryVault:
         predictive_value: Optional[float] = None,
         source: str = "",
         tags: Optional[List[str]] = None,
+        vector_override: Optional[List[float]] = None,
     ) -> str:
         """
         Store a new memory with initial DARS metadata.
@@ -254,6 +255,9 @@ class MemoryVault:
             Origin label  ("user" | "agent" | "system").
         tags : list of str, optional
             Classification tags.
+        vector_override : list of float, optional
+            Pre-computed embedding vector (e.g. centroid from clustering).
+            When provided, skips internal text encoding.
 
         Returns
         -------
@@ -267,8 +271,7 @@ class MemoryVault:
         point_id = MemoryPoint.generate_id()
         now = time.time()
 
-        # Embed the text
-        vector = self.embedder.encode(text)
+        vector = vector_override if vector_override is not None else self.embedder.encode(text)
 
         # Build payload with initial DARS metadata
         p_val = predictive_value
@@ -514,16 +517,16 @@ class MemoryVault:
         fetch_k: Optional[int] = None,
         top_n: Optional[int] = None,
         alpha: Optional[float] = None,
+        use_rrf: bool = True,
+        rrf_k: int = 60,
+        current_time: Optional[float] = None,
     ) -> List[MemoryPoint]:
         """
         Two-stage retrieval  (Layer A pipeline, Stage 2).
 
         1.  **Semantic search** → fetch ``fetch_k`` candidates.
-        2.  **DARS reranking**  → combined_score = α·sim + (1−α)·DARS.
-        3.  **Selection**       → return the top ``top_n`` results.
-
-        Reference – DARS Specification §18:
-            argmax_i  (α · sim(q, e_i) + (1 − α) · DARS(m_i))
+        2.  **Reranking** → RRF (default) or weighted-sum fallback.
+        3.  **Selection** → return the top ``top_n`` results.
 
         Parameters
         ----------
@@ -534,7 +537,17 @@ class MemoryVault:
         top_n : int
             Final output count  (default: config.DEFAULT_TOP_N).
         alpha : float
-            Blend factor  (default: config.RERANK_ALPHA).
+            Blend factor for weighted-sum mode (default: config.RERANK_ALPHA).
+            Ignored when ``use_rrf=True``.
+        use_rrf : bool
+            When True, use Reciprocal Rank Fusion (Cormack et al., 2009).
+            When False, use legacy weighted-sum: α·sim + (1−α)·DARS.
+        rrf_k : int
+            RRF smoothing constant (default 60, standard in literature).
+        current_time : float, optional
+            Reference timestamp for recency calculation.  Defaults to
+            ``time.time()``.  Pass a virtual-clock value during simulated
+            training / evaluation.
 
         Returns
         -------
@@ -544,42 +557,47 @@ class MemoryVault:
         fetch_k = fetch_k or self.config.DEFAULT_FETCH_K
         top_n = top_n or self.config.DEFAULT_TOP_N
         alpha = alpha if alpha is not None else self.config.RERANK_ALPHA
-        now = time.time()
+        now = current_time if current_time is not None else time.time()
 
-        # Stage 1: Semantic search
         candidates = self.semantic_search(query_text, top_k=fetch_k)
 
         if not candidates:
             return []
 
-        # Min-max scaling setup for vector similarities
-        # If variance is extremely low (e.g. 0.88 to 0.89), prevent Min-Max scaling from killing similarity weight
-        sim_scores = [c.score for c in candidates if c.score is not None]
-        min_sim = min(sim_scores) if sim_scores else 0.0
-        max_sim = max(sim_scores) if sim_scores else 1.0
-        range_sim = max_sim - min_sim
-        
-        # Stage 2: Compute DARS score and combined score
-        if range_sim < 0.05:
-            # Bypass min-max by treating all similarities as 1.0, making DARS scores the primary decider
+        for mem in candidates:
+            mem.dars_score = self.compute_dars_score(
+                mem.payload.to_dict(), current_time=now
+            )
+
+        if use_rrf:
+            sim_ranked = sorted(
+                candidates, key=lambda m: m.score or 0.0, reverse=True
+            )
+            dars_ranked = sorted(
+                candidates, key=lambda m: m.dars_score or 0.0, reverse=True
+            )
+            sim_rank = {id(m): rank for rank, m in enumerate(sim_ranked, 1)}
+            dars_rank = {id(m): rank for rank, m in enumerate(dars_ranked, 1)}
+
             for mem in candidates:
-                mem.dars_score = self.compute_dars_score(
-                    mem.payload.to_dict(), current_time=now
-                )
-                mem.score = alpha * 1.0 + (1 - alpha) * mem.dars_score
+                r_sim = sim_rank[id(mem)]
+                r_dars = dars_rank[id(mem)]
+                mem.score = 1.0 / (rrf_k + r_sim) + 1.0 / (rrf_k + r_dars)
         else:
-            for mem in candidates:
-                mem.dars_score = self.compute_dars_score(
-                    mem.payload.to_dict(), current_time=now
-                )
-                # Min-max scaling the similarity score
-                raw_sim = mem.score if mem.score is not None else 0.0
-                norm_sim = (raw_sim - min_sim) / range_sim
+            sim_scores = [c.score for c in candidates if c.score is not None]
+            min_sim = min(sim_scores) if sim_scores else 0.0
+            max_sim = max(sim_scores) if sim_scores else 1.0
+            range_sim = max_sim - min_sim
 
-                # Combined:  α · normalized_cosine_sim + (1 − α) · DARS
-                mem.score = alpha * norm_sim + (1 - alpha) * mem.dars_score
+            if range_sim < 0.05:
+                for mem in candidates:
+                    mem.score = alpha * 1.0 + (1 - alpha) * mem.dars_score
+            else:
+                for mem in candidates:
+                    raw_sim = mem.score if mem.score is not None else 0.0
+                    norm_sim = (raw_sim - min_sim) / range_sim
+                    mem.score = alpha * norm_sim + (1 - alpha) * mem.dars_score
 
-        # Stage 3: Sort by combined score, take top-N
         candidates.sort(key=lambda m: m.score or 0.0, reverse=True)
         return candidates[:top_n]
 
