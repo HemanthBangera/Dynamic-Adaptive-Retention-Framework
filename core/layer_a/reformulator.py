@@ -1,7 +1,12 @@
 import asyncio
 import aiohttp
 import logging
+from typing import TYPE_CHECKING, Optional
+
 from config.settings import DARSConfig
+
+if TYPE_CHECKING:
+    from core.gemini_transport import GovernedGeminiTransport
 
 logger = logging.getLogger(__name__)
 
@@ -14,7 +19,8 @@ class QueryReformulator:
     to the raw user query so the pipeline never blocks.
     """
 
-    def __init__(self, timeout: float = None):
+    def __init__(self, timeout: float = None, transport: Optional["GovernedGeminiTransport"] = None):
+        self.transport = transport
         self.timeout = timeout or DARSConfig.GEMINI_TIMEOUT
         self.max_retries = DARSConfig.GEMINI_MAX_RETRIES
         self.max_expansion_chars = DARSConfig.GEMINI_MAX_EXPANSION_CHARS
@@ -27,6 +33,10 @@ class QueryReformulator:
 
     async def _call_gemini(self, prompt_text: str) -> str | None:
         """Make a single Gemini REST call. Returns extracted text or None."""
+        if self.transport is not None:
+            text, _ki = await self.transport.generate_text(prompt_text)
+            return text
+
         payload = {"contents": [{"parts": [{"text": prompt_text}]}]}
         headers = {
             "Content-Type": "application/json",

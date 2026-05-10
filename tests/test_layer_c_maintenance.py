@@ -65,18 +65,20 @@ class TestCompressorLive:
 
 class TestDecisionEngine:
 
-    def test_grace_period_skips_fresh_memory(self, vault):
+    @pytest.mark.asyncio
+    async def test_grace_period_skips_fresh_memory(self, vault):
         pid = vault.store_memory("Fresh memory")
         mem = vault.get_memory(pid)
         janitor = DecisionEngine(vault=vault)
-        asyncio.get_event_loop().run_until_complete(janitor.triage_memory(mem))
+        await janitor.triage_memory(mem)
         assert vault.get_memory(pid) is not None
 
-    def test_grace_period_bypassed_by_priority_tag(self, vault):
+    @pytest.mark.asyncio
+    async def test_grace_period_bypassed_by_priority_tag(self, vault):
         pid = vault.store_memory("Priority bypass", tags=["system:high_priority_distillation"])
         mem = vault.get_memory(pid)
         janitor = DecisionEngine(vault=vault)
-        asyncio.get_event_loop().run_until_complete(janitor.triage_memory(mem))
+        await janitor.triage_memory(mem)
         assert vault.get_memory(pid) is not None
 
     @pytest.mark.asyncio

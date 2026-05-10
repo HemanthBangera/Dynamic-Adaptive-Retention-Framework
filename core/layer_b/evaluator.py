@@ -1,7 +1,12 @@
 import aiohttp
 import asyncio
 import logging
+from typing import TYPE_CHECKING, Optional
+
 from config.settings import DARSConfig
+
+if TYPE_CHECKING:
+    from core.gemini_transport import GovernedGeminiTransport
 
 logger = logging.getLogger(__name__)
 
@@ -14,7 +19,8 @@ class SuccessEvaluator:
     or failure to prevent poisoning the learning loop.
     """
 
-    def __init__(self, timeout: float = None):
+    def __init__(self, timeout: float = None, transport: Optional["GovernedGeminiTransport"] = None):
+        self.transport = transport
         self.timeout = timeout or DARSConfig.GEMINI_TIMEOUT
         self.max_retries = DARSConfig.GEMINI_MAX_RETRIES
         self.api_key = DARSConfig.GEMINI_API_KEY
@@ -26,6 +32,10 @@ class SuccessEvaluator:
 
     async def _call_gemini(self, prompt_text: str) -> str | None:
         """Make a single Gemini REST call. Returns extracted text or None."""
+        if self.transport is not None:
+            text, _ki = await self.transport.generate_text(prompt_text)
+            return text
+
         payload = {"contents": [{"parts": [{"text": prompt_text}]}]}
         headers = {
             "Content-Type": "application/json",
@@ -69,7 +79,7 @@ class SuccessEvaluator:
         Raises RuntimeError when no valid API key is configured,
         preventing silent no-op learning.
         """
-        if not self.api_key:
+        if not self.api_key and self.transport is None:
             raise RuntimeError("Gemini API key is required for Success Evaluator.")
 
         prompt = (

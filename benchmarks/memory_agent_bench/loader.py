@@ -7,9 +7,11 @@ from __future__ import annotations
 
 import random
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 from datasets import DatasetDict, load_dataset
+
+from third_party.memoryagentbench_eval import count_tokens
 
 logger = logging.getLogger(__name__)
 
@@ -82,10 +84,17 @@ def load_mab_filtered(
     max_test_samples: Optional[int] = None,
     seed: int = 42,
     revision: str = "main",
-) -> List[Dict[str, Any]]:
+    *,
+    min_context_tokens: Optional[int] = None,
+    max_context_tokens: Optional[int] = None,
+    tiktoken_model: str = "gpt-4o-mini",
+) -> Tuple[List[Dict[str, Any]], Dict[str, int]]:
     """
     Load HF rows for one competency split, filter `metadata.source == source_filter`,
-    optionally subsample with deterministic seed, return list of processed dicts.
+    optionally filter by context token count, optionally subsample with deterministic seed.
+
+    Returns (rows, stats) where stats contains:
+      rows_after_source, rows_after_token_filter, rows_returned
     """
     if split_name not in SUPPORTED_SPLITS:
         raise ValueError(
@@ -110,16 +119,49 @@ def load_mab_filtered(
             "Run `python -m benchmarks.memory_agent_bench list-sources --split ...`."
         )
 
-    n = len(filtered)
+    rows_after_source = len(filtered)
+    processed_rows = [_process_single_sample_qa_lists(dict(row)) for row in filtered]
+
+    if min_context_tokens is not None or max_context_tokens is not None:
+        lo = min_context_tokens if min_context_tokens is not None else 0
+        hi = max_context_tokens if max_context_tokens is not None else 10**12
+
+        def _tok(r: Dict[str, Any]) -> int:
+            return int(count_tokens(r.get("context") or "", model_name=tiktoken_model))
+
+        processed_rows = [r for r in processed_rows if lo <= _tok(r) <= hi]
+        logger.info(
+            "MAB token filter [%s, %s] model=%s: %d -> %d rows",
+            lo,
+            hi,
+            tiktoken_model,
+            rows_after_source,
+            len(processed_rows),
+        )
+
+    rows_after_token = len(processed_rows)
+    if rows_after_token == 0:
+        raise ValueError(
+            f"No rows left after token filter (split={split_name!r}, source={source_filter!r}, "
+            f"min_tokens={min_context_tokens}, max_tokens={max_context_tokens}). "
+            "Widen the band or omit --min-context-tokens / --max-context-tokens."
+        )
+
+    n = rows_after_token
     if max_test_samples is not None and n > max_test_samples:
         rng = random.Random(seed)
         indices = list(range(n))
         rng.shuffle(indices)
         pick = sorted(indices[:max_test_samples])
-        filtered = filtered.select(pick)
+        processed_rows = [processed_rows[i] for i in pick]
         logger.info("Subsampled to %d rows (seed=%s)", max_test_samples, seed)
 
-    return [_process_single_sample_qa_lists(dict(row)) for row in filtered]
+    stats = {
+        "rows_after_source": rows_after_source,
+        "rows_after_token_filter": rows_after_token,
+        "rows_returned": len(processed_rows),
+    }
+    return processed_rows, stats
 
 
 def list_sources_for_split(split_name: str, revision: str = "main") -> List[str]:

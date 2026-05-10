@@ -30,8 +30,17 @@ def build_manifest(
     gemini_sleep_s: float,
     gemini_max_retries: int,
     upstream_mab_commit: str = "main",
+    min_context_tokens: Optional[int] = None,
+    max_context_tokens: Optional[int] = None,
+    load_stats: Optional[Dict[str, int]] = None,
+    gemini_min_interval_s: float = 0.0,
+    gemini_keys_file: Optional[str] = None,
+    vault_recreate: bool = True,
+    keep_collection: bool = False,
+    run_label: Optional[str] = None,
+    audit_jsonl: Optional[str] = None,
 ) -> Dict[str, Any]:
-    return {
+    m: Dict[str, Any] = {
         "benchmark": "MemoryAgentBench",
         "hf_dataset": "ai-hyz/MemoryAgentBench",
         "hf_revision": hf_revision,
@@ -50,6 +59,18 @@ def build_manifest(
         "max_qa_per_context": max_qa,
         "gemini_inter_qa_sleep_s": gemini_sleep_s,
         "gemini_max_retries": gemini_max_retries,
+        "gemini_min_interval_s": gemini_min_interval_s,
+        "gemini_keys_file": gemini_keys_file,
+        "min_context_tokens": min_context_tokens,
+        "max_context_tokens": max_context_tokens,
+        "load_stats": load_stats or {},
+        "vault_recreate": vault_recreate,
+        "keep_collection": keep_collection,
+        "run_label": run_label,
+        "audit_jsonl": audit_jsonl,
+        "mab_use_virtual_time": DARSConfig.MAB_USE_VIRTUAL_TIME,
+        "mab_virtual_time_step_s": DARSConfig.MAB_VIRTUAL_TIME_STEP_S,
+        "mab_injection_initial_success": DARSConfig.MAB_INJECTION_INITIAL_SUCCESS,
         "gemini_model": DARSConfig.GEMINI_MODEL,
         "embedding_model": DARSConfig.EMBEDDING_MODEL,
         "goal_description_set": bool(DARSConfig.GOAL_DESCRIPTION),
@@ -58,6 +79,7 @@ def build_manifest(
         "platform": platform.platform(),
         "created_unix": time.time(),
     }
+    return m
 
 
 def write_manifest(path: Path, manifest: Dict[str, Any]) -> None:

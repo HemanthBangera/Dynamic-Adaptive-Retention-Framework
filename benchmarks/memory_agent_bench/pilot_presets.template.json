@@ -4,24 +4,24 @@
     "split": "Accurate_Retrieval",
     "source": "ruler_qa1_197K",
     "max_samples": 1,
-    "output_dir": "./mab_pilot_results/ar_1"
+    "output_dir": "./benchmark_runs/pilot/ar_1"
   },
   {
     "split": "Test_Time_Learning",
     "source": "REPLACE_WITH_METADATA_SOURCE",
     "max_samples": 1,
-    "output_dir": "./mab_pilot_results/ttl_1"
+    "output_dir": "./benchmark_runs/pilot/ttl_1"
   },
   {
     "split": "Long_Range_Understanding",
     "source": "REPLACE_WITH_METADATA_SOURCE",
     "max_samples": 1,
-    "output_dir": "./mab_pilot_results/lru_1"
+    "output_dir": "./benchmark_runs/pilot/lru_1"
   },
   {
     "split": "Conflict_Resolution",
     "source": "REPLACE_WITH_METADATA_SOURCE",
     "max_samples": 1,
-    "output_dir": "./mab_pilot_results/cr_1"
+    "output_dir": "./benchmark_runs/pilot/cr_1"
   }
 ]

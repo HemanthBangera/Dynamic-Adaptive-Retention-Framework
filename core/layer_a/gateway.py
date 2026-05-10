@@ -1,6 +1,7 @@
 import logging
 import asyncio
-from typing import Optional, List
+import time
+from typing import Dict, List, Optional, Tuple
 
 from config.settings import DARSConfig
 from core.layer_a.reformulator import QueryReformulator
@@ -65,4 +66,43 @@ class CognitiveGateway:
         prompt = PromptConstructor.build(query=raw_query, memories=memories)
         
         return prompt
+
+    async def process_query_timed(
+        self, raw_query: str
+    ) -> Tuple[str, Dict[str, float], List]:
+        """
+        Same as ``process_query`` but returns wall-time breakdown and ranked memories.
+
+        Returns
+        -------
+        prompt : str
+            XML-augmented prompt.
+        timings : dict
+            Keys: ``reformulate_s``, ``retrieve_s``, ``xml_build_s``, ``gateway_total_s``.
+        memories : list
+            Top memories returned by reranker (same as used for XML build).
+        """
+        t0 = time.perf_counter()
+        expanded_query = await self.reformulator.reformulate_query(raw_query)
+        t1 = time.perf_counter()
+        loop = asyncio.get_running_loop()
+        memories = await loop.run_in_executor(
+            None,
+            lambda: self.reranker.rerank(
+                query=expanded_query,
+                fetch_k=self.fetch_k,
+                top_n=self.top_n,
+                alpha=self.alpha,
+            ),
+        )
+        t2 = time.perf_counter()
+        prompt = PromptConstructor.build(query=raw_query, memories=memories)
+        t3 = time.perf_counter()
+        timings: Dict[str, float] = {
+            "reformulate_s": t1 - t0,
+            "retrieve_s": t2 - t1,
+            "xml_build_s": t3 - t2,
+            "gateway_total_s": t3 - t0,
+        }
+        return prompt, timings, memories
 

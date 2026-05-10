@@ -8,21 +8,30 @@ from __future__ import annotations
 
 import asyncio
 import logging
-from typing import Optional
+from typing import TYPE_CHECKING, Optional, Tuple
 
 import aiohttp
 
 from config.settings import DARSConfig
 
+if TYPE_CHECKING:
+    from core.gemini_transport import GovernedGeminiTransport
+
 logger = logging.getLogger(__name__)
 
 
 class GeminiBenchmarkReader:
-    def __init__(self, timeout: Optional[float] = None, max_retries: Optional[int] = None):
+    def __init__(
+        self,
+        timeout: Optional[float] = None,
+        max_retries: Optional[int] = None,
+        transport: Optional["GovernedGeminiTransport"] = None,
+    ):
         self.timeout = timeout or DARSConfig.GEMINI_TIMEOUT
         self.max_retries = (
             int(max_retries) if max_retries is not None else int(DARSConfig.GEMINI_MAX_RETRIES)
         )
+        self.transport = transport
         self.api_key = DARSConfig.GEMINI_API_KEY
         self.model = DARSConfig.GEMINI_MODEL
         self.endpoint = (
@@ -30,7 +39,12 @@ class GeminiBenchmarkReader:
             f"{self.model}:generateContent"
         )
 
-    async def _call_once(self, prompt_text: str) -> Optional[str]:
+    async def _call_once(self, prompt_text: str) -> Tuple[Optional[str], int]:
+        """Returns (text, key_index). key_index is -1 when not using key pool."""
+        if self.transport is not None:
+            text, ki = await self.transport.generate_text(prompt_text)
+            return text, ki
+
         if not self.api_key:
             raise RuntimeError("GEMINI_API_KEY is required for MemoryAgentBench reader.")
 
@@ -52,7 +66,7 @@ class GeminiBenchmarkReader:
                     if cands:
                         parts = cands[0].get("content", {}).get("parts", [])
                         if parts:
-                            return (parts[0].get("text") or "").strip()
+                            return (parts[0].get("text") or "").strip(), -1
                 elif resp.status == 429:
                     raise aiohttp.ClientResponseError(
                         resp.request_info, resp.history, status=429, message="Rate limited"
@@ -64,15 +78,17 @@ class GeminiBenchmarkReader:
                 else:
                     body = await resp.text()
                     logger.error("Gemini reader error %s: %s", resp.status, body[:300])
-        return None
+        return None, -1
 
     async def answer_with_memories_bullets(
         self,
         formatted_user_query: str,
         memory_bullets: str,
-    ) -> str:
+    ) -> Tuple[str, int]:
         """
         Mem0-style: system lists memories; user message is the benchmark query block.
+
+        Returns (answer_text, gemini_key_index) where index is -1 without key pool.
         """
         system = (
             "You are a helpful AI. Answer using ONLY the retrieved memory bullets below. "
@@ -82,18 +98,20 @@ class GeminiBenchmarkReader:
         user = f"--- Retrieved memories ---\n{memory_bullets}\n\n--- Task ---\n{formatted_user_query}"
         prompt = f"{system}\n\n{user}"
         last_err: Optional[BaseException] = None
+        last_ki = -1
         for attempt in range(1 + self.max_retries):
             try:
-                out = await self._call_once(prompt)
+                out, last_ki = await self._call_once(prompt)
                 if out:
-                    return out
+                    return out, last_ki
             except aiohttp.ClientResponseError as e:
                 last_err = e
-                if e.status in (429, 500, 502, 503):
-                    # Capped exponential backoff (uncapped 2**N caused multi-hour waits on 429).
+                if self.transport is None and e.status in (429, 500, 502, 503):
                     base = 5.0 if e.status == 429 else 1.5
                     delay = min(90.0, base * (1.7**attempt))
                     await asyncio.sleep(delay)
+                    continue
+                if self.transport is not None:
                     continue
                 raise
             except asyncio.TimeoutError as e:
@@ -101,26 +119,29 @@ class GeminiBenchmarkReader:
                 await asyncio.sleep(1.0 * (attempt + 1))
                 continue
         logger.warning("Gemini reader failed after retries: %s", last_err)
-        return "Answer: "
+        return "Answer: ", last_ki
 
-    async def answer_with_gateway_xml(self, gateway_xml_prompt: str) -> str:
+    async def answer_with_gateway_xml(self, gateway_xml_prompt: str) -> Tuple[str, int]:
         """Path A: entire Layer A XML string is the user task."""
         system = (
             "You are the assistant. Use the XML memory stream to answer the current user query. "
             "Start your reply with the line `Answer:` followed by the answer text."
         )
         prompt = f"{system}\n\n{gateway_xml_prompt}"
+        last_ki = -1
         for attempt in range(1 + self.max_retries):
             try:
-                out = await self._call_once(prompt)
+                out, last_ki = await self._call_once(prompt)
                 if out:
-                    return out
+                    return out, last_ki
             except aiohttp.ClientResponseError as e:
-                if e.status in (429, 500, 502, 503):
+                if self.transport is None and e.status in (429, 500, 502, 503):
                     base = 5.0 if e.status == 429 else 1.5
                     delay = min(90.0, base * (1.7**attempt))
                     await asyncio.sleep(delay)
                     continue
+                if self.transport is not None:
+                    continue
                 raise
             await asyncio.sleep(1.0 * (attempt + 1))
-        return "Answer: "
+        return "Answer: ", last_ki

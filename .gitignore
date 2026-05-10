@@ -17,6 +17,7 @@ htmlcov/
 
 # Local configuration
 .env
+keys.txt
 .vscode/
 .idea/
 

@@ -141,5 +141,10 @@ class DARSConfig:
     # ── MemoryAgentBench driver defaults (benchmarks/memory_agent_bench) ─
     MAB_HF_REVISION: str = os.getenv("MAB_HF_REVISION", "main")
     MAB_TIKTOKEN_MODEL: str = os.getenv("MAB_TIKTOKEN_MODEL", "gpt-4o-mini")
+    # Virtual clock: advance recency/created_at per chunk so hour-scale λ decay is meaningful in fast replays
+    MAB_USE_VIRTUAL_TIME: bool = os.getenv("MAB_USE_VIRTUAL_TIME", "").lower() in ("1", "true", "yes")
+    MAB_VIRTUAL_TIME_STEP_S: float = float(os.getenv("MAB_VIRTUAL_TIME_STEP_S", "3600"))
+    # Acquisition phase: mild Laplace prior so first-query retrieval is not stuck at zero-utility cold start
+    MAB_INJECTION_INITIAL_SUCCESS: int = int(os.getenv("MAB_INJECTION_INITIAL_SUCCESS", "0"))
 
 DARSConfig.validate_and_normalize()

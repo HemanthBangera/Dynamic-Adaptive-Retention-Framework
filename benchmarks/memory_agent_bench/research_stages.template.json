@@ -1,0 +1,42 @@
+[
+  {
+    "comment": "Stratified stages: replace sources via list-sources. Use gemini-keys-file outside repo; never commit.",
+    "split": "Conflict_Resolution",
+    "source": "REPLACE_WITH_METADATA_SOURCE",
+    "max_samples": 35,
+    "chunk_size": 4096,
+    "path": "a",
+    "output_dir": "./benchmark_runs/research/stage_cr",
+    "min_context_tokens": 10000,
+    "max_context_tokens": 100000,
+    "gemini_min_interval": 4.0,
+    "gemini_keys_file": "REPLACE_PATH_TO_keys.txt",
+    "audit_jsonl": "audit_cr.jsonl"
+  },
+  {
+    "split": "Accurate_Retrieval",
+    "source": "REPLACE_WITH_METADATA_SOURCE",
+    "max_samples": 50,
+    "chunk_size": 4096,
+    "path": "b",
+    "output_dir": "./benchmark_runs/research/stage_ar_path_b",
+    "min_context_tokens": 10000,
+    "max_context_tokens": 100000,
+    "gemini_min_interval": 4.0,
+    "gemini_keys_file": "REPLACE_PATH_TO_keys.txt",
+    "audit_jsonl": "audit_ar_b.jsonl"
+  },
+  {
+    "split": "Accurate_Retrieval",
+    "source": "REPLACE_SAME_AS_PREVIOUS_AR_SOURCE",
+    "max_samples": 50,
+    "chunk_size": 4096,
+    "path": "a",
+    "output_dir": "./benchmark_runs/research/stage_ar_path_a",
+    "min_context_tokens": 10000,
+    "max_context_tokens": 100000,
+    "gemini_min_interval": 4.0,
+    "gemini_keys_file": "REPLACE_PATH_TO_keys.txt",
+    "audit_jsonl": "audit_ar_a.jsonl"
+  }
+]

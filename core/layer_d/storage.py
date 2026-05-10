@@ -241,6 +241,9 @@ class MemoryVault:
         source: str = "",
         tags: Optional[List[str]] = None,
         vector_override: Optional[List[float]] = None,
+        *,
+        sim_timestamp: Optional[float] = None,
+        mab_injection_boost: bool = False,
     ) -> str:
         """
         Store a new memory with initial DARS metadata.
@@ -267,9 +270,16 @@ class MemoryVault:
         Reference – DARS Specification §17 (Memory Creation):
             m_new = f(observation, action, outcome)
             Access count = 0,  Utility = neutral,  Predictive = estimated.
+
+        sim_timestamp
+            If set, used as ``recency`` and ``created_at`` (MemoryAgentBench virtual clock).
+
+        mab_injection_boost
+            When True, seeds ``success_count`` from ``DARSConfig.MAB_INJECTION_INITIAL_SUCCESS``
+            for acquisition-phase Laplace-friendly utility (benchmark only).
         """
         point_id = MemoryPoint.generate_id()
-        now = time.time()
+        now = float(sim_timestamp) if sim_timestamp is not None else time.time()
 
         vector = vector_override if vector_override is not None else self.embedder.encode(text)
 
@@ -282,10 +292,14 @@ class MemoryVault:
             else:
                 p_val = self.config.DEFAULT_PREDICTIVE_VALUE
         p_val = max(0.0, min(1.0, p_val))
-            
+
+        inj_succ = 0
+        if mab_injection_boost:
+            inj_succ = max(0, int(self.config.MAB_INJECTION_INITIAL_SUCCESS))
+
         payload = MemoryPayload(
             text_content=text,
-            success_count=0,
+            success_count=inj_succ,
             failure_count=0,
             utility=0.0,
             frequency=0,
@@ -600,6 +614,26 @@ class MemoryVault:
 
         candidates.sort(key=lambda m: m.score or 0.0, reverse=True)
         return candidates[:top_n]
+
+    def mean_dars_score_all_points(
+        self,
+        current_time: Optional[float] = None,
+        scroll_limit: int = 256,
+    ) -> Tuple[float, int]:
+        """
+        Mean DARS retention score S over all points in the collection.
+
+        Used for MemoryAgentBench ``dars_mass_ratio`` (retrieved mean vs vault mean).
+        """
+        gen = self.get_all_memories(limit=scroll_limit, with_vectors=False, scroll_yield=True)
+        vals: List[float] = []
+        now = current_time if current_time is not None else time.time()
+        for chunk, _ in gen:
+            for p in chunk:
+                vals.append(self.compute_dars_score(p.payload.to_dict(), current_time=now))
+        if not vals:
+            return 0.0, 0
+        return float(sum(vals) / len(vals)), int(len(vals))
 
     # ═══════════════════════════════════════════════════════════════════
     #  4.  ATOMIC PAYLOAD UPDATES  (Core Layer D Capability)
