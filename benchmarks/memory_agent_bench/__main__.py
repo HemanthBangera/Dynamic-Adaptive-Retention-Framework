@@ -4,8 +4,8 @@ from __future__ import annotations
 
 Examples:
   python -m benchmarks.memory_agent_bench list-sources --split Accurate_Retrieval
-  python -m benchmarks.memory_agent_bench run --split Accurate_Retrieval --source ruler_qa_xxx \\
-      --max-samples 1 --chunk-size 4096 --path b --output-dir ./benchmark_runs/pilot/example
+  python -m benchmarks.memory_agent_bench run --split Accurate_Retrieval --source eventqa_65536 \\
+      --max-samples 1 --chunk-size 4096 --output-dir ./benchmark_runs/pilot/example
 """
 
 import argparse
@@ -18,7 +18,7 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any, DefaultDict, Dict, Optional, Set
 
-from config.settings import DARSConfig
+from config.settings import DARSConfig, apply_mab_narrative_profile
 from core.gemini_transport import GovernedGeminiTransport, collect_gemini_keys_from_env_and_file
 from core.layer_a.gateway import CognitiveGateway
 from core.layer_a.reformulator import QueryReformulator
@@ -65,7 +65,7 @@ def _cmd_run_presets(args: argparse.Namespace) -> None:
             "--chunk-size",
             str(item.get("chunk_size", args.chunk_size)),
             "--path",
-            item.get("path", "b"),
+            item.get("path", "a"),
             "--output-dir",
             item["output_dir"],
             "--hf-revision",
@@ -124,19 +124,34 @@ async def _cmd_run(args: argparse.Namespace) -> None:
     out_dir = Path(args.output_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
+    narrative_on = not getattr(args, "no_narrative", False)
+    if narrative_on:
+        apply_mab_narrative_profile()
+
     min_tok = args.min_context_tokens if getattr(args, "min_context_tokens", None) is not None else None
     max_tok = args.max_context_tokens if getattr(args, "max_context_tokens", None) is not None else None
+
+    max_test_samples_opt: Optional[int] = None if args.max_samples == 0 else args.max_samples
 
     rows, load_stats = load_mab_filtered(
         args.split,
         args.source,
-        max_test_samples=args.max_samples,
+        max_test_samples=max_test_samples_opt,
         seed=args.seed,
         revision=args.hf_revision,
         min_context_tokens=min_tok,
         max_context_tokens=max_tok,
         tiktoken_model=args.tiktoken_model,
     )
+
+    if (
+        args.split == "Accurate_Retrieval"
+        and "eventqa" in args.source.lower()
+        and args.path == "b"
+    ):
+        logger.warning(
+            "Path B with EventQA is ablation-only; Path A (default) is recommended for narrative EM."
+        )
 
     audit_rel: Optional[str] = None
     audit_path: Optional[Path] = None
@@ -150,11 +165,25 @@ async def _cmd_run(args: argparse.Namespace) -> None:
         except ValueError:
             audit_rel = str(audit_path.resolve())
 
+    failure_detail_path: Optional[Path] = None
+    failure_rel: Optional[str] = None
+    if not getattr(args, "no_failure_detail", False) and getattr(
+        args, "failure_detail_jsonl", None
+    ):
+        failure_detail_path = Path(args.failure_detail_jsonl)
+        if not failure_detail_path.is_absolute():
+            failure_detail_path = out_dir / failure_detail_path
+        failure_detail_path.parent.mkdir(parents=True, exist_ok=True)
+        try:
+            failure_rel = str(failure_detail_path.resolve().relative_to(out_dir.resolve()))
+        except ValueError:
+            failure_rel = str(failure_detail_path.resolve())
+
     manifest = build_manifest(
         split=args.split,
         source=args.source,
         chunk_size=args.chunk_size,
-        max_test_samples=args.max_samples,
+        max_test_samples=max_test_samples_opt,
         seed=args.seed,
         hf_revision=args.hf_revision,
         path_mode=args.path,
@@ -176,6 +205,10 @@ async def _cmd_run(args: argparse.Namespace) -> None:
         keep_collection=args.keep_collection,
         run_label=args.run_label,
         audit_jsonl=audit_rel,
+        chunk_overlap_tokens=int(getattr(args, "chunk_overlap_tokens", 0) or 0),
+        narrative_profile=narrative_on,
+        failure_detail_jsonl=failure_rel,
+        tombstone_sim_threshold=getattr(args, "tombstone_sim_threshold", None),
     )
     write_manifest(out_dir / "run_manifest.json", manifest)
 
@@ -203,7 +236,11 @@ async def _cmd_run(args: argparse.Namespace) -> None:
             DARSConfig.GEMINI_MODEL,
         )
 
-    reader = GeminiBenchmarkReader(max_retries=args.gemini_retries, transport=transport)
+    reader = GeminiBenchmarkReader(
+        max_retries=args.gemini_retries,
+        transport=transport,
+        strict_grounded_reader=not getattr(args, "loose_reader", False),
+    )
     done = _load_done_keys(out_dir / "per_sample.jsonl") if args.resume else set()
 
     def vault_factory(cname: str) -> MemoryVault:
@@ -233,6 +270,7 @@ async def _cmd_run(args: argparse.Namespace) -> None:
                 split_name=args.split,
                 source_filter=args.source,
                 chunk_size=args.chunk_size,
+                chunk_overlap_tokens=int(getattr(args, "chunk_overlap_tokens", 0) or 0),
                 tiktoken_model=args.tiktoken_model,
                 path_mode=args.path,
                 fetch_k=args.fetch_k,
@@ -249,6 +287,8 @@ async def _cmd_run(args: argparse.Namespace) -> None:
                 keep_collection=args.keep_collection,
                 run_label=args.run_label,
                 audit_jsonl_path=audit_path,
+                failure_detail_jsonl_path=failure_detail_path,
+                tombstone_sim_threshold=getattr(args, "tombstone_sim_threshold", None),
             )
             merge_episode_metrics(acc, ep)
             all_detail_rows.extend(ep.rows)
@@ -291,16 +331,26 @@ def main(argv: list[str] | None = None) -> None:
     run = sub.add_parser("run", help="Run pilot evaluation")
     run.add_argument("--split", required=True)
     run.add_argument("--source", required=True, help="metadata.source filter (see list-sources)")
-    run.add_argument("--max-samples", type=int, default=2)
+    run.add_argument(
+        "--max-samples",
+        type=int,
+        default=2,
+        help="Contexts to evaluate after filters (subsampled with --seed). Use 0 for all rows.",
+    )
     run.add_argument("--chunk-size", type=int, default=4096)
     run.add_argument("--seed", type=int, default=42)
     run.add_argument("--hf-revision", default=DARSConfig.MAB_HF_REVISION)
     run.add_argument("--tiktoken-model", default=DARSConfig.MAB_TIKTOKEN_MODEL)
     run.add_argument("--min-context-tokens", type=int, default=None, help="Drop rows with fewer context tokens")
     run.add_argument("--max-context-tokens", type=int, default=None, help="Drop rows with more context tokens")
-    run.add_argument("--path", choices=("a", "b"), default="b", help="a=full gateway XML reader; b=rerank bullets (default)")
-    run.add_argument("--fetch-k", type=int, default=DARSConfig.DEFAULT_FETCH_K)
-    run.add_argument("--top-n", type=int, default=DARSConfig.DEFAULT_TOP_N)
+    run.add_argument(
+        "--path",
+        choices=("a", "b"),
+        default="a",
+        help="a=full gateway XML + reformulator (default); b=rerank bullets only (ablation)",
+    )
+    run.add_argument("--fetch-k", type=int, default=25, help="Semantic candidate pool size (default 25)")
+    run.add_argument("--top-n", type=int, default=5, help="Memories after rerank before neighbor expand (default 5)")
     run.add_argument("--alpha", type=float, default=DARSConfig.RERANK_ALPHA)
     run.add_argument("--baseline", choices=("normal", "empty"), default="normal")
     run.add_argument(
@@ -349,6 +399,39 @@ def main(argv: list[str] | None = None) -> None:
         type=str,
         default=None,
         help="Append per-QA audit records (money metrics) to this path (relative to output-dir if not absolute).",
+    )
+    run.add_argument(
+        "--failure-detail-jsonl",
+        type=str,
+        default="failure_detail.jsonl",
+        help="Append one JSON line per failed exact_match (relative to output-dir).",
+    )
+    run.add_argument(
+        "--no-failure-detail",
+        action="store_true",
+        help="Disable failure_detail.jsonl emission.",
+    )
+    run.add_argument(
+        "--no-narrative",
+        action="store_true",
+        help="Disable narrative stack (DARS weights, λ, goal, virtual time defaults, neighbor expand env).",
+    )
+    run.add_argument(
+        "--chunk-overlap-tokens",
+        type=int,
+        default=128,
+        help="Token overlap between consecutive context chunks (0 disables).",
+    )
+    run.add_argument(
+        "--tombstone-sim-threshold",
+        type=float,
+        default=None,
+        help="Cosine similarity threshold for superseding non-adjacent older chunks (default from DARSConfig).",
+    )
+    run.add_argument(
+        "--loose-reader",
+        action="store_true",
+        help="Allow legacy reader behavior (guessing when memories are incomplete).",
     )
     run.add_argument(
         "--output-dir",

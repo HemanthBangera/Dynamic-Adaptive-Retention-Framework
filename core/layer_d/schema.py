@@ -46,6 +46,7 @@ class MemoryPayload:
     is_compressed  : bool   – True after Layer C compression.
     source         : str    – Origin tag  ("user" | "agent" | "system").
     tags           : list   – Optional classification labels.
+    superseded     : bool   – When True, memory is tombstoned and excluded from retrieval.
     """
 
     # ── Core Content ───────────────────────────────────────────────────
@@ -67,6 +68,7 @@ class MemoryPayload:
     is_compressed: bool = False
     source: str = ""
     tags: List[str] = field(default_factory=list)
+    superseded: bool = False
     original_vector: list[float] | None = field(default=None)
 
     # ── Serialisation ──────────────────────────────────────────────────

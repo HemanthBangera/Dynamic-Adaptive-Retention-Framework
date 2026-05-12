@@ -91,14 +91,14 @@ class TestPromptConstructor:
         assert "beforeafter" in prompt
 
     def test_large_text_truncated(self):
-        mem = self._make_memory("A" * 15000)
+        mem = self._make_memory("A" * 13000)
         prompt = PromptConstructor.build("test", [mem])
         assert "[TRUNCATED FOR BUDGET" in prompt
 
     def test_max_prompt_budget(self):
         mems = [self._make_memory(f"Memory content {'X' * 5000}") for _ in range(10)]
         prompt = PromptConstructor.build("test query", mems)
-        assert len(prompt) <= 25000
+        assert len(prompt) <= 55000
 
 
 @requires_gemini

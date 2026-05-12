@@ -148,7 +148,11 @@ def load_mab_filtered(
         )
 
     n = rows_after_token
-    if max_test_samples is not None and n > max_test_samples:
+    if (
+        max_test_samples is not None
+        and max_test_samples > 0
+        and n > max_test_samples
+    ):
         rng = random.Random(seed)
         indices = list(range(n))
         rng.shuffle(indices)

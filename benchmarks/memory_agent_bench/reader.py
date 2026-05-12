@@ -26,6 +26,7 @@ class GeminiBenchmarkReader:
         timeout: Optional[float] = None,
         max_retries: Optional[int] = None,
         transport: Optional["GovernedGeminiTransport"] = None,
+        strict_grounded_reader: bool = True,
     ):
         self.timeout = timeout or DARSConfig.GEMINI_TIMEOUT
         self.max_retries = (
@@ -37,6 +38,39 @@ class GeminiBenchmarkReader:
         self.endpoint = (
             f"https://generativelanguage.googleapis.com/v1beta/models/"
             f"{self.model}:generateContent"
+        )
+        self.strict_grounded_reader = strict_grounded_reader
+
+    def _system_bullets(self) -> str:
+        if self.strict_grounded_reader:
+            return (
+                "You answer from ONLY the retrieved memory bullets below. "
+                "Do NOT guess or use outside knowledge. If the bullets are insufficient, "
+                "reply exactly: `Answer: unknown`. "
+                "When bullets describe the same entity at different times, prefer the "
+                "LATEST chronology (later story beats override earlier ones). "
+                "Start your reply with the line `Answer:` followed by a concise answer "
+                "that can be verified from the bullets."
+            )
+        return (
+            "You are a helpful AI. Answer using ONLY the retrieved memory bullets below. "
+            "If the answer is not in the memories, give your best concise guess. "
+            "Start your reply with the line `Answer:` followed by the answer text."
+        )
+
+    def _system_xml(self) -> str:
+        if self.strict_grounded_reader:
+            return (
+                "You are the assistant. Use ONLY the XML memory stream to answer the current user query. "
+                "Do NOT guess or use outside knowledge. If memories are insufficient, "
+                "reply exactly: `Answer: unknown`. "
+                "When memories conflict, prefer the LATEST story state (higher chunk order / "
+                "more recent narrative). "
+                "Start your reply with the line `Answer:` followed by a concise answer."
+            )
+        return (
+            "You are the assistant. Use the XML memory stream to answer the current user query. "
+            "Start your reply with the line `Answer:` followed by the answer text."
         )
 
     async def _call_once(self, prompt_text: str) -> Tuple[Optional[str], int]:
@@ -90,11 +124,7 @@ class GeminiBenchmarkReader:
 
         Returns (answer_text, gemini_key_index) where index is -1 without key pool.
         """
-        system = (
-            "You are a helpful AI. Answer using ONLY the retrieved memory bullets below. "
-            "If the answer is not in the memories, give your best concise guess. "
-            "Start your reply with the line `Answer:` followed by the answer text."
-        )
+        system = self._system_bullets()
         user = f"--- Retrieved memories ---\n{memory_bullets}\n\n--- Task ---\n{formatted_user_query}"
         prompt = f"{system}\n\n{user}"
         last_err: Optional[BaseException] = None
@@ -123,10 +153,7 @@ class GeminiBenchmarkReader:
 
     async def answer_with_gateway_xml(self, gateway_xml_prompt: str) -> Tuple[str, int]:
         """Path A: entire Layer A XML string is the user task."""
-        system = (
-            "You are the assistant. Use the XML memory stream to answer the current user query. "
-            "Start your reply with the line `Answer:` followed by the answer text."
-        )
+        system = self._system_xml()
         prompt = f"{system}\n\n{gateway_xml_prompt}"
         last_ki = -1
         for attempt in range(1 + self.max_retries):

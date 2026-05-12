@@ -29,8 +29,9 @@ from __future__ import annotations
 
 import logging
 import math
+import re
 import time
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 from qdrant_client import QdrantClient
 from qdrant_client.models import (
@@ -38,6 +39,7 @@ from qdrant_client.models import (
     FieldCondition,
     Filter,
     HasIdCondition,
+    MatchAny,
     MatchValue,
     PointIdsList,
     PointStruct,
@@ -56,6 +58,20 @@ from core.layer_d.schema import (
 )
 
 logger = logging.getLogger(__name__)
+
+_CHUNK_TAG_RE = re.compile(r"^chunk:(\d+)$")
+
+
+def chunk_index_from_tags(tags: Any) -> Optional[int]:
+    """Return chunk index from ``chunk:{n}`` tag if present."""
+    if not tags:
+        return None
+    for t in tags:
+        if isinstance(t, str):
+            m = _CHUNK_TAG_RE.match(t.strip())
+            if m:
+                return int(m.group(1))
+    return None
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -196,6 +212,16 @@ class MemoryVault:
         except Exception as e:
             logger.debug("Payload index for utility might already exist: %s", e)
 
+        for field, schema in (("superseded", "bool"), ("tags", "keyword")):
+            try:
+                self.client.create_payload_index(
+                    collection_name=self.collection_name,
+                    field_name=field,
+                    field_schema=schema,
+                )
+            except Exception as e:
+                logger.debug("Payload index for %s might already exist: %s", field, e)
+
         if not exists:
             return True
             
@@ -309,6 +335,7 @@ class MemoryVault:
             is_compressed=False,
             source=source,
             tags=tags or [],
+            superseded=False,
         )
 
         self.client.upsert(
@@ -471,6 +498,7 @@ class MemoryVault:
         top_k: int = 10,
         utility_threshold: Optional[float] = None,
         score_threshold: Optional[float] = None,
+        exclude_superseded: bool = True,
     ) -> List[MemoryPoint]:
         """
         Perform pure semantic similarity search.
@@ -485,6 +513,8 @@ class MemoryVault:
             If set, only return memories with utility ≥ this value.
         score_threshold : float, optional
             If set, only return points with cosine similarity ≥ this value.
+        exclude_superseded : bool
+            When True (default), tombstoned memories are excluded from candidates.
 
         Returns
         -------
@@ -493,17 +523,27 @@ class MemoryVault:
         """
         query_vector = self.embedder.encode(query_text)
 
-        # Build optional filter
-        query_filter = None
+        must: List[FieldCondition] = []
+        must_not: List[FieldCondition] = []
         if utility_threshold is not None:
-            query_filter = Filter(
-                must=[
-                    FieldCondition(
-                        key="utility",
-                        range=Range(gte=utility_threshold),
-                    )
-                ]
+            must.append(
+                FieldCondition(
+                    key="utility",
+                    range=Range(gte=utility_threshold),
+                )
             )
+        if exclude_superseded:
+            must_not.append(
+                FieldCondition(key="superseded", match=MatchValue(value=True))
+            )
+
+        query_filter: Optional[Filter] = None
+        if must and must_not:
+            query_filter = Filter(must=must, must_not=must_not)
+        elif must:
+            query_filter = Filter(must=must)
+        elif must_not:
+            query_filter = Filter(must_not=must_not)
 
         results = self.client.query_points(
             collection_name=self.collection_name,
@@ -524,6 +564,74 @@ class MemoryVault:
             )
             for hit in results
         ]
+
+    def supersede_similar_lower_chunks(
+        self,
+        chunk_text: str,
+        new_chunk_index: int,
+        *,
+        sim_threshold: Optional[float] = None,
+        top_k: int = 24,
+    ) -> int:
+        """
+        Tombstone earlier chunks in the same episode that are semantically very
+        similar to ``chunk_text`` (sequential narrative state updates).
+        """
+        thr = (
+            float(sim_threshold)
+            if sim_threshold is not None
+            else float(self.config.MAB_TOMBSTONE_SIM_THRESHOLD)
+        )
+        hits = self.semantic_search(chunk_text, top_k=top_k, exclude_superseded=True)
+        updated = 0
+        for h in hits:
+            old_i = chunk_index_from_tags(h.payload.tags)
+            if old_i is None or old_i >= new_chunk_index:
+                continue
+            # Keep the immediate predecessor chunk for N±1 narrative windows.
+            if old_i == new_chunk_index - 1:
+                continue
+            sim = h.score if h.score is not None else 0.0
+            if sim >= thr:
+                self.patch_payload(h.point_id, {"superseded": True})
+                updated += 1
+        return updated
+
+    def fetch_points_for_chunk_indices(self, chunk_indices: Set[int]) -> List[MemoryPoint]:
+        """Retrieve non-superseded points whose tags include ``chunk:{i}``."""
+        out: List[MemoryPoint] = []
+        seen: Set[str] = set()
+        for ci in sorted(chunk_indices):
+            if ci < 0:
+                continue
+            tag = f"chunk:{ci}"
+            flt = Filter(
+                must=[FieldCondition(key="tags", match=MatchAny(any=[tag]))],
+                must_not=[
+                    FieldCondition(key="superseded", match=MatchValue(value=True))
+                ],
+            )
+            records, _next = self.client.scroll(
+                collection_name=self.collection_name,
+                scroll_filter=flt,
+                limit=8,
+                with_payload=True,
+                with_vectors=False,
+            )
+            for r in records:
+                pid = str(r.id)
+                if pid in seen:
+                    continue
+                seen.add(pid)
+                pl = r.payload or {}
+                out.append(
+                    MemoryPoint(
+                        point_id=pid,
+                        vector=[],
+                        payload=MemoryPayload.from_dict(pl),
+                    )
+                )
+        return out
 
     def search_and_rerank(
         self,
@@ -573,7 +681,9 @@ class MemoryVault:
         alpha = alpha if alpha is not None else self.config.RERANK_ALPHA
         now = current_time if current_time is not None else time.time()
 
-        candidates = self.semantic_search(query_text, top_k=fetch_k)
+        candidates = self.semantic_search(
+            query_text, top_k=fetch_k, exclude_superseded=True
+        )
 
         if not candidates:
             return []
@@ -630,6 +740,8 @@ class MemoryVault:
         now = current_time if current_time is not None else time.time()
         for chunk, _ in gen:
             for p in chunk:
+                if getattr(p.payload, "superseded", False):
+                    continue
                 vals.append(self.compute_dars_score(p.payload.to_dict(), current_time=now))
         if not vals:
             return 0.0, 0

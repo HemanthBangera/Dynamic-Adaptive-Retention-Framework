@@ -69,12 +69,25 @@ class EpisodeResult:
     rows: List[Dict[str, Any]] = field(default_factory=list)
 
 
+def _memory_audit_rows(memories) -> Tuple[List[str], List[Optional[int]]]:
+    """Point IDs and chunk indices for logging."""
+    ids: List[str] = []
+    idxs: List[Optional[int]] = []
+    from core.layer_d.storage import chunk_index_from_tags
+
+    for m in memories or []:
+        ids.append(getattr(m, "point_id", "") or "")
+        idxs.append(chunk_index_from_tags(getattr(m.payload, "tags", None)))
+    return ids, idxs
+
+
 async def run_single_sample(
     *,
     row: Dict[str, Any],
     split_name: str,
     source_filter: str,
     chunk_size: int,
+    chunk_overlap_tokens: int = 0,
     tiktoken_model: str,
     path_mode: str,
     fetch_k: int,
@@ -91,6 +104,8 @@ async def run_single_sample(
     keep_collection: bool = False,
     run_label: Optional[str] = None,
     audit_jsonl_path: Optional[Path] = None,
+    failure_detail_jsonl_path: Optional[Path] = None,
+    tombstone_sim_threshold: Optional[float] = None,
 ) -> EpisodeResult:
     out = EpisodeResult()
     context = row.get("context") or ""
@@ -109,8 +124,14 @@ async def run_single_sample(
     inj_boost = DARSConfig.MAB_INJECTION_INITIAL_SUCCESS > 0
 
     t0 = time.time()
+    chunks: List[str] = []
     if baseline != "empty":
-        chunks = chunk_context(context, chunk_size=chunk_size, tiktoken_model=tiktoken_model)
+        chunks = chunk_context(
+            context,
+            chunk_size=chunk_size,
+            tiktoken_model=tiktoken_model,
+            overlap_tokens=chunk_overlap_tokens,
+        )
         for i, chunk in enumerate(chunks):
             st = (vbase + i * vstep) if use_vclock else None
             vault.store_memory(
@@ -120,7 +141,17 @@ async def run_single_sample(
                 sim_timestamp=st,
                 mab_injection_boost=inj_boost,
             )
+            vault.supersede_similar_lower_chunks(
+                chunk,
+                i,
+                sim_threshold=tombstone_sim_threshold,
+            )
     mem_time = time.time() - t0
+
+    if use_vclock and chunks:
+        narrative_query_clock = vbase + float(len(chunks)) * vstep
+    else:
+        narrative_query_clock = time.time()
 
     reranker = DARSReranker(vault=vault)
     gateway = gateway_factory(vault)
@@ -132,13 +163,14 @@ async def run_single_sample(
     for qi, (formatted_query, answer, qa_pair_id) in enumerate(qa_list):
         q_start = time.time()
         reader_key_index = -1
-        gateway_timings: Dict[str, float] = {}
+        gateway_timings: Dict[str, Any] = {}
         memories_for_metrics = []
 
         reader_answer_s = 0.0
         if path_mode.lower() == "a":
             xml_prompt, gateway_timings, memories_for_metrics = await gateway.process_query_timed(
-                formatted_query
+                formatted_query,
+                current_time=narrative_query_clock,
             )
             tr0 = time.perf_counter()
             raw, reader_key_index = await reader.answer_with_gateway_xml(xml_prompt)
@@ -153,6 +185,7 @@ async def run_single_sample(
                     fetch_k=fetch_k,
                     top_n=top_n,
                     alpha=alpha,
+                    current_time=narrative_query_clock,
                 ),
             )
             bullets = _memories_to_bullets(memories_for_metrics)
@@ -172,7 +205,9 @@ async def run_single_sample(
             token_savings_ratio = 0.0
 
         dars_mean_topk, dars_max, _n = _retrieved_dars_stats(memories_for_metrics)
-        dars_mean_vault, n_vault = vault.mean_dars_score_all_points()
+        dars_mean_vault, n_vault = vault.mean_dars_score_all_points(
+            current_time=narrative_query_clock,
+        )
         dars_mass_ratio = dars_mean_topk / max(_DARS_MASS_EPS, dars_mean_vault) if n_vault else 0.0
 
         payload = {
@@ -207,6 +242,13 @@ async def run_single_sample(
             query_id=qi,
             qa_pair_id=qa_pair_id,
         )
+        last_row = out.rows[-1] if out.rows else {}
+        em = float(last_row.get("exact_match", 0.0))
+        pt_ids, chunk_idxs = _memory_audit_rows(memories_for_metrics)
+        expanded_q = gateway_timings.get("expanded_query", "")
+        if path_mode.lower() != "a" and not expanded_q:
+            expanded_q = formatted_query
+
         if audit_jsonl_path is not None:
             rec = {
                 "split": split_name,
@@ -222,10 +264,36 @@ async def run_single_sample(
                 "dars_mass_ratio": dars_mass_ratio,
                 "gemini_key_index": reader_key_index,
                 "reader_answer_s": reader_answer_s,
+                "exact_match": em,
+                "expanded_query": expanded_q,
+                "retrieved_point_ids": pt_ids,
+                "retrieved_chunk_indices": chunk_idxs,
+                "narrative_query_clock": narrative_query_clock,
+                "reformulate_changed": gateway_timings.get("reformulate_changed", False),
                 **{k: gateway_timings.get(k) for k in ("reformulate_s", "retrieve_s", "xml_build_s", "gateway_total_s")},
             }
             with audit_jsonl_path.open("a", encoding="utf-8") as fh:
                 fh.write(json.dumps(rec, default=str) + "\n")
+
+        if failure_detail_jsonl_path is not None and em < 1.0:
+            fq_preview = formatted_query[:800] if formatted_query else ""
+            fail_rec = {
+                "split": split_name,
+                "source": source_filter,
+                "qa_index": qi,
+                "qa_pair_id": qa_pair_id,
+                "exact_match": em,
+                "formatted_query_preview": fq_preview,
+                "expanded_query": expanded_q,
+                "path_mode": path_mode.lower(),
+                "retrieved_point_ids": pt_ids,
+                "retrieved_chunk_indices": chunk_idxs,
+                "model_output_preview": (raw or "")[:1200],
+                "ground_truth": answer,
+            }
+            failure_detail_jsonl_path.parent.mkdir(parents=True, exist_ok=True)
+            with failure_detail_jsonl_path.open("a", encoding="utf-8") as fh:
+                fh.write(json.dumps(fail_rec, default=str) + "\n")
 
         if gemini_sleep_s > 0:
             await asyncio.sleep(gemini_sleep_s)

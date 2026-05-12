@@ -236,20 +236,22 @@ where `sim_i` is min-max normalized unless similarity variance is very low; in t
 
 ## `QueryReformulator`
 
-- Makes async Gemini REST call with constrained expansion prompt.
+- Makes async Gemini REST call with a **narrative retrieval** expansion prompt (temporal anchors, exclusions, entity names; explicitly discourages synonym-only output).
 - Guard rails:
+  - **empty / whitespace-only input** → return raw query (no LLM call)
   - fallback when no API key
   - fallback on timeout/errors
   - fallback on empty model output
-  - fallback on excessive expansion-length drift for long queries
+  - **degenerate expansion** heuristic (`_is_degenerate_expansion`) → raw query
 
 Result: robust fail-open behavior preserving user query continuity.
 
 ## `DARSReranker`
 
 - Thin adapter over `MemoryVault.search_and_rerank()`.
-- Inputs: `query`, `fetch_k`, `top_n`, `alpha`.
-- Output: top `MemoryPoint` results with combined ranking score.
+- Inputs: `query`, `fetch_k`, `top_n`, `alpha`, optional **`current_time`** for DARS recency, optional **`secondary_query`** for dual-pool fusion when `MAB_DUAL_QUERY_RETRIEVAL` is enabled.
+- After ranking: optional **chunk N±1** neighbor fetch (via `fetch_points_for_chunk_indices`) when `MAB_EXPAND_NEIGHBOR_CHUNKS` is true.
+- Output: top `MemoryPoint` results (expanded neighbors appended, deduped).
 
 ## `PromptConstructor`
 
@@ -284,14 +286,25 @@ sequenceDiagram
     else timeout/error/empty/guard
       R-->>G: raw query (fallback)
     end
-    G->>RR: rerank(expanded query)
-    RR->>V: search_and_rerank(...)
+    G->>RR: rerank(expanded, current_time, secondary=raw)
+    RR->>V: search_and_rerank(..., current_time)
     V-->>RR: top memories
     RR-->>G: ranked memories
     G->>P: build(raw query, memories)
     P-->>G: XML prompt
     G-->>User: augmented prompt
 ```
+
+### MemoryAgentBench narrative / EventQA stack (Layer A + D + driver)
+
+These behaviors apply when the MAB driver calls `apply_mab_narrative_profile()` (default unless `--no-narrative`). They are the implementation backing the “64% → ≥90% EM” retrieval plan.
+
+| Requirement | Status | Where |
+| --- | --- | --- |
+| **Narrative–temporal reformulation** (anchors, exclusions, not synonym-only); empty/whitespace → raw; reject trivial expansions | **Implemented** | `core/layer_a/reformulator.py`: Gemini prompt asks for time/discourse anchors, entities, next-event hooks, obsolete-state exclusions; early return when `raw_query` is empty/whitespace-only; `_is_degenerate_expansion` rejects weak expansions and returns the raw query. |
+| **`current_time` at query = end of narrative** (virtual clock when enabled, else wall clock); threaded **gateway → reranker → `search_and_rerank`** | **Implemented** | `benchmarks/memory_agent_bench/runner.py` sets `narrative_query_clock` from virtual chunk timeline or `time.time()`; passes `current_time` into `gateway.process_query_timed` (Path A) and `reranker.rerank` (Path B). `core/layer_a/gateway.py` forwards `current_time` and optional `secondary_query` into `DARSReranker.rerank`. `core/layer_d/storage.py` `search_and_rerank` / DARS scoring use that clock for recency decay. |
+| **N±1 neighbor expansion**; wider **`fetch_k` / `top_n`** defaults; **optional dual-query fusion** (reformulated + raw) | **Implemented** | `core/layer_a/reranker.py`: after top-N ranking, expands `chunk:i±1` when `MAB_EXPAND_NEIGHBOR_CHUNKS` is true (default on in config). CLI defaults `fetch_k=25`, `top_n=5`. When `MAB_DUAL_QUERY_RETRIEVAL` is true (narrative profile turns it on), two retrieval pools are merged by best score per point, then truncated. |
+| **`superseded` payload + retrieval filter**; **ingest-time tombstone** of similar older chunks (same episode, lower chunk index, sim ≥ τ, not immediate predecessor) | **Implemented** | `core/layer_d/schema.py`: `superseded` on `MemoryPayload`. `core/layer_d/storage.py`: `semantic_search(..., exclude_superseded=True)` and `search_and_rerank` use the filter; `supersede_similar_lower_chunks` called from MAB `runner.py` after each chunk store. Threshold: `MAB_TOMBSTONE_SIM_THRESHOLD` (env / config). |
 
 ---
 
@@ -425,8 +438,10 @@ Both initialize payload with DARS defaults and persisted timestamps.
 
 - `get_memory(point_id)`
 - `get_all_memories(limit, with_vectors, scroll_yield)`
-- `semantic_search(query_text, top_k, utility_threshold, score_threshold)`
-- `search_and_rerank(query_text, fetch_k, top_n, alpha)`
+- `semantic_search(query_text, top_k, utility_threshold, score_threshold, exclude_superseded=True)`
+- `search_and_rerank(query_text, fetch_k, top_n, alpha, current_time=...)`
+- `supersede_similar_lower_chunks(chunk_text, new_chunk_index, sim_threshold)` (MemoryAgentBench ingest tombstones)
+- `fetch_points_for_chunk_indices(indices)` (neighbor window for reranker)
 
 ### Atomic Metadata Updates
 

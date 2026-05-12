@@ -86,6 +86,10 @@ class DARSConfig:
             "Effective action sequences, object locations, and task completion "
             "strategies for interactive household environments"
         ),
+        "Narrative": (
+            "Long-form narrative coherence: plot progression, character state, "
+            "temporal ordering of events, and the most recent scene consistent with the story"
+        ),
     }
     TRAINING_GROUP: str = os.getenv("TRAINING_GROUP", "ALFWorld")
     GOAL_DESCRIPTION: str = os.getenv("GOAL_DESCRIPTION", "")
@@ -146,5 +150,34 @@ class DARSConfig:
     MAB_VIRTUAL_TIME_STEP_S: float = float(os.getenv("MAB_VIRTUAL_TIME_STEP_S", "3600"))
     # Acquisition phase: mild Laplace prior so first-query retrieval is not stuck at zero-utility cold start
     MAB_INJECTION_INITIAL_SUCCESS: int = int(os.getenv("MAB_INJECTION_INITIAL_SUCCESS", "0"))
+    # Tombstone / neighbor expansion (MemoryAgentBench narrative stack)
+    MAB_TOMBSTONE_SIM_THRESHOLD: float = float(os.getenv("MAB_TOMBSTONE_SIM_THRESHOLD", "0.88"))
+    MAB_EXPAND_NEIGHBOR_CHUNKS: bool = os.getenv(
+        "MAB_EXPAND_NEIGHBOR_CHUNKS", "1"
+    ).lower() in ("1", "true", "yes")
+    # Merge retrieval from reformulated + raw query (narrative profile enables in apply_mab_narrative_profile)
+    MAB_DUAL_QUERY_RETRIEVAL: bool = os.getenv(
+        "MAB_DUAL_QUERY_RETRIEVAL", "0"
+    ).lower() in ("1", "true", "yes")
+
+
+def apply_mab_narrative_profile() -> None:
+    """
+    Aggressive DARS + goal preset for narrative / EventQA-style benchmarks.
+    Call before constructing MemoryVault for a MemoryAgentBench run.
+    """
+    DARSConfig.WEIGHT_RECENCY = 0.6
+    DARSConfig.WEIGHT_FREQUENCY = 0.1
+    DARSConfig.WEIGHT_UTILITY = 0.1
+    DARSConfig.WEIGHT_PREDICTIVE = 0.2
+    DARSConfig.RECENCY_DECAY_LAMBDA = 0.01
+    DARSConfig.TRAINING_GROUP = "Narrative"
+    DARSConfig.DEFAULT_FETCH_K = max(DARSConfig.DEFAULT_FETCH_K, 25)
+    DARSConfig.DEFAULT_TOP_N = max(DARSConfig.DEFAULT_TOP_N, 5)
+    DARSConfig.MAB_USE_VIRTUAL_TIME = True
+    DARSConfig.MAB_DUAL_QUERY_RETRIEVAL = True
+    DARSConfig.validate_and_normalize()
+    DARSConfig._goal_vector_cache = None  # type: ignore[attr-defined]
+
 
 DARSConfig.validate_and_normalize()

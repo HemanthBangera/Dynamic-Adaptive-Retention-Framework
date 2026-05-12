@@ -1,7 +1,7 @@
 import logging
 import asyncio
 import time
-from typing import Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 from config.settings import DARSConfig
 from core.layer_a.reformulator import QueryReformulator
@@ -34,7 +34,9 @@ class CognitiveGateway:
         self.fetch_k = int(fetch_k) if fetch_k is not None else int(DARSConfig.DEFAULT_FETCH_K)
         self.top_n = int(top_n) if top_n is not None else int(DARSConfig.DEFAULT_TOP_N)
 
-    async def process_query(self, raw_query: str) -> str:
+    async def process_query(
+        self, raw_query: str, *, current_time: Optional[float] = None
+    ) -> str:
         """
         Executes the three-stage Interaction Layer pipeline.
         
@@ -59,17 +61,22 @@ class CognitiveGateway:
                 fetch_k=self.fetch_k,
                 top_n=self.top_n,
                 alpha=self.alpha,
+                current_time=current_time,
+                secondary_query=raw_query,
             ),
         )
-        
-        # 3. XML Injection 
+
+        # 3. XML Injection
         prompt = PromptConstructor.build(query=raw_query, memories=memories)
-        
+
         return prompt
 
     async def process_query_timed(
-        self, raw_query: str
-    ) -> Tuple[str, Dict[str, float], List]:
+        self,
+        raw_query: str,
+        *,
+        current_time: Optional[float] = None,
+    ) -> Tuple[str, Dict[str, Any], List]:
         """
         Same as ``process_query`` but returns wall-time breakdown and ranked memories.
 
@@ -93,16 +100,23 @@ class CognitiveGateway:
                 fetch_k=self.fetch_k,
                 top_n=self.top_n,
                 alpha=self.alpha,
+                current_time=current_time,
+                secondary_query=raw_query,
             ),
         )
         t2 = time.perf_counter()
         prompt = PromptConstructor.build(query=raw_query, memories=memories)
         t3 = time.perf_counter()
-        timings: Dict[str, float] = {
+        rq = raw_query.strip()
+        eq = expanded_query.strip()
+        timings: Dict[str, Any] = {
             "reformulate_s": t1 - t0,
             "retrieve_s": t2 - t1,
             "xml_build_s": t3 - t2,
             "gateway_total_s": t3 - t0,
+            "expanded_query": expanded_query,
+            "narrative_query_clock": current_time,
+            "reformulate_changed": bool(eq and eq != rq),
         }
         return prompt, timings, memories
 

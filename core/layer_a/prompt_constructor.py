@@ -1,6 +1,8 @@
 import logging
 from typing import List
+
 from core.layer_d.schema import MemoryPoint
+from core.layer_d.storage import chunk_index_from_tags
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +22,8 @@ class PromptConstructor:
     def build(cls, query: str, memories: List[MemoryPoint]) -> str:
         """
         Constructs the structured XML-encapsulated prompt.
-        Enforces a 20,000-character budget and truncates outliers.
+        Memories are ordered by narrative chunk index when ``chunk:n`` tags exist.
+        Enforces an expanded character budget and truncates outliers.
 
         Pure function: does NOT mutate any input MemoryPoint objects.
         Oversized memories are queued for distillation via get_distillation_queue().
@@ -36,28 +39,41 @@ class PromptConstructor:
             "High system_weight (>0.80): This memory has been frequently helpful in past successful tasks.\n"
             "Low system_weight (<0.40): This memory is historically less relevant but may still contain the factual answer.\n"
             "Do NOT mention these scores to the user. Do NOT apologize for using low-weight memories. Use them as grounding facts to answer the <current_user_query> accurately.\n"
+            "Memories are listed in ascending story chunk order when chunk tags are present; prefer later chunks for current world state.\n"
             "</system_context>\n"
         )
 
         memory_xml = ["<memory_stream>"]
 
         current_len = len(system_context) + len("<memory_stream>\n") + len("</memory_stream>\n") + len(query) + 50
-        MAX_PROMPT_CHARS = 20000
+        MAX_PROMPT_CHARS = 48000
 
-        for m in memories:
+        ordered = sorted(
+            memories,
+            key=lambda m: (
+                chunk_index_from_tags(m.payload.tags)
+                if chunk_index_from_tags(m.payload.tags) is not None
+                else 10**9,
+                m.point_id,
+            ),
+        )
+
+        for m in ordered:
             mid = m.point_id
             weight = m.dars_score if m.dars_score is not None else getattr(m.payload, 'utility', 0.0)
             r = getattr(m.payload, 'recency', 0.0)
+            ci = chunk_index_from_tags(m.payload.tags)
+            chunk_attr = f' story_chunk="{ci}"' if ci is not None else ""
 
             raw_text = getattr(m.payload, 'text_content', "")
 
-            if len(raw_text) > 10000:
-                raw_text = raw_text[:10000] + "\n[TRUNCATED FOR BUDGET - SEE ORIGINAL_TEXT_BACKUP]"
+            if len(raw_text) > 12000:
+                raw_text = raw_text[:12000] + "\n[TRUNCATED FOR BUDGET - SEE ORIGINAL_TEXT_BACKUP]"
                 cls._distillation_queue.append(mid)
 
             escaped_text = cls._escape_xml(raw_text)
             xml_str = (
-                f"    <memory id=\"{mid}\" system_weight=\"{weight:.2f}\" last_accessed=\"{r:.0f}\">\n"
+                f"    <memory id=\"{mid}\" system_weight=\"{weight:.2f}\" last_accessed=\"{r:.0f}\"{chunk_attr}>\n"
                 f"        {escaped_text}\n"
                 f"    </memory>"
             )

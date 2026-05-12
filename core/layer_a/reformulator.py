@@ -11,6 +11,23 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
+def _is_degenerate_expansion(raw: str, expanded: str) -> bool:
+    """Treat trivial / synonym-only style expansions as noise → caller falls back to raw."""
+    r = raw.strip()
+    e = expanded.strip()
+    if not e:
+        return True
+    if e.lower() == r.lower():
+        return False
+    if len(r) > 40 and len(e) < 12:
+        return True
+    rw = set(r.lower().split())
+    extra = set(e.lower().split()) - rw
+    if len(extra) < 2 and len(e) < len(r) * 1.12:
+        return True
+    return False
+
+
 class QueryReformulator:
     """
     Expands underspecified queries into descriptive search vectors via Gemini API.
@@ -80,24 +97,33 @@ class QueryReformulator:
         Transforms underspecified queries into descriptive search vectors.
         Falls back to the raw query on timeout, failure, or empty response.
         """
+        if not (raw_query or "").strip():
+            return raw_query
+
         if not self.api_key:
             logger.warning("No Gemini API key found. Falling back to raw query.")
             return raw_query
 
         prompt = (
-            f"Analyze the User Input: '{raw_query}'.\n"
-            f"FACT EXTRACTION: Identify and list any new facts or preferences.\n"
-            f"SEMANTIC EXPANSION: Generate 3-5 technical synonyms, related entities, "
-            f"and keyword variations of the underlying inquiry.\n"
-            f"OUTPUT: Return a single concise string (under {self.max_expansion_chars} characters) "
-            f"containing the expanded keywords. Do NOT rephrase or interpret the user's intent. "
-            f"Do NOT apologize. Keep entity names (e.g., 'Pista') untouched."
+            f"You rewrite benchmark queries for ARCHIVAL MEMORY RETRIEVAL over a long story.\n"
+            f"USER INPUT:\n'''{raw_query}'''\n\n"
+            f"TASK: Produce ONE dense search string (max {self.max_expansion_chars} chars) that:\n"
+            f"1) Anchors TIME and DISCOURSE: what just happened, 'after', 'most recent', 'current scene', "
+            f"'latest' vs 'earlier' when the question implies state change.\n"
+            f"2) Names concrete ENTITIES (people, objects, places) exactly as in the query.\n"
+            f"3) Adds retrieval hooks for what must be predicted next (e.g. 'next event', 'what happens next') "
+            f"tied to those anchors.\n"
+            f"4) Explicitly asks to EXCLUDE or deprioritize obsolete states when the query implies replacement "
+            f"(outfit change, location change, revised fact).\n"
+            f"Do NOT output bullet lists, JSON, or apologies. Do NOT only output synonyms.\n"
+            f"If the input is already specific, still add temporal anchors when applicable.\n"
         )
 
         last_error = None
         for attempt in range(1 + self.max_retries):
             try:
                 result = await self._call_gemini(prompt)
+                result = (result or "").strip()
 
                 if not result:
                     logger.warning("Empty expansion from Gemini (attempt %d). Retrying.", attempt + 1)
@@ -106,6 +132,10 @@ class QueryReformulator:
                 if len(result) > self.max_expansion_chars:
                     result = result[:self.max_expansion_chars]
                     logger.info("Expansion truncated to %d chars.", self.max_expansion_chars)
+
+                if _is_degenerate_expansion(raw_query, result):
+                    logger.warning("Degenerate reformulation rejected; using raw query.")
+                    return raw_query
 
                 logger.info(
                     "Query reformulated: '%s' -> '%s' (%d chars)",
