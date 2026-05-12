@@ -1,0 +1,38 @@
+% Figure 1.5 — Layer C janitor triage (grace, priority tag, score bands)
+\documentclass[tikz,border=10pt]{standalone}
+\input{dars-fig-preamble}
+\begin{document}
+\begin{tikzpicture}[
+  font=\footnotesize\sffamily,
+  arr/.style={-{Stealth[length=2mm]}, line width=0.55pt, draw=DarsGray},
+  arrR/.style={-{Stealth[length=2mm]}, line width=0.6pt, draw=DarsAccent!90!black},
+  dec/.style={diamond, aspect=2.2, draw=DarsGray, fill=white, inner sep=2pt,
+    font=\scriptsize\bfseries, minimum width=1.6cm},
+]
+
+  \node[boxAccent] (in) at (0,0) {triage\_memory(point)};
+  \node[dec, below=0.75 of in] (pr) {Priority tag?};
+  \node[boxFill, below left=1.05 and 0.5 of pr] (cmpP) {COMPRESS\\(distillation)};
+  \node[dec, below right=1.05 and 0.5 of pr] (gr) {24h grace?};
+  \node[boxFill, below left=1.05 and 0.5 of gr] (skip) {Skip triage};
+  \node[box, below right=1.05 and 0.5 of gr] (sc) {compute\_dars\_score};
+  \node[dec, below=1.0 of sc] (bd) {classify\_memory($S$)};
+  \node[boxFill, below left=1.15 and 0.55 of bd] (ret) {RETAIN\\$S{>}0.7$};
+  \node[boxFill, below=1.15 of bd] (cmp) {COMPRESS\\$0.3{<}S{\le}0.7$};
+  \node[box, below right=1.15 and 0.55 of bd] (del) {DELETE\\$S{\le}0.3$};
+
+  \draw[arrR] (in) -- (pr);
+  \draw[arr] (pr) -- node[above left, font=\scriptsize] {yes} (cmpP);
+  \draw[arr] (pr) -- node[above right, font=\scriptsize] {no} (gr);
+  \draw[arr] (gr) -- node[above left, font=\scriptsize] {yes} (skip);
+  \draw[arr] (gr) -- node[above right, font=\scriptsize] {no} (sc);
+  \draw[arr] (sc) -- (bd);
+  \draw[arr] (bd) -- node[above left, font=\scriptsize] {retain} (ret);
+  \draw[arr] (bd) -- node[left, font=\scriptsize] {compress} (cmp);
+  \draw[arr] (bd) -- node[above right, font=\scriptsize] {delete} (del);
+
+  \node[subnote, anchor=west] at (-3.35,-4.35) {\textbf{Tag:} \texttt{system:high\_priority\_distillation} $\Rightarrow$ compress path.\\
+    \textbf{Grace:} first 24h since created/recency $\Rightarrow$ skip (non-priority).};
+
+\end{tikzpicture}
+\end{document}

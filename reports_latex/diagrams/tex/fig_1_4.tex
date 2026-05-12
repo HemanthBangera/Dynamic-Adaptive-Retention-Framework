@@ -1,0 +1,43 @@
+% Figure 1.4 — DARS scoring dataflow + retrieval fusion (RRF vs alpha blend)
+\documentclass[tikz,border=10pt]{standalone}
+\input{dars-fig-preamble}
+\begin{document}
+\begin{tikzpicture}[
+  font=\footnotesize\sffamily,
+  arr/.style={-{Stealth[length=2mm]}, line width=0.55pt, draw=DarsGray},
+  arrB/.style={-{Stealth[length=2mm]}, line width=0.55pt, draw=DarsAccent!80!black},
+  dash/.style={dashed, line width=0.45pt, draw=DarsGray!70},
+]
+
+  \node[boxFill] (raw) at (0,2.8) {Raw text / chunk};
+  \node[boxFill, right=1.0 of raw] (emb) {EmbeddingEngine};
+  \node[boxAccent, right=1.0 of emb] (mp) {MemoryPayload\\+ vector};
+  \node[box, right=0.85 of mp, yshift=1.05cm] (r) {$R$};
+  \node[box, right=0.55 of mp] (f) {$F$};
+  \node[box, right=0.55 of mp, yshift=-1.05cm] (u) {$U$};
+  \node[box, right=1.85 of mp, yshift=-1.05cm] (p) {$P$};
+  \node[boxAccent, right=2.35 of mp] (s) {$S$ DARS score};
+  \node[box, below=0.9 of mp] (sim) {Similarity\\(query--vector)};
+  \node[diamond, aspect=2.1, draw=DarsAccent, fill=DarsLight, line width=0.55pt,
+    inner sep=1pt, font=\scriptsize\bfseries, below=1.15 of s] (d) {use\_rrf?};
+  \node[boxFill, below left=1.0 and 0.35 of d] (rrf) {RRF fusion\\$k{=}60$};
+  \node[boxFill, below right=1.0 and 0.35 of d] (hyb) {$\alpha\,\widehat{\mathrm{sim}} + (1{-}\alpha)\,\widehat{S}$};
+  \node[boxAccent, below=1.35 of d] (out) {Ranked top-$k$ $\rightarrow$ Layer A};
+  \node[box, above=0.65 of mp] (ing) {ingest\_new\_facts $\rightarrow$ store\_memory};
+  \draw[arr] (raw) -- (emb) -- (mp);
+  \draw[arr] (mp) -- (r); \draw[arr] (mp) -- (f); \draw[arr] (mp) -- (u); \draw[arr] (mp) -- (p);
+  \draw[arr] (r.east) -- ++(0.35,0) |- (s.west);
+  \draw[arr] (f.east) -- ++(0.2,0) |- (s.west);
+  \draw[arr] (u.east) -- ++(0.2,0) |- (s.west);
+  \draw[arr] (p.west) -- ++(-0.35,0) |- (s.west);
+  \draw[arr] (s) -- (d);
+  \draw[arr] (mp.south) |- (sim.west);
+  \draw[arr] (sim) -| (d.west);
+  \draw[arr] (d) -- node[left, font=\scriptsize] {Y} (rrf);
+  \draw[arr] (d) -- node[right, font=\scriptsize] {N} (hyb);
+  \draw[arr] (rrf.south) |- ($(out.north)+(-0.6,0.15)$);
+  \draw[arr] (hyb.south) |- ($(out.north)+(0.6,0.15)$);
+  \draw[dash] (ing.south) -- (mp.north);
+
+\end{tikzpicture}
+\end{document}

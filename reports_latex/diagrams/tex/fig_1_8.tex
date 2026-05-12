@@ -1,0 +1,30 @@
+% Figure 1.8 — Token savings vs.\ F1 (per QA rows from results export)
+\documentclass[tikz,border=10pt]{standalone}
+\input{dars-fig-preamble}
+\begin{document}
+\begin{tikzpicture}
+\begin{axis}[
+  width=11.6cm, height=6.4cm,
+  only marks,
+  mark size=1.35pt,
+  mark=*,
+  xmin=0.45, xmax=1.02,
+  ymin=0, ymax=1.02,
+  xlabel={\footnotesize Token savings ratio},
+  ylabel={\footnotesize F1 (per QA)},
+  tick label style={font=\scriptsize\sffamily},
+  label style={font=\footnotesize\sffamily},
+  title={\small\sffamily\bfseries Figure 1.8 --- Efficiency vs.\ accuracy (sampled rows)},
+  grid=major,
+  major grid style={DarsGray!12},
+]
+
+\addplot[draw=DarsAccent, fill=DarsAccent!70!white, opacity=0.92] table[
+  x=token_savings_ratio,
+  y=f1,
+  col sep=comma,
+]{../data/fig_1_8_scatter.csv};
+
+\end{axis}
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,36 @@
+% Figure 1.3 — Path A vs Path B (MemoryAgentBench evaluation flows)
+\documentclass[tikz,border=8pt]{standalone}
+\input{dars-fig-preamble}
+\begin{document}
+\begin{tikzpicture}[
+  font=\footnotesize\sffamily,
+  flow/.style={-{Stealth[length=2mm]}, line width=0.55pt, draw=DarsGray},
+  flowA/.style={-{Stealth[length=2mm]}, line width=0.6pt, draw=DarsAccent},
+  stage/.style={box, minimum width=2.6cm, minimum height=0.72cm},
+  cap/.style={bigLbl, anchor=west},
+  sub/.style={subnote},
+]
+
+  \node[cap] at (0,5.6) {Path A: full gateway (XML prompt + reader)};
+  \node[stage] (a1) at (1.4,4.7) {Runner: QA row};
+  \node[stage, below=0.55 of a1] (a2) {CognitiveGateway};
+  \node[stage, below=0.55 of a2] (a3) {Vault: search\_and\_rerank};
+  \node[stage, below=0.55 of a3] (a4) {PromptConstructor\\(budget 20k char)};
+  \node[stage, below=0.55 of a4] (a5) {Gemini API};
+  \node[stage, below=0.55 of a5] (a6) {Reader: gateway XML};
+  \foreach \a/\b in {a1/a2,a2/a3,a3/a4,a4/a5,a5/a6} \draw[flowA] (\a.south) -- (\b.north);
+  \node[sub] at (-0.2,0.35) {\textbf{Ingest} (episode): loader $\rightarrow$ qa\_builder $\rightarrow$ chunking $\rightarrow$ store\_memory};
+
+  \begin{scope}[shift={(7.2,0)}]
+    \node[cap] at (0,5.6) {Path B: rerank + bullets (runner default)};
+    \node[stage] (b1) at (1.4,4.7) {Runner: QA row};
+    \node[stage, below=0.55 of b1] (b2) {DARSReranker $\rightarrow$ Vault};
+    \node[stage, below=0.55 of b2] (b3) {Memory bullets text};
+    \node[stage, below=0.55 of b3] (b4) {Gemini API};
+    \node[stage, below=0.55 of b4] (b5) {Reader: bullet contract};
+    \foreach \a/\b in {b1/b2,b2/b3,b3/b4,b4/b5} \draw[flow] (\a.south) -- (\b.north);
+    \node[sub] at (-0.2,0.35) {No full gateway stack; aligns with \texttt{runner.py} Path B branch.};
+  \end{scope}
+
+\end{tikzpicture}
+\end{document}

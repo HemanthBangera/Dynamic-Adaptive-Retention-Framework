@@ -16,6 +16,8 @@ The architecture enforces a strict handoff contract:
 - Layer C governs lifecycle actions using score thresholds and policy boundaries.
 - Layer D is the single source of truth for persisted vectors and payload state.
 
+**Diagrams (research figures):** multi-view Mermaid figures, Path A/B pipelines, MAB driver flow, and a full element-to-file glossary live in [ARCHITECTURE_DIAGRAMS.md](ARCHITECTURE_DIAGRAMS.md).
+
 ---
 
 ## 2) Repository Architecture Map

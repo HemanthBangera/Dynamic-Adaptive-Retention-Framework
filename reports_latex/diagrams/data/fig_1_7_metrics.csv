@@ -1,0 +1,3 @@
+plot_index,label,short_label,em_mean,f1_mean,n,path_mode,split,source
+0,accurate-retrieval-eventqa-65536-path-b,accurate-retrieval-eve...,0.64,0.7635204421309685,25,b,Accurate_Retrieval,eventqa_65536
+1,accurate-retrieval-ruler-qa1-197k-path-b,accurate-retrieval-rul...,0.2,0.37466666666666665,5,b,Accurate_Retrieval,ruler_qa1_197K

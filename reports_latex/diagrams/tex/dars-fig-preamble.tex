@@ -1,0 +1,35 @@
+% Shared preamble for DARS journal figures (input from each fig_*.tex in this directory).
+\usepackage[T1]{fontenc}
+\usepackage{microtype}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{xcolor}
+% tikz loaded by standalone class option [tikz]
+\usetikzlibrary{positioning,arrows.meta,calc,fit,backgrounds,shapes.geometric,matrix}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{pgfplotstable}
+\usepackage{booktabs}
+\usepackage{array}
+
+% Print-safe palette (grayscale + one accent)
+\definecolor{DarsAccent}{HTML}{2E5AAC}
+\definecolor{DarsAccentDark}{HTML}{1A3D6E}
+\definecolor{DarsGray}{HTML}{555555}
+\definecolor{DarsLight}{HTML}{E8EBF0}
+\definecolor{DarsBand}{HTML}{F4F5F7}
+
+\tikzset{
+  darsLine/.style={-{Stealth[length=2.2mm]}, line width=0.55pt, draw=DarsGray},
+  darsLineAccent/.style={-{Stealth[length=2.2mm]}, line width=0.65pt, draw=DarsAccent},
+  darsDash/.style={dashed, line width=0.5pt, draw=DarsGray!70},
+  box/.style={draw=DarsGray, rounded corners=2.5pt, line width=0.5pt,
+    fill=white, align=center, inner sep=4pt, font=\footnotesize\sffamily},
+  boxFill/.style={box, fill=DarsLight},
+  boxAccent/.style={box, draw=DarsAccent, line width=0.6pt, fill=DarsLight!60!white},
+  lbl/.style={font=\scriptsize\sffamily, text=DarsGray},
+  subnote/.style={font=\scriptsize\sffamily, text=DarsGray, align=left, anchor=north west},
+  bigLbl/.style={font=\small\bfseries\sffamily, text=DarsAccentDark},
+}

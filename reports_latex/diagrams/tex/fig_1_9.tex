@@ -1,0 +1,38 @@
+% Figure 1.9 — Ablation / run comparison (manifest-controlled; data from CSV when present)
+\documentclass[tikz,border=10pt,varwidth=16cm]{standalone}
+\input{dars-fig-preamble}
+\begin{document}
+\sffamily\footnotesize
+\begin{center}
+\textbf{Figure 1.9 — Controlled runs (Path and retrieval knobs)}\\[0.35em]
+\IfFileExists{../data/fig_1_7_metrics.csv}{
+\pgfplotstabletypeset[
+  col sep=comma,
+  columns={plot_index,short_label,path_mode,em_mean,f1_mean,n,split,source},
+  columns/plot_index/.style={column name={\#}},
+  columns/short_label/.style={column name={Run (short)}},
+  columns/path_mode/.style={column name={path}},
+  columns/em_mean/.style={column name={EM mean}, column type={r}},
+  columns/f1_mean/.style={column name={F1 mean}, column type={r}},
+  columns/n/.style={column name={$n$}, column type={r}},
+  columns/split/.style={column name={split}},
+  columns/source/.style={column name={source}},
+  every head row/.style={before row=\toprule, after row=\midrule},
+  every last row/.style={after row=\bottomrule},
+]{../data/fig_1_7_metrics.csv}
+}{
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Run} & \textbf{path} & \textbf{EM mean} & \textbf{F1 mean} & \textbf{$n$} \\
+\midrule
+\multicolumn{5}{@{}l@{}}{\textit{No CSV found --- run} \texttt{export\_plot\_data.py}} \\
+\bottomrule
+\end{tabular}
+}
+\end{center}
+\vspace{0.5em}
+\begin{minipage}{15.5cm}
+\scriptsize\sffamily
+\textbf{Hold constant for A/B:} \texttt{hf\_revision}, \texttt{split}, \texttt{metadata\_source}, \texttt{chunk\_size\_tokens}, \texttt{seed}, \texttt{dars\_fetch\_k}, \texttt{dars\_top\_n}, \texttt{dars\_rerank\_alpha}, Gemini pacing fields in \texttt{run\_manifest.json}.
+\end{minipage}
+\end{document}

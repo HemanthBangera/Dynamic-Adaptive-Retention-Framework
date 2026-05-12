@@ -1,0 +1,32 @@
+% Figure 1.7 — Comparative accuracy (mean exact match) across archived runs
+\documentclass[tikz,border=10pt]{standalone}
+\input{dars-fig-preamble}
+\begin{document}
+\begin{tikzpicture}
+\begin{axis}[
+  width=11.8cm, height=6.2cm,
+  ybar,
+  bar width=16pt,
+  ymin=0, ymax=1.05,
+  ylabel={\footnotesize Mean exact match},
+  xtick=data,
+  xticklabels from table={../data/fig_1_7_metrics.csv}{short_label},
+  enlarge x limits=0.22,
+  tick label style={font=\scriptsize\sffamily, rotate=28, anchor=east},
+  label style={font=\footnotesize\sffamily},
+  title={\small\sffamily\bfseries Figure 1.7 --- Archived runs (EM mean)},
+  grid=major,
+  major grid style={DarsGray!12},
+  legend style={font=\scriptsize\sffamily},
+]
+
+\addplot[fill=DarsAccent!75!white, draw=DarsAccent] table[
+  x=plot_index,
+  y=em_mean,
+  col sep=comma,
+]{../data/fig_1_7_metrics.csv};
+\addlegendentry{EM mean}
+
+\end{axis}
+\end{tikzpicture}
+\end{document}
