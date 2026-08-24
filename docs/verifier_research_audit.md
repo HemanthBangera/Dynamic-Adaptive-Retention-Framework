@@ -35,33 +35,39 @@ The existing baseline suite proves many implemented paths work. This verifier su
 
 ---
 
-## Failure analysis (why these 3 failed)
+## Issues found by this suite, and how they were resolved
 
-### 1) Empty reformulation fallback fails
+These three contract violations were what the suite was written to expose. All three were
+**observed on the first run and have since been fixed**; the suite now passes 6/6 against the
+current code. This section is retained as the record of what was found and where it was corrected.
+
+### 1) Empty reformulation was accepted instead of triggering fallback
 - Test: `test_reformulator_empty_generation_falls_back_to_raw_query`
-- Observed: reformulator returned empty string `""` instead of raw query.
-- Why it might fail:
-  - Empty model output is currently treated as valid output.
-  - Fallback guard triggers on timeout/error/length mismatch, but not on empty-string content.
-- Research risk:
-  - Retrieval can run with empty query vectors, reducing recall quality and introducing unstable benchmark outcomes.
+- Observed at audit time: reformulator returned an empty string `""` instead of the raw query.
+- Cause: empty model output was treated as a valid expansion; the fallback guard fired on
+  timeout, error and length drift, but not on empty content.
+- Research risk if unfixed: retrieval could run on an empty query vector, reducing recall and
+  destabilising benchmark outcomes.
+- **Resolved** — `core/layer_a/reformulator.py:102` now treats a falsy result as a failure and
+  returns the raw query (`reformulator.py:133`).
 
-### 2) Predictive value can be negative on ingest
+### 2) Predictive value could be negative on ingest
 - Test: `test_ingest_new_facts_predictive_value_is_bounded`
-- Observed: `predictive_value = -1.0` forwarded to `store_memory()`.
-- Why it might fail:
-  - Cosine similarity is computed directly and forwarded without clamp/normalization.
-  - The schema intent documents predictive score as $p \in [0,1]$.
-- Research risk:
-  - Negative predictive values distort DARS scoring and can bias retention decisions under adversarial vectors.
+- Observed at audit time: `predictive_value = -1.0` forwarded to `store_memory()`.
+- Cause: cosine similarity was forwarded without clamping, though the schema documents the
+  predictive score as $p \in [0,1]$.
+- Research risk if unfixed: negative predictive values distort the DARS composite and bias
+  retention decisions under adversarial vectors.
+- **Resolved** — clamped to $[0,1]$ at `core/layer_d/storage.py:294` and `storage.py:363`.
 
-### 3) Maintenance errors are logged but swallowed
+### 3) Maintenance errors were logged but swallowed
 - Test: `test_triage_orchestrator_surfaces_maintenance_failures`
-- Observed: run completed without raising; only log entry recorded.
-- Why it might fail:
-  - `run_maintenance()` catches broad exception and does not re-raise.
-- Research risk:
-  - Supervisors/schedulers cannot detect failed maintenance cycles, causing silent stale-memory accumulation.
+- Observed at audit time: the run completed without raising; only a log entry was recorded.
+- Cause: `run_maintenance()` caught a broad exception without re-raising.
+- Research risk if unfixed: schedulers cannot detect failed maintenance cycles, allowing silent
+  accumulation of stale memories.
+- **Resolved** — the handler at `core/layer_c/triage.py:147` now re-raises after logging
+  (`triage.py:149`).
 
 ---
 
@@ -75,10 +81,19 @@ The existing baseline suite proves many implemented paths work. This verifier su
 
 ## Interpretation for research progression
 
-This verifier run shows the implementation is functionally strong in several core paths, but has three contract-level loopholes that can affect research validity:
+The suite was written to expose contract-level loopholes that could affect research validity. It
+found three:
 
 1. Empty reformulation acceptance.
 2. Unbounded predictive handoff.
 3. Non-propagating maintenance failures.
 
-These are appropriate next targets for research-grade reliability before relying on comparative benchmark claims.
+All three have been corrected at the code locations cited above, and the suite now passes 6/6. The
+cross-layer contracts it covers — Layer A query handoff, Layer B feedback patching, Layer C grace
+period and error propagation, and the bounded predictive handoff into Layer D — therefore hold
+against the current implementation.
+
+Note on scope: these tests verify architectural contracts, not retrieval quality. They establish
+that the layers interact as specified; they do not establish that the DARS composite score improves
+retrieval accuracy. That question requires the baseline and ablation experiments listed under Scope
+for Future Work in the manuscript.
