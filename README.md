@@ -222,9 +222,11 @@ Department of Information Science and Engineering, Ramaiah Institute of Technolo
 
 ## License
 
-<!-- TODO: choose a license (MIT and Apache-2.0 are the common choices for research code)
-     and add the corresponding LICENSE file at the repository root. Until then, no licence
-     is granted and reuse rights are undefined. -->
+Released under the [MIT License](LICENSE) — © 2026 Pushpalatha M N, Harshendra M and
+Hemanth L Bangera.
 
-No licence has been specified yet. Until a `LICENSE` file is added, all rights are reserved and no
-permission to reuse is granted.
+This covers the original work in this repository. Vendored code under
+`third_party/memoryagentbench_eval/` retains its own upstream copyright and licence (MIT, from
+MemoryAgentBench, adapted in part from Princeton DensePhrases); see
+[`VENDOR.md`](third_party/memoryagentbench_eval/VENDOR.md). The evaluation and training datasets are
+third-party resources distributed under their own terms.
