@@ -16,11 +16,9 @@ from editdistance import eval as edit_distance
 
 import logging
 
-# Configure logging
-logging.basicConfig(
-    format='%(asctime)s - %(levelname)s - %(name)s - %(message)s',
-    datefmt='%m/%d/%Y %H:%M:%S'
-)
+# DARS change: the upstream module called logging.basicConfig() at import time. That
+# pre-empted the logging setup of every driver importing it, so their INFO progress
+# messages were dropped. The call is removed; the metric code is unchanged.
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 

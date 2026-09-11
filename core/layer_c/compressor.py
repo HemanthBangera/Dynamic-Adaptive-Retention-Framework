@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING, Optional
 
 from config.settings import DARSConfig
 from core.layer_d.storage import MemoryVault
+from core.llm_transport import get_default_transport
 
 if TYPE_CHECKING:
     from core.gemini_transport import GovernedGeminiTransport
@@ -28,7 +29,7 @@ class SemanticCompressor:
     ):
         if vault is None:
             raise TypeError("SemanticCompressor requires an explicit vault instance")
-        self.transport = transport
+        self.transport = transport if transport is not None else get_default_transport("aux")
         self.timeout = timeout or DARSConfig.GEMINI_TIMEOUT
         self.max_retries = DARSConfig.GEMINI_MAX_RETRIES
         self.api_key = DARSConfig.GEMINI_API_KEY
@@ -40,7 +41,11 @@ class SemanticCompressor:
         self.vault = vault
 
     async def _call_gemini(self, prompt_text: str) -> str | None:
-        """Make a single Gemini REST call. Returns extracted text or None."""
+        """Make a single LLM call (injected transport, else Gemini REST). Returns text or None."""
+        if self.transport is not None:
+            text, _ki = await self.transport.generate_text(prompt_text)
+            return text
+
         payload = {"contents": [{"parts": [{"text": prompt_text}]}]}
         headers = {
             "Content-Type": "application/json",
@@ -88,7 +93,7 @@ class SemanticCompressor:
             return False
 
         if not self.api_key and self.transport is None:
-            raise RuntimeError("Gemini API key is required for Semantic Compressor.")
+            raise RuntimeError("An LLM API key is required for Semantic Compressor (Gemini or OpenAI).")
 
         prompt = (
             "Summarize the following memory into a single, dense, factual bullet point.\n"

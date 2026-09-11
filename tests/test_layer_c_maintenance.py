@@ -57,8 +57,10 @@ class TestCompressorLive:
 
     @pytest.mark.asyncio
     async def test_missing_key_raises(self, vault):
+        """No Gemini key and no transport at all → compression must fail loudly."""
         compressor = SemanticCompressor(vault=vault)
         compressor.api_key = ""
+        compressor.transport = None
         with pytest.raises(RuntimeError, match="API key is required"):
             await compressor.compress_memory("fake-id", "some text")
 

@@ -28,3 +28,7 @@ data/groupB/cache/
 # OS generated files
 .DS_Store
 Thumbs.db
+# LLM response cache (archived separately with the paper artifacts)
+benchmark_runs/_llm_cache/
+# Embedding vector cache (DARS_EMBED_CACHE; regenerable)
+benchmark_runs/_emb_cache/

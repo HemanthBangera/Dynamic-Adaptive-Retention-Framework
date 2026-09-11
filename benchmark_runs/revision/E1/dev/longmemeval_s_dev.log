@@ -1,0 +1,25 @@
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 1182.66it/s]
+C:\Users\Harsh\Desktop\minilunch\Dynamic-Adaptive-Retention-Framework\core\layer_d\embedding.py:87: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  return self._model.get_sentence_embedding_dimension()
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+09/11/2026 18:06:08 - WARNING - datasets.load - Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\ai-hyz___memory_agent_bench\default\0.0.0\7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 17:56:01 2026).
+09/11/2026 18:06:08 - WARNING - datasets.packaged_modules.cache.cache - Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\ai-hyz___memory_agent_bench\default\0.0.0\7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 17:56:01 2026).
+Filter:   0%|          | 0/22 [00:00<?, ? examples/s]Filter: 100%|██████████| 22/22 [00:00<00:00, 71.59 examples/s]Filter: 100%|██████████| 22/22 [00:00<00:00, 64.12 examples/s]
+[transformers] Token indices sequence length is longer than the specified maximum sequence length for this model (428 > 256). Running this sequence through the model will result in indexing errors
+C:\Users\Harsh\Desktop\minilunch\Dynamic-Adaptive-Retention-Framework\core\layer_d\storage.py:223: UserWarning: Payload indexes have no effect in the local Qdrant. Please use server Qdrant if you need payload indexes.
+  
+bm25                         group_recall@5120 = 0.805 [0.720, 0.885]
+similarity                   group_recall@5120 = 0.777 [0.664, 0.876]
+dars_rrf_k15                 group_recall@5120 = 0.777 [0.664, 0.876]
+dars_wrrf_k20_b0.25          group_recall@5120 = 0.777 [0.664, 0.876]
+dars_wrrf_k20_b0.5           group_recall@5120 = 0.777 [0.664, 0.876]
+dars_wrrf_k50_b0.25          group_recall@5120 = 0.777 [0.664, 0.876]
+dars_wrrf_k50_b0.5           group_recall@5120 = 0.777 [0.664, 0.876]
+dars_blend_a0.5              group_recall@5120 = 0.777 [0.664, 0.876]
+dars_blend_a0.8              group_recall@5120 = 0.777 [0.664, 0.876]
+dars_wrrf_k100_b0.25         group_recall@5120 = 0.775 [0.662, 0.875]
+dars_rrf_k50                 group_recall@5120 = 0.771 [0.662, 0.870]
+dars_wrrf_k100_b0.5          group_recall@5120 = 0.766 [0.649, 0.869]
+recency                      group_recall@5120 = 0.008 [0.000, 0.032]
+random                       group_recall@5120 = 0.002 [0.000, 0.009]

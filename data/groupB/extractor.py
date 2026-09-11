@@ -28,6 +28,7 @@ logger = logging.getLogger(__name__)
 
 FEEDBACK_THRESHOLD = 0.45
 NOISE_FACTS_PER_TASK = 5
+NOISE_SEED = 42
 
 STRATEGY_TEMPLATES: Dict[str, str] = {
     "pick_heat_then_place_in_recep": (
@@ -243,10 +244,12 @@ def _build_goal_nl(
 #  Main Extraction
 # ═══════════════════════════════════════════════════════════════════════════════
 
-def extract_task(row: Dict[str, Any]) -> Optional[ProcessedTask]:
+def extract_task(row: Dict[str, Any], seed: int = NOISE_SEED) -> Optional[ProcessedTask]:
     """Extract a single ALFWorld task into DARS-ready structures.
 
     Returns None if the game_content cannot be parsed.
+    The noise-fact sample is seeded per task (``seed`` + task id), so the
+    extraction is reproducible across runs.
     """
     task_id = row["id"]
     task_type = row["task_type"]
@@ -342,7 +345,8 @@ def extract_task(row: Dict[str, Any]) -> Optional[ProcessedTask]:
     irrelevant = [
         f for f in in_receps if f["obj_type"].lower() not in goal_obj_lower
     ]
-    sampled = random.sample(irrelevant, min(NOISE_FACTS_PER_TASK, len(irrelevant)))
+    rng = random.Random(f"{seed}:{task_id}")
+    sampled = rng.sample(irrelevant, min(NOISE_FACTS_PER_TASK, len(irrelevant)))
     for fact in sampled:
         cid = fact["concept_id"]
         memories.append({
@@ -400,12 +404,14 @@ def extract_task(row: Dict[str, Any]) -> Optional[ProcessedTask]:
 def extract_all(
     rows: List[Dict[str, Any]],
     max_per_type: Optional[int] = None,
+    seed: int = NOISE_SEED,
 ) -> Dict[str, List[ProcessedTask]]:
     """Extract tasks grouped by task_type.
 
     Args:
         rows: raw dataset rows (one split).
         max_per_type: cap per task_type (None = all).
+        seed: seed for the per-task noise-fact sample.
 
     Returns:
         ``{task_type: [ProcessedTask, ...]}``
@@ -421,7 +427,7 @@ def extract_all(
         subset = type_rows[:max_per_type] if max_per_type else type_rows
         tasks: List[ProcessedTask] = []
         for r in subset:
-            pt = extract_task(r)
+            pt = extract_task(r, seed=seed)
             if pt is not None:
                 tasks.append(pt)
         result[ttype] = tasks

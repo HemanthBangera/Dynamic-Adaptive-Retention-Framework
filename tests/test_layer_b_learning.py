@@ -47,8 +47,10 @@ class TestEvaluatorLive:
 
     @pytest.mark.asyncio
     async def test_missing_key_raises(self):
+        """No Gemini key and no transport at all → the judge must fail loudly."""
         ev = SuccessEvaluator()
         ev.api_key = ""
+        ev.transport = None
         with pytest.raises(RuntimeError, match="API key is required"):
             await ev.evaluate_success("q", "r", "m")
 

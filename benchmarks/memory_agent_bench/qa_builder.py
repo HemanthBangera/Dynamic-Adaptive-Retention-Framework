@@ -11,6 +11,8 @@ from third_party.memoryagentbench_eval import get_template
 
 # Agent name must contain `Agentic_memory` for upstream `normalize_agent_name`.
 MAB_AGENT_TEMPLATE_KEY = "dars_Agentic_memory"
+# RAG-agent query templates (as used for MemoryAgentBench's published RAG baselines).
+MAB_RAG_TEMPLATE_KEY = "dars_rag"
 
 
 def _get_field_value(
@@ -55,16 +57,25 @@ def _create_single_qa_pair(
     answer: Any,
     question_index: int,
     sub_dataset: str,
+    agent_key: str = MAB_AGENT_TEMPLATE_KEY,
 ) -> Tuple[str, Any, Any]:
     qa_metadata = _create_qa_metadata(question_data, question, answer, question_index)
-    query_template = get_template(sub_dataset, "query", MAB_AGENT_TEMPLATE_KEY)
+    query_template = get_template(sub_dataset, "query", agent_key)
     formatted_query = query_template.format(**qa_metadata)
     qa_pair_id = qa_metadata.get("qa_pair_ids")
     return formatted_query, answer, qa_pair_id
 
 
-def build_qa_pairs(row: Dict[str, Any], sub_dataset: str) -> List[Tuple[str, Any, Any]]:
-    """Return list of (formatted_query, answer, qa_pair_id)."""
+def build_qa_pairs(
+    row: Dict[str, Any],
+    sub_dataset: str,
+    agent_key: str = MAB_AGENT_TEMPLATE_KEY,
+) -> List[Tuple[str, Any, Any]]:
+    """Return list of (formatted_query, answer, qa_pair_id).
+
+    ``agent_key`` selects the MemoryAgentBench query-template family
+    (``MAB_AGENT_TEMPLATE_KEY`` = agentic-memory agents, ``MAB_RAG_TEMPLATE_KEY`` = RAG agents).
+    """
     question_data = {k: v for k, v in row.items() if k != "context"}
     questions = question_data.get("questions") or []
     answers = question_data.get("answers") or []
@@ -75,12 +86,12 @@ def build_qa_pairs(row: Dict[str, Any], sub_dataset: str) -> List[Tuple[str, Any
 
     if len(questions) > 1 and len(answers) > 1:
         return [
-            _create_single_qa_pair(question_data, q, a, i, sub_dataset)
+            _create_single_qa_pair(question_data, q, a, i, sub_dataset, agent_key)
             for i, (q, a) in enumerate(zip(questions, answers))
         ]
     q0 = questions[0] if questions else ""
     a0 = answers[0] if len(answers) == 1 else answers
-    return [_create_single_qa_pair(question_data, q0, a0, 0, sub_dataset)]
+    return [_create_single_qa_pair(question_data, q0, a0, 0, sub_dataset, agent_key)]
 
 
 def min_context_chars() -> int:

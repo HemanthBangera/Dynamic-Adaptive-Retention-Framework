@@ -24,8 +24,16 @@ class DARSConfig:
 
     # ── Gemini API Integration ─────────────────────────────────────────
     GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
-    GEMINI_PROJECT_NUMBER: str = os.getenv("GEMINI_PROJECT_NUMBER", "805928140149")
+    GEMINI_PROJECT_NUMBER: str = os.getenv("GEMINI_PROJECT_NUMBER", "")
     GEMINI_MODEL: str = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+
+    # ── OpenAI Integration ─────────────────────────────────────────────
+    #    LLM_PROVIDER: "openai" | "gemini" | "" (auto: Gemini if GEMINI_API_KEY
+    #    is set, otherwise OpenAI if an OpenAI key can be found).
+    #    Reader = answer generation; AUX = judge, compressor, reformulator.
+    LLM_PROVIDER: str = os.getenv("DARS_LLM_PROVIDER", "").strip().lower()
+    OPENAI_READER_MODEL: str = os.getenv("DARS_OPENAI_READER_MODEL", "gpt-4o-mini-2024-07-18")
+    OPENAI_AUX_MODEL: str = os.getenv("DARS_OPENAI_AUX_MODEL", "gpt-4.1-nano-2025-04-14")
 
     # ── Qdrant Connection ──────────────────────────────────────────────
     QDRANT_URL: str = os.getenv(
@@ -36,6 +44,9 @@ class DARSConfig:
         "QDRANT_API_KEY",
         "",
     )
+    # Local vector store (":memory:" or a folder path), used when QDRANT_URL is empty.
+    # Local mode performs exact search; Qdrant Cloud uses approximate HNSW search.
+    QDRANT_LOCATION: str = os.getenv("QDRANT_LOCATION", "")
 
     # ── Collection ─────────────────────────────────────────────────────
     COLLECTION_NAME: str = "dars_memory"
@@ -119,6 +130,7 @@ class DARSConfig:
     # ── Layer C Resilience ─────────────────────────────────────────────
     SHUTDOWN_TIMEOUT_SECONDS: float = 15.0
     MAX_CONCURRENT_DISTILLATIONS: int = 3
+    GRACE_PERIOD_SECONDS: float = 86400.0  # memories created/accessed within this window skip triage
 
     # ── Retention Thresholds (§9) ──────────────────────────────────────
     THRESHOLD_RETAIN: float = 0.7        # S > 0.7  → Keep

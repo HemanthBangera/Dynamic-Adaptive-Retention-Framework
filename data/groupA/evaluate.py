@@ -338,8 +338,10 @@ def run_evaluation(
     k: int = 5,
     fetch_k: int = 20,
     verbose: bool = True,
+    seed: int = 42,
 ) -> List[DialogueEvalResult]:
     """Full pipeline: extract -> train -> evaluate for each dialogue."""
+    rng = random.Random(seed)
     original_group = DARSConfig.TRAINING_GROUP
     DARSConfig.TRAINING_GROUP = "MSC"
     DARSConfig._goal_vector_cache = None
@@ -375,7 +377,7 @@ def run_evaluation(
             pr = evaluator.evaluate_persona_retention(d, trainer.vault, sessions_data)
             persona_results.append(pr)
 
-            foreign_id = _pick_foreign_dialogue(d.dialogue_id, all_dialogue_ids)
+            foreign_id = _pick_foreign_dialogue(d.dialogue_id, all_dialogue_ids, rng=rng)
             if foreign_id is not None:
                 foreign_sessions = raw_dialogues.get(foreign_id, {})
                 foreign_s0 = foreign_sessions.get(0, {})
@@ -408,12 +410,15 @@ def run_evaluation(
         DARSConfig._goal_vector_cache = None
 
 
-def _pick_foreign_dialogue(current_id: int, all_ids: List[int]) -> Optional[int]:
-    """Pick a dialogue_id that is far from the current one."""
+def _pick_foreign_dialogue(
+    current_id: int, all_ids: List[int], rng: Optional[random.Random] = None
+) -> Optional[int]:
+    """Pick a dialogue_id that is far from the current one (seeded when ``rng`` is given)."""
+    rng = rng or random.Random(current_id)
     candidates = [did for did in all_ids if abs(did - current_id) > 100]
     if not candidates:
         candidates = [did for did in all_ids if did != current_id]
-    return random.choice(candidates) if candidates else None
+    return rng.choice(candidates) if candidates else None
 
 
 def _print_eval_report(

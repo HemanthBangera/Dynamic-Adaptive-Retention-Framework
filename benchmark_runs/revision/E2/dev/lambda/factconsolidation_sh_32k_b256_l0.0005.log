@@ -1,0 +1,15 @@
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 7067.47it/s]
+C:\Users\Harsh\Desktop\minilunch\Dynamic-Adaptive-Retention-Framework\core\layer_d\embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  return self._model.get_sentence_embedding_dimension()
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING:datasets.load:Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\ai-hyz___memory_agent_bench\default\0.0.0\7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:33:40 2026).
+WARNING:datasets.packaged_modules.cache.cache:Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\ai-hyz___memory_agent_bench\default\0.0.0\7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:33:40 2026).
+C:\Users\Harsh\Desktop\minilunch\Dynamic-Adaptive-Retention-Framework\core\layer_d\storage.py:227: UserWarning: Payload indexes have no effect in the local Qdrant. Please use server Qdrant if you need payload indexes.
+  self.client.create_payload_index(
+dars_blend_a0.5|none|dev                      recall=1.0 precedence=0.3333333333333333 precedence_rank=0.3333333333333333 reader_acc=None
+dars_blend_a0.5|oracle|dev                    recall=1.0 precedence=0.38095238095238093 precedence_rank=0.38095238095238093 reader_acc=None
+dars_rrf_k50|none|dev                         recall=0.8666666666666667 precedence=0.9047619047619048 precedence_rank=0.9523809523809523 reader_acc=None
+dars_rrf_k50|oracle|dev                       recall=0.9 precedence=0.7619047619047619 precedence_rank=0.8095238095238095 reader_acc=None
+dars_wrrf_k50_b0.5|none|dev                   recall=1.0 precedence=0.9047619047619048 precedence_rank=0.9047619047619048 reader_acc=None
+dars_wrrf_k50_b0.5|oracle|dev                 recall=1.0 precedence=0.7619047619047619 precedence_rank=0.7619047619047619 reader_acc=None

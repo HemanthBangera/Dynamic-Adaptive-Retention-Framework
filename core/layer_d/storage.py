@@ -22,14 +22,23 @@ It serves:
     • Layer B  (atomic payload updates after success evaluation)
     • Layer C  (full-scan scoring & triage)
 
-Tech Stack:  Qdrant (cloud/local) · Python qdrant-client · all-MiniLM-L6-v2
+Tech Stack:  Qdrant (cloud/server or local) · Python qdrant-client · all-MiniLM-L6-v2
+
+Backends
+--------
+``QDRANT_URL`` selects a Qdrant server or Qdrant Cloud (approximate HNSW search).
+``location=":memory:"`` (or ``QDRANT_LOCATION``) selects the in-process local
+store, and a folder path selects on-disk local storage; local mode performs
+exact nearest-neighbour search.
 """
 
 from __future__ import annotations
 
 import logging
 import math
+import threading
 import time
+import uuid
 from typing import Any, Dict, List, Optional, Tuple
 
 from qdrant_client import QdrantClient
@@ -38,7 +47,9 @@ from qdrant_client.models import (
     FieldCondition,
     Filter,
     HasIdCondition,
+    IsEmptyCondition,
     MatchValue,
+    PayloadField,
     PointIdsList,
     PointStruct,
     Range,
@@ -57,6 +68,9 @@ from core.layer_d.schema import (
 
 logger = logging.getLogger(__name__)
 
+RANK_MODES = ("similarity", "rrf", "wrrf", "blend")
+_UPSERT_BATCH = 256
+
 
 # ═══════════════════════════════════════════════════════════════════════════════
 #  MemoryVault  –  Layer D Core Engine
@@ -73,10 +87,17 @@ class MemoryVault:
         Override the default DARS configuration.
     collection_name : str, optional
         Override the collection name from config (useful for testing).
+    weights : DARSWeights, optional
+        Per-vault DARS weight vector (ablations, sensitivity analysis).
+        Defaults to the weights in ``config``.
+    location : str, optional
+        ``":memory:"`` for an in-process local store or a folder path for an
+        on-disk local store.  Falls back to ``config.QDRANT_LOCATION``, then to
+        ``config.QDRANT_URL``.  Each ``":memory:"`` vault is its own store.
 
     Example
     -------
-    >>> vault = MemoryVault()
+    >>> vault = MemoryVault(location=":memory:")
     >>> vault.initialize_collection()
     >>> pid = vault.store_memory("The client prefers Python 3.12")
     >>> results = vault.search_and_rerank("What language does the client use?")
@@ -86,43 +107,68 @@ class MemoryVault:
         self,
         config: Optional[DARSConfig] = None,
         collection_name: Optional[str] = None,
+        *,
+        weights: Optional[DARSWeights] = None,
+        location: Optional[str] = None,
     ):
         self.config = config or DARSConfig()
         self.collection_name = collection_name or self.config.COLLECTION_NAME
 
         # ── Qdrant client ──────────────────────────────────────────────
-        kwargs = {}
-        if self.config.QDRANT_URL.startswith("localhost") or self.config.QDRANT_URL.startswith("127.0.0.1"):
-            pass # Keep defaults
+        loc = location if location is not None else (self.config.QDRANT_LOCATION or None)
+        if loc:
+            if loc == ":memory:":
+                self.client = QdrantClient(location=":memory:")
+                self.backend = "local-memory"
+            else:
+                self.client = QdrantClient(path=loc)
+                self.backend = "local-path"
+            where = loc
+        elif self.config.QDRANT_URL:
+            kwargs = {}
+            if not (
+                self.config.QDRANT_URL.startswith("localhost")
+                or self.config.QDRANT_URL.startswith("127.0.0.1")
+            ):
+                kwargs["prefer_grpc"] = False
+            self.client = QdrantClient(
+                url=self.config.QDRANT_URL,
+                api_key=self.config.QDRANT_API_KEY,
+                timeout=60.0,
+                **kwargs,
+            )
+            self.backend = "remote"
+            where = self.config.QDRANT_URL[:50] + "..."
         else:
-            kwargs["prefer_grpc"] = False
+            raise ValueError(
+                "No vector store configured: set QDRANT_URL (server/cloud) or "
+                "QDRANT_LOCATION (':memory:' or a folder path), or pass location=..."
+            )
 
-        self.client = QdrantClient(
-            url=self.config.QDRANT_URL,
-            api_key=self.config.QDRANT_API_KEY,
-            timeout=60.0,
-            **kwargs
-        )
+        # Serialises version-checked writes on in-process (local) stores; see _conditional_patch.
+        self._write_lock = threading.RLock()
 
         # ── Embedding engine (lazy-loaded) ─────────────────────────────
         self.embedder = EmbeddingEngine(self.config.EMBEDDING_MODEL)
 
         # ── DARS weight vector ─────────────────────────────────────────
-        self.weights = DARSWeights(
+        self.weights = weights or DARSWeights(
             w_r=self.config.WEIGHT_RECENCY,
             w_f=self.config.WEIGHT_FREQUENCY,
             w_u=self.config.WEIGHT_UTILITY,
             w_p=self.config.WEIGHT_PREDICTIVE,
         )
-        assert self.weights.validate(), (
-            f"DARS weights must sum to 1.0, got "
-            f"{self.weights.w_r + self.weights.w_f + self.weights.w_u + self.weights.w_p}"
-        )
+        if not self.weights.validate():
+            raise ValueError(
+                "DARS weights must sum to 1.0, got "
+                f"{self.weights.w_r + self.weights.w_f + self.weights.w_u + self.weights.w_p}"
+            )
 
         logger.info(
-            "MemoryVault initialised  [collection=%s, url=%s]",
+            "MemoryVault initialised  [collection=%s, backend=%s, where=%s]",
             self.collection_name,
-            self.config.QDRANT_URL[:50] + "...",
+            self.backend,
+            where,
         )
 
     # ═══════════════════════════════════════════════════════════════════
@@ -166,7 +212,7 @@ class MemoryVault:
                     ),
                 ),
             )
-            
+
             logger.info(
                 "Collection created: %s  (dim=%d, distance=%s)",
                 self.collection_name,
@@ -175,17 +221,17 @@ class MemoryVault:
             )
             # Fall through to index creation below...
 
-        # Verify or Create payload indices for optimistic locking (even on existing)
-        for field in ["frequency", "success_count", "failure_count"]:
+        # Verify or Create payload indices used by filters (even on existing)
+        for field_name in ["frequency", "success_count", "failure_count", "version"]:
             try:
                 self.client.create_payload_index(
                     collection_name=self.collection_name,
-                    field_name=field,
+                    field_name=field_name,
                     field_schema="integer"
                 )
             except Exception as e:
                 # If the index already exists, it might throw, or just log info
-                logger.debug("Payload index for %s might already exist: %s", field, e)
+                logger.debug("Payload index for %s might already exist: %s", field_name, e)
 
         try:
             self.client.create_payload_index(
@@ -198,7 +244,7 @@ class MemoryVault:
 
         if not exists:
             return True
-            
+
         logger.info("Collection already exists: %s", self.collection_name)
         return False
 
@@ -233,6 +279,17 @@ class MemoryVault:
     #  2.  MEMORY CREATION
     # ═══════════════════════════════════════════════════════════════════
 
+    def _initial_predictive(self, vector: List[float], predictive_value: Optional[float]) -> float:
+        """Predictive value on creation: explicit value, else goal alignment, clamped to [0, 1]."""
+        p_val = predictive_value
+        if p_val is None:
+            goal_vec = self.config.get_goal_vector()
+            if goal_vec is not None:
+                p_val = max(0.0, self.embedder.cosine_similarity(vector, goal_vec))
+            else:
+                p_val = self.config.DEFAULT_PREDICTIVE_VALUE
+        return max(0.0, min(1.0, p_val))
+
     @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=2, min=2, max=8), reraise=True)
     def store_memory(
         self,
@@ -243,6 +300,7 @@ class MemoryVault:
         vector_override: Optional[List[float]] = None,
         *,
         sim_timestamp: Optional[float] = None,
+        current_time: Optional[float] = None,
         mab_injection_boost: bool = False,
     ) -> str:
         """
@@ -253,7 +311,7 @@ class MemoryVault:
         text : str
             The factual text content of the memory.
         predictive_value : float, optional
-            Initial p-score ∈ [0, 1].  Defaults to config value.
+            Initial p-score ∈ [0, 1].  Defaults to goal-vector alignment.
         source : str
             Origin label  ("user" | "agent" | "system").
         tags : list of str, optional
@@ -261,6 +319,12 @@ class MemoryVault:
         vector_override : list of float, optional
             Pre-computed embedding vector (e.g. centroid from clustering).
             When provided, skips internal text encoding.
+        sim_timestamp, current_time
+            If set, used as ``recency`` and ``created_at`` (virtual clock);
+            ``sim_timestamp`` takes precedence.
+        mab_injection_boost
+            When True, seeds ``success_count`` from ``DARSConfig.MAB_INJECTION_INITIAL_SUCCESS``
+            for acquisition-phase Laplace-friendly utility (benchmark only).
 
         Returns
         -------
@@ -270,28 +334,13 @@ class MemoryVault:
         Reference – DARS Specification §17 (Memory Creation):
             m_new = f(observation, action, outcome)
             Access count = 0,  Utility = neutral,  Predictive = estimated.
-
-        sim_timestamp
-            If set, used as ``recency`` and ``created_at`` (MemoryAgentBench virtual clock).
-
-        mab_injection_boost
-            When True, seeds ``success_count`` from ``DARSConfig.MAB_INJECTION_INITIAL_SUCCESS``
-            for acquisition-phase Laplace-friendly utility (benchmark only).
         """
         point_id = MemoryPoint.generate_id()
-        now = float(sim_timestamp) if sim_timestamp is not None else time.time()
+        ts = sim_timestamp if sim_timestamp is not None else current_time
+        now = float(ts) if ts is not None else time.time()
 
         vector = vector_override if vector_override is not None else self.embedder.encode(text)
-
-        # Build payload with initial DARS metadata
-        p_val = predictive_value
-        if p_val is None:
-            goal_vec = self.config.get_goal_vector()
-            if goal_vec is not None:
-                p_val = max(0.0, self.embedder.cosine_similarity(vector, goal_vec))
-            else:
-                p_val = self.config.DEFAULT_PREDICTIVE_VALUE
-        p_val = max(0.0, min(1.0, p_val))
+        p_val = self._initial_predictive(vector, predictive_value)
 
         inj_succ = 0
         if mab_injection_boost:
@@ -328,56 +377,60 @@ class MemoryVault:
     def store_memories_batch(
         self,
         memories: List[Dict[str, Any]],
+        current_time: Optional[float] = None,
     ) -> List[str]:
         """
-        Batch-insert multiple memories in a single Qdrant upsert.
+        Batch-insert multiple memories (upserted in chunks of 256 points).
 
         Parameters
         ----------
         memories : list of dict
             Each dict must contain ``"text"``; optional keys:
-            ``"predictive_value"``, ``"source"``, ``"tags"``.
+            ``"predictive_value"``, ``"source"``, ``"tags"``,
+            ``"vector"`` (pre-computed embedding), ``"timestamp"``
+            (virtual clock for recency / created_at) and ``"extra"``
+            (additional payload fields, e.g. experiment bookkeeping).
+        current_time : float, optional
+            Default timestamp for memories without their own ``"timestamp"``.
 
         Returns
         -------
         list of str
             UUIDs of all created points.
         """
-        texts = [m["text"] for m in memories]
-        vectors = self.embedder.encode_batch(texts)
-        now = time.time()
+        if not memories:
+            return []
+        missing = [i for i, m in enumerate(memories) if m.get("vector") is None]
+        encoded = self.embedder.encode_batch([memories[i]["text"] for i in missing]) if missing else []
+        vectors: List[Optional[List[float]]] = [m.get("vector") for m in memories]
+        for i, vec in zip(missing, encoded):
+            vectors[i] = vec
+
+        default_ts = float(current_time) if current_time is not None else time.time()
         point_ids: List[str] = []
         points: List[PointStruct] = []
 
         for mem, vec in zip(memories, vectors):
             pid = MemoryPoint.generate_id()
             point_ids.append(pid)
-            
-            p_val = mem.get("predictive_value")
-            if p_val is None:
-                goal_vec = self.config.get_goal_vector()
-                if goal_vec is not None:
-                    p_val = max(0.0, self.embedder.cosine_similarity(vec, goal_vec))
-                else:
-                    p_val = self.config.DEFAULT_PREDICTIVE_VALUE
-            p_val = max(0.0, min(1.0, p_val))
-                
+            ts = float(mem["timestamp"]) if mem.get("timestamp") is not None else default_ts
             payload = MemoryPayload(
                 text_content=mem["text"],
-                predictive=p_val,
-                recency=now,
-                created_at=now,
+                predictive=self._initial_predictive(vec, mem.get("predictive_value")),
+                recency=ts,
+                created_at=ts,
                 source=mem.get("source", ""),
                 tags=mem.get("tags", []),
-            )
-            points.append(
-                PointStruct(id=pid, vector=vec, payload=payload.to_dict())
-            )
+            ).to_dict()
+            if mem.get("extra"):
+                payload.update(mem["extra"])
+            points.append(PointStruct(id=pid, vector=vec, payload=payload))
 
-        self.client.upsert(
-            collection_name=self.collection_name,
-            points=points,
-        )
+        for start in range(0, len(points), _UPSERT_BATCH):
+            self.client.upsert(
+                collection_name=self.collection_name,
+                points=points[start:start + _UPSERT_BATCH],
+            )
         logger.info("Batch-stored %d memories.", len(points))
         return point_ids
 
@@ -449,7 +502,7 @@ class MemoryVault:
 
         if scroll_yield:
             return _generator()
-        
+
         records, _next_offset = self.client.scroll(
             collection_name=self.collection_name,
             limit=limit,
@@ -471,6 +524,7 @@ class MemoryVault:
         top_k: int = 10,
         utility_threshold: Optional[float] = None,
         score_threshold: Optional[float] = None,
+        query_vector: Optional[List[float]] = None,
     ) -> List[MemoryPoint]:
         """
         Perform pure semantic similarity search.
@@ -485,13 +539,16 @@ class MemoryVault:
             If set, only return memories with utility ≥ this value.
         score_threshold : float, optional
             If set, only return points with cosine similarity ≥ this value.
+        query_vector : list of float, optional
+            Pre-computed query embedding (skips encoding ``query_text``).
 
         Returns
         -------
         list of MemoryPoint
             Ranked by cosine similarity (descending).
         """
-        query_vector = self.embedder.encode(query_text)
+        if query_vector is None:
+            query_vector = self.embedder.encode(query_text)
 
         # Build optional filter
         query_filter = None
@@ -534,12 +591,18 @@ class MemoryVault:
         use_rrf: bool = True,
         rrf_k: int = 60,
         current_time: Optional[float] = None,
+        *,
+        rank_mode: Optional[str] = None,
+        beta_sim: float = 1.0,
+        beta_dars: float = 1.0,
+        query_vector: Optional[List[float]] = None,
+        return_components: bool = False,
     ) -> List[MemoryPoint]:
         """
         Two-stage retrieval  (Layer A pipeline, Stage 2).
 
         1.  **Semantic search** → fetch ``fetch_k`` candidates.
-        2.  **Reranking** → RRF (default) or weighted-sum fallback.
+        2.  **Reranking** → one of ``RANK_MODES``.
         3.  **Selection** → return the top ``top_n`` results.
 
         Parameters
@@ -551,53 +614,69 @@ class MemoryVault:
         top_n : int
             Final output count  (default: config.DEFAULT_TOP_N).
         alpha : float
-            Blend factor for weighted-sum mode (default: config.RERANK_ALPHA).
-            Ignored when ``use_rrf=True``.
+            Blend factor for ``blend`` mode (default: config.RERANK_ALPHA).
         use_rrf : bool
-            When True, use Reciprocal Rank Fusion (Cormack et al., 2009).
-            When False, use legacy weighted-sum: α·sim + (1−α)·DARS.
+            Legacy switch used when ``rank_mode`` is not given:
+            True → ``rrf``, False → ``blend``.
         rrf_k : int
             RRF smoothing constant (default 60, standard in literature).
         current_time : float, optional
             Reference timestamp for recency calculation.  Defaults to
             ``time.time()``.  Pass a virtual-clock value during simulated
             training / evaluation.
+        rank_mode : str, optional
+            ``similarity`` – cosine similarity only (DARS computed but unused);
+            ``rrf``        – Reciprocal Rank Fusion of the similarity and DARS
+                             rankings (Cormack et al., 2009), equal votes;
+            ``wrrf``       – weighted RRF: β_s/(k+r_sim) + β_d/(k+r_dars);
+            ``blend``      – α·norm_sim + (1−α)·DARS with variance-aware min-max.
+        beta_sim, beta_dars : float
+            Vote weights for ``wrrf``.
+        query_vector : list of float, optional
+            Pre-computed query embedding.
+        return_components : bool
+            If True, attach ``components`` (R, F, U, P, S, sim, sim_rank,
+            dars_rank) to each returned MemoryPoint.
 
         Returns
         -------
         list of MemoryPoint
             Top-N memories sorted by combined score (descending).
         """
+        mode = rank_mode or ("rrf" if use_rrf else "blend")
+        if mode not in RANK_MODES:
+            raise ValueError(f"Unknown rank_mode {mode!r}; expected one of {RANK_MODES}")
         fetch_k = fetch_k or self.config.DEFAULT_FETCH_K
         top_n = top_n or self.config.DEFAULT_TOP_N
         alpha = alpha if alpha is not None else self.config.RERANK_ALPHA
         now = current_time if current_time is not None else time.time()
 
-        candidates = self.semantic_search(query_text, top_k=fetch_k)
+        candidates = self.semantic_search(query_text, top_k=fetch_k, query_vector=query_vector)
 
         if not candidates:
             return []
 
+        comps: Dict[int, Dict[str, float]] = {}
         for mem in candidates:
-            mem.dars_score = self.compute_dars_score(
-                mem.payload.to_dict(), current_time=now
-            )
+            c = self.compute_components(mem.payload.to_dict(), current_time=now)
+            mem.dars_score = self.score_from_components(c)
+            c["S"] = mem.dars_score
+            c["sim"] = mem.score if mem.score is not None else 0.0
+            comps[id(mem)] = c
 
-        if use_rrf:
-            sim_ranked = sorted(
-                candidates, key=lambda m: m.score or 0.0, reverse=True
-            )
-            dars_ranked = sorted(
-                candidates, key=lambda m: m.dars_score or 0.0, reverse=True
-            )
-            sim_rank = {id(m): rank for rank, m in enumerate(sim_ranked, 1)}
-            dars_rank = {id(m): rank for rank, m in enumerate(dars_ranked, 1)}
+        sim_ranked = sorted(candidates, key=lambda m: m.score or 0.0, reverse=True)
+        dars_ranked = sorted(candidates, key=lambda m: m.dars_score or 0.0, reverse=True)
+        sim_rank = {id(m): rank for rank, m in enumerate(sim_ranked, 1)}
+        dars_rank = {id(m): rank for rank, m in enumerate(dars_ranked, 1)}
 
+        if mode == "similarity":
             for mem in candidates:
-                r_sim = sim_rank[id(mem)]
-                r_dars = dars_rank[id(mem)]
-                mem.score = 1.0 / (rrf_k + r_sim) + 1.0 / (rrf_k + r_dars)
-        else:
+                mem.score = comps[id(mem)]["sim"]
+        elif mode in ("rrf", "wrrf"):
+            b_s, b_d = (1.0, 1.0) if mode == "rrf" else (float(beta_sim), float(beta_dars))
+            for mem in candidates:
+                mem.score = b_s / (rrf_k + sim_rank[id(mem)]) + b_d / (rrf_k + dars_rank[id(mem)])
+        else:  # blend
             sim_scores = [c.score for c in candidates if c.score is not None]
             min_sim = min(sim_scores) if sim_scores else 0.0
             max_sim = max(sim_scores) if sim_scores else 1.0
@@ -611,6 +690,13 @@ class MemoryVault:
                     raw_sim = mem.score if mem.score is not None else 0.0
                     norm_sim = (raw_sim - min_sim) / range_sim
                     mem.score = alpha * norm_sim + (1 - alpha) * mem.dars_score
+
+        if return_components:
+            for mem in candidates:
+                c = comps[id(mem)]
+                c["sim_rank"] = float(sim_rank[id(mem)])
+                c["dars_rank"] = float(dars_rank[id(mem)])
+                mem.components = c
 
         candidates.sort(key=lambda m: m.score or 0.0, reverse=True)
         return candidates[:top_n]
@@ -641,10 +727,11 @@ class MemoryVault:
     @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=2, min=2, max=8), reraise=True)
     def patch_payload(self, point_id: str, updates: Dict[str, Any]) -> None:
         """
-        Atomic payload patch  –  update metadata WITHOUT re-uploading the vector.
+        Unguarded payload patch – update metadata WITHOUT re-uploading the vector.
 
-        This is the key efficiency primitive of Layer D.
-        Layer B uses it after every interaction to update u, f, r.
+        Last writer wins; use the versioned update methods (``update_utility``,
+        ``increment_frequency``, ``update_on_retrieval``) for counters that
+        concurrent writers may touch.
 
         Parameters
         ----------
@@ -661,62 +748,123 @@ class MemoryVault:
         )
         logger.debug("Patched payload for %s: %s", point_id, updates)
 
-    def update_recency(self, point_id: str) -> float:
+    def _read_raw_payload(self, point_id: str) -> Optional[Dict[str, Any]]:
+        """Return the stored payload dict of a point, or None if it does not exist."""
+        records = self.client.retrieve(
+            collection_name=self.collection_name,
+            ids=[point_id],
+            with_payload=True,
+            with_vectors=False,
+        )
+        if not records:
+            return None
+        return dict(records[0].payload or {})
+
+    def _conditional_patch(
+        self,
+        point_id: str,
+        raw_payload: Dict[str, Any],
+        updates: Dict[str, Any],
+        operation: str,
+    ) -> None:
         """
-        Touch a memory  –  set recency to current time.
+        Optimistic concurrency control for read-modify-write updates.
+
+        The write is guarded on the version read before computing ``updates``
+        (or on the version field being absent for points created before
+        versioning) and carries a fresh nonce.  Qdrant's ``set_payload`` does
+        not report whether a filtered write matched, so the point is read back:
+        the update counts as applied only if the stored version is exactly the
+        expected version + 1 and the nonce is ours.  Anything else raises, so a
+        concurrent writer can never cause a silently lost update.
+
+        Local (in-process) stores evaluate payload filters by scanning every
+        point, so for them the same check is done by re-reading the point's
+        version under an in-process lock and writing by id: within one process
+        this is equally atomic, and the conflict semantics are unchanged.
+        """
+        has_version = "version" in raw_payload
+        expected = int(raw_payload.get("version", 0))
+        nonce = uuid.uuid4().hex
+
+        if self.backend != "remote":
+            with self._write_lock:
+                current = self._read_raw_payload(point_id)
+                if current is None:
+                    raise ValueError(f"Memory not found: {point_id}")
+                current_version = int(current["version"]) if "version" in current else None
+                if current_version != (expected if has_version else None):
+                    raise RuntimeError(
+                        f"Optimistic lock conflict for {operation} of {point_id} "
+                        f"(expected version {expected if has_version else 'unset'}, "
+                        f"found version {current.get('version')})"
+                    )
+                self.client.set_payload(
+                    collection_name=self.collection_name,
+                    payload={**updates, "version": expected + 1, "write_nonce": nonce},
+                    points=[point_id],
+                )
+            return
+
+        guard = (
+            FieldCondition(key="version", match=MatchValue(value=expected))
+            if has_version
+            else IsEmptyCondition(is_empty=PayloadField(key="version"))
+        )
+        self.client.set_payload(
+            collection_name=self.collection_name,
+            payload={**updates, "version": expected + 1, "write_nonce": nonce},
+            points=Filter(must=[HasIdCondition(has_id=[point_id]), guard]),
+        )
+        after = self._read_raw_payload(point_id)
+        if after is None:
+            raise ValueError(f"Memory not found: {point_id}")
+        if int(after.get("version", -1)) != expected + 1 or after.get("write_nonce") != nonce:
+            raise RuntimeError(
+                f"Optimistic lock conflict for {operation} of {point_id} "
+                f"(expected version {expected} -> {expected + 1}, "
+                f"found version {after.get('version')})"
+            )
+
+    def update_recency(self, point_id: str, current_time: Optional[float] = None) -> float:
+        """
+        Touch a memory  –  set recency to the current (or virtual) time.
 
         Returns the new timestamp.
 
         Reference – DARS Specification §19:
             t_i ← current_time
         """
-        now = time.time()
+        now = time.time() if current_time is None else float(current_time)
         self.patch_payload(point_id, {"recency": now})
         return now
 
     def increment_frequency(self, point_id: str) -> int:
         """
-        Increment the access counter by 1.
-
-        Must first retrieve the current count (Qdrant has no atomic increment).
+        Increment the access counter by 1 (version-guarded).
 
         Reference – DARS Specification §19:
             a_i ← a_i + 1
 
         Returns the new frequency value.
         """
-        mem = self.get_memory(point_id)
-        if mem is None:
+        raw = self._read_raw_payload(point_id)
+        if raw is None:
             raise ValueError(f"Memory not found: {point_id}")
-            
-        old_freq = mem.payload.frequency
+
+        old_freq = int(raw.get("frequency", 0))
         new_freq = old_freq + 1
-        
-        res = self.client.set_payload(
-            collection_name=self.collection_name,
-            payload={"frequency": new_freq},
-            points=Filter(
-                must=[
-                    FieldCondition(key="frequency", match=MatchValue(value=old_freq)),
-                    HasIdCondition(has_id=[point_id])
-                ]
-            )
-        )
-        
-        if isinstance(res, dict) and res.get("updated") == 0:
-            raise RuntimeError(f"Optimistic lock conflict for incrementing frequency of {point_id}")
-        elif hasattr(res, "updated") and res.updated == 0:
-            raise RuntimeError(f"Optimistic lock conflict for incrementing frequency of {point_id}")
-            
+        self._conditional_patch(point_id, raw, {"frequency": new_freq}, "incrementing frequency")
+
         logger.debug("Optimistic increment frequency for %s, %d -> %d", point_id, old_freq, new_freq)
         return new_freq
 
     def update_utility(self, point_id: str, success: bool) -> float:
         """
-        Update utility after a success/failure signal from Layer B.
+        Update utility after a success/failure signal from Layer B (version-guarded).
 
-        Increments the appropriate counter and recomputes:
-            U = success_count / (success_count + failure_count + 1)
+        Increments the appropriate counter and recomputes the Laplace-smoothed
+            U = (success_count + 1) / (success_count + failure_count + 2)
 
         Parameters
         ----------
@@ -732,76 +880,62 @@ class MemoryVault:
 
         Reference – DARS Specification §22 (Utility as Credit Assignment).
         """
-        mem = self.get_memory(point_id)
-        if mem is None:
+        raw = self._read_raw_payload(point_id)
+        if raw is None:
             raise ValueError(f"Memory not found: {point_id}")
 
-        payload = mem.payload
-        old_success = payload.success_count
-        old_failure = payload.failure_count
-
+        s = int(raw.get("success_count", 0))
+        f = int(raw.get("failure_count", 0))
         if success:
-            payload.success_count += 1
+            s += 1
         else:
-            payload.failure_count += 1
-        new_utility = payload.compute_utility()
+            f += 1
+        new_utility = self._compute_utility_score(s, f)
 
         updates = {
-            "success_count": payload.success_count,
-            "failure_count": payload.failure_count,
+            "success_count": s,
+            "failure_count": f,
             "utility": new_utility,
         }
+        self._conditional_patch(point_id, raw, updates, "update_utility")
 
-        res = self.client.set_payload(
-            collection_name=self.collection_name,
-            payload=updates,
-            points=Filter(
-                must=[
-                    FieldCondition(key="success_count", match=MatchValue(value=old_success)),
-                    FieldCondition(key="failure_count", match=MatchValue(value=old_failure)),
-                    HasIdCondition(has_id=[point_id])
-                ]
-            )
-        )
-        if isinstance(res, dict) and res.get("updated") == 0:
-            raise RuntimeError(f"Optimistic lock conflict for update_utility of {point_id}")
-        elif hasattr(res, "updated") and res.updated == 0:
-            raise RuntimeError(f"Optimistic lock conflict for update_utility of {point_id}")
-            
         logger.debug("Optimistic updated utility for %s: %s", point_id, updates)
         return new_utility
 
-    def update_on_retrieval(self, point_id: str, success: bool) -> Dict[str, Any]:
+    def update_on_retrieval(
+        self,
+        point_id: str,
+        success: bool,
+        current_time: Optional[float] = None,
+    ) -> Dict[str, Any]:
         """
-        Convenience method:  perform all Layer B updates in one call.
+        Convenience method:  perform all Layer B updates in one guarded write.
 
-        Updates recency, frequency, and utility atomically.
+        Updates recency, frequency, and utility together.
 
         Returns a dict of the new values.
         """
-        mem = self.get_memory(point_id)
-        if mem is None:
+        raw = self._read_raw_payload(point_id)
+        if raw is None:
             raise ValueError(f"Memory not found: {point_id}")
 
-        now = time.time()
-        payload = mem.payload
-
-        # Update counts
-        payload.frequency += 1
+        now = time.time() if current_time is None else float(current_time)
+        frequency = int(raw.get("frequency", 0)) + 1
+        s = int(raw.get("success_count", 0))
+        f = int(raw.get("failure_count", 0))
         if success:
-            payload.success_count += 1
+            s += 1
         else:
-            payload.failure_count += 1
-        new_utility = payload.compute_utility()
+            f += 1
 
         updates = {
             "recency": now,
-            "frequency": payload.frequency,
-            "success_count": payload.success_count,
-            "failure_count": payload.failure_count,
-            "utility": new_utility,
+            "frequency": frequency,
+            "success_count": s,
+            "failure_count": f,
+            "utility": self._compute_utility_score(s, f),
         }
-        self.patch_payload(point_id, updates)
+        self._conditional_patch(point_id, raw, updates, "update_on_retrieval")
         return updates
 
     # ═══════════════════════════════════════════════════════════════════
@@ -867,6 +1001,37 @@ class MemoryVault:
         """
         return (success_count + 1) / (success_count + failure_count + 2)
 
+    def compute_components(
+        self,
+        payload: Dict[str, Any],
+        current_time: Optional[float] = None,
+    ) -> Dict[str, float]:
+        """Return the four DARS components ``{"R", "F", "U", "P"}`` for a payload."""
+        return {
+            "R": self._compute_recency(payload.get("recency", time.time()), current_time),
+            "F": self._compute_frequency(payload.get("frequency", 0)),
+            "U": self._compute_utility_score(
+                payload.get("success_count", 0),
+                payload.get("failure_count", 0),
+            ),
+            "P": float(payload.get("predictive", self.config.DEFAULT_PREDICTIVE_VALUE)),
+        }
+
+    def score_from_components(
+        self,
+        components: Dict[str, float],
+        weights: Optional[DARSWeights] = None,
+    ) -> float:
+        """Weighted DARS score from precomputed components, clamped to [0, 1]."""
+        w = weights or self.weights
+        score = (
+            w.w_r * components["R"]
+            + w.w_f * components["F"]
+            + w.w_u * components["U"]
+            + w.w_p * components["P"]
+        )
+        return round(min(max(score, 0.0), 1.0), 6)
+
     def compute_dars_score(
         self,
         payload: Dict[str, Any],
@@ -892,23 +1057,7 @@ class MemoryVault:
 
         Reference – DARS Specification §8.
         """
-        R = self._compute_recency(
-            payload.get("recency", time.time()), current_time
-        )
-        F = self._compute_frequency(payload.get("frequency", 0))
-        U = self._compute_utility_score(
-            payload.get("success_count", 0),
-            payload.get("failure_count", 0),
-        )
-        P = payload.get("predictive", self.config.DEFAULT_PREDICTIVE_VALUE)
-
-        score = (
-            self.weights.w_r * R
-            + self.weights.w_f * F
-            + self.weights.w_u * U
-            + self.weights.w_p * P
-        )
-        return round(min(max(score, 0.0), 1.0), 6)
+        return self.score_from_components(self.compute_components(payload, current_time))
 
     # ═══════════════════════════════════════════════════════════════════
     #  7.  RETENTION CLASSIFICATION  (for Layer C)
@@ -932,7 +1081,7 @@ class MemoryVault:
             return "delete"
 
     def triage_all_memories(
-        self, limit: int = 500
+        self, limit: int = 500, current_time: Optional[float] = None
     ) -> List[RetentionDecision]:
         """
         Scan the entire collection and classify each memory.
@@ -945,7 +1094,7 @@ class MemoryVault:
             One decision per memory, sorted by DARS score ascending
             (worst memories first).
         """
-        now = time.time()
+        now = time.time() if current_time is None else float(current_time)
         decisions: List[RetentionDecision] = []
 
         for chunk_points, _next_offset in self.get_all_memories(limit=limit, with_vectors=False, scroll_yield=True):
@@ -988,9 +1137,10 @@ class MemoryVault:
                 info = self.get_collection_info()
             return {
                 "connected": True,
+                "backend": self.backend,
                 "collection_exists": exists,
                 "collection_info": info,
                 "total_collections": len(col_names),
             }
         except Exception as e:
-            return {"connected": False, "error": str(e)}
+            return {"connected": False, "backend": self.backend, "error": str(e)}

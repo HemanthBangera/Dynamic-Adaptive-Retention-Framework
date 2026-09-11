@@ -1,0 +1,27 @@
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 5335.94it/s]
+C:\Users\Harsh\Desktop\minilunch\Dynamic-Adaptive-Retention-Framework\core\layer_d\embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  return self._model.get_sentence_embedding_dimension()
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING:datasets.load:Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\ai-hyz___memory_agent_bench\default\0.0.0\7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:33:40 2026).
+WARNING:datasets.packaged_modules.cache.cache:Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\ai-hyz___memory_agent_bench\default\0.0.0\7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:33:40 2026).
+C:\Users\Harsh\Desktop\minilunch\Dynamic-Adaptive-Retention-Framework\core\layer_d\storage.py:227: UserWarning: Payload indexes have no effect in the local Qdrant. Please use server Qdrant if you need payload indexes.
+  self.client.create_payload_index(
+ruler_qa1_197K|bm25|extractive|512               shown=6.9 recall=0.967 answer=0.633
+ruler_qa1_197K|bm25|extractive|1024              shown=14.4 recall=0.967 answer=0.667
+ruler_qa1_197K|bm25|extractive|2048              shown=29.3 recall=0.967 answer=0.667
+ruler_qa1_197K|bm25|none|512                     shown=3.2 recall=0.933 answer=0.967
+ruler_qa1_197K|bm25|none|1024                    shown=6.6 recall=0.967 answer=0.967
+ruler_qa1_197K|bm25|none|2048                    shown=13.2 recall=0.967 answer=1.000
+ruler_qa1_197K|dars_wrrf_k50_b0.5|extractive|512 shown=7.8 recall=0.833 answer=0.600
+ruler_qa1_197K|dars_wrrf_k50_b0.5|extractive|1024 shown=15.3 recall=0.900 answer=0.667
+ruler_qa1_197K|dars_wrrf_k50_b0.5|extractive|2048 shown=30.7 recall=0.967 answer=0.700
+ruler_qa1_197K|dars_wrrf_k50_b0.5|none|512       shown=3.5 recall=0.633 answer=0.733
+ruler_qa1_197K|dars_wrrf_k50_b0.5|none|1024      shown=7.1 recall=0.767 answer=0.833
+ruler_qa1_197K|dars_wrrf_k50_b0.5|none|2048      shown=14.2 recall=0.900 answer=0.967
+ruler_qa1_197K|similarity|extractive|512         shown=7.7 recall=0.867 answer=0.633
+ruler_qa1_197K|similarity|extractive|1024        shown=15.3 recall=0.933 answer=0.667
+ruler_qa1_197K|similarity|extractive|2048        shown=30.2 recall=1.000 answer=0.700
+ruler_qa1_197K|similarity|none|512               shown=3.2 recall=0.667 answer=0.767
+ruler_qa1_197K|similarity|none|1024              shown=6.9 recall=0.833 answer=0.900
+ruler_qa1_197K|similarity|none|2048              shown=14.1 recall=0.900 answer=0.967

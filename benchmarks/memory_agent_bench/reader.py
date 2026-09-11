@@ -13,11 +13,16 @@ from typing import TYPE_CHECKING, Optional, Tuple
 import aiohttp
 
 from config.settings import DARSConfig
+from core.llm_transport import get_default_transport
 
 if TYPE_CHECKING:
     from core.gemini_transport import GovernedGeminiTransport
 
 logger = logging.getLogger(__name__)
+
+
+class ReaderFailure(RuntimeError):
+    """The reader produced no answer after all retries (never scored as an empty answer)."""
 
 
 class GeminiBenchmarkReader:
@@ -31,7 +36,7 @@ class GeminiBenchmarkReader:
         self.max_retries = (
             int(max_retries) if max_retries is not None else int(DARSConfig.GEMINI_MAX_RETRIES)
         )
-        self.transport = transport
+        self.transport = transport if transport is not None else get_default_transport("reader")
         self.api_key = DARSConfig.GEMINI_API_KEY
         self.model = DARSConfig.GEMINI_MODEL
         self.endpoint = (
@@ -118,8 +123,8 @@ class GeminiBenchmarkReader:
                 last_err = e
                 await asyncio.sleep(1.0 * (attempt + 1))
                 continue
-        logger.warning("Gemini reader failed after retries: %s", last_err)
-        return "Answer: ", last_ki
+        # Fail loud: a missing answer must never be scored as an (empty) model output.
+        raise ReaderFailure(f"Benchmark reader produced no answer after retries: {last_err}")
 
     async def answer_with_gateway_xml(self, gateway_xml_prompt: str) -> Tuple[str, int]:
         """Path A: entire Layer A XML string is the user task."""
@@ -144,4 +149,4 @@ class GeminiBenchmarkReader:
                     continue
                 raise
             await asyncio.sleep(1.0 * (attempt + 1))
-        return "Answer: ", last_ki
+        raise ReaderFailure("Benchmark reader (gateway XML path) produced no answer after retries")

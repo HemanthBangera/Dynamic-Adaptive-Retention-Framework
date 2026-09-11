@@ -94,15 +94,18 @@ class GroupBTrainer:
     every memory's recency on each time jump (O(1) instead of O(n)).
     """
 
-    def __init__(self, collection_name: Optional[str] = None):
+    def __init__(
+        self,
+        collection_name: Optional[str] = None,
+        vault: Optional[MemoryVault] = None,
+    ):
         self.collection_name = (
             collection_name or f"{COLLECTION_PREFIX}_{int(time.time())}"
         )
-        self.vault = MemoryVault(collection_name=self.collection_name)
+        self.vault = vault or MemoryVault(collection_name=self.collection_name)
         self.embedder = EmbeddingEngine()
         self.vault.initialize_collection(recreate=True)
         self._pid_map: Dict[str, str] = {}
-        self._freq_cache: Dict[str, int] = {}
         self._sim_time: float = time.time()
 
     def _ingest_memories(
@@ -128,13 +131,8 @@ class GroupBTrainer:
                 if text in self._pid_map:
                     pid = self._pid_map[text]
                     try:
-                        old_freq = self._freq_cache.get(pid, 1)
-                        new_freq = old_freq + 1
-                        self._freq_cache[pid] = new_freq
-                        self.vault.patch_payload(pid, {
-                            "frequency": new_freq,
-                            "recency": self._sim_time,
-                        })
+                        self.vault.increment_frequency(pid)
+                        self.vault.update_recency(pid, current_time=self._sim_time)
                     except Exception as exc:
                         logger.debug(
                             "Freq/recency boost failed for %s: %s", pid, exc
@@ -146,10 +144,9 @@ class GroupBTrainer:
                 text=text,
                 source="alfworld",
                 tags=mem.get("tags", []),
+                sim_timestamp=self._sim_time,
             )
-            self.vault.patch_payload(pid, {"recency": self._sim_time})
             self._pid_map[text] = pid
-            self._freq_cache[pid] = 1
             ingested[mem_type].append(pid)
 
         return ingested
@@ -163,9 +160,9 @@ class GroupBTrainer:
     ) -> Dict[str, int]:
         """Run PDDL-grounded feedback loop for a task.
 
-        Computes all updates locally from already-loaded payloads,
-        then writes each memory's changes in a single patch_payload
-        call (1 API write per memory, not 3-5).
+        Each retrieved memory gets one success/failure signal through the
+        vault's version-guarded updates (Laplace-smoothed utility); successes
+        also count as an access (frequency + recency on the virtual clock).
         """
         feedback: Dict[str, int] = {}
 
@@ -194,33 +191,12 @@ class GroupBTrainer:
                             is_relevant = True
                             break
 
-            payload = mem.payload
-            updates: Dict[str, Any] = {}
-
-            if is_relevant:
-                new_sc = payload.success_count + 1
-                new_util = new_sc / (new_sc + payload.failure_count + 1)
-                new_freq = payload.frequency + 1
-                updates = {
-                    "success_count": new_sc,
-                    "utility": new_util,
-                    "frequency": new_freq,
-                    "recency": self._sim_time,
-                }
-                feedback[mem.point_id] = 1
-            else:
-                new_fc = payload.failure_count + 1
-                new_util = payload.success_count / (
-                    payload.success_count + new_fc + 1
-                )
-                updates = {
-                    "failure_count": new_fc,
-                    "utility": new_util,
-                }
-                feedback[mem.point_id] = -1
-
+            feedback[mem.point_id] = 1 if is_relevant else -1
             try:
-                self.vault.patch_payload(mem.point_id, updates)
+                self.vault.update_utility(mem.point_id, success=is_relevant)
+                if is_relevant:
+                    self.vault.increment_frequency(mem.point_id)
+                    self.vault.update_recency(mem.point_id, current_time=self._sim_time)
             except Exception as exc:
                 logger.warning(
                     "Feedback update failed for %s: %s", mem.point_id, exc
