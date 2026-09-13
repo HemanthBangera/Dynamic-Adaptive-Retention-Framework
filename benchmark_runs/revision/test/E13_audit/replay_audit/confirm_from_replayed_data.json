@@ -1,0 +1,13 @@
+{
+ "facts_archived": 15251,
+ "facts_replayed": 15251,
+ "confirmed_archived": 11,
+ "confirmed_replayed": 11,
+ "family_size": 11,
+ "decisions_changed": [],
+ "values_changed_at_3dp": [
+  "test:C1a.ci_lo 0.02346 -> 0.02353"
+ ],
+ "max_abs_difference": 0.00015572643415551202,
+ "summary": "11 of 11 comparisons confirmed, as archived (11); 0 decisions changed overall or per split; largest difference in any AUROC, effect, interval bound or Holm p 1.6e-04; 1 values change at three decimals."
+}

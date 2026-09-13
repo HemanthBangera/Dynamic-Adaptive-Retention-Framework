@@ -1,0 +1,18 @@
+2026-09-13T05:42:40Z collect fc_serial
+2026-09-13T05:43:25Z batch fc_serial (16 request files, 2592 requests)
+usage: batch_run.py [-h] --in INPUT [--state STATE] [--cache-dir CACHE_DIR]
+                    [--max-requests MAX_REQUESTS] [--max-tokens MAX_TOKENS]
+                    [--in-flight-tokens IN_FLIGHT_TOKENS]
+                    [--interval INTERVAL] [--timeout TIMEOUT]
+                    {run,recover}
+batch_run.py: error: run takes a single --in
+2026-09-13T05:43:25Z batch failed
+2026-09-13T06:15:31Z batch fc_serial (2592 requests)
+2592 request(s) still need answers (cached ones skipped)
+  submitted batch_6aa63f8619fc8190b66c331a20476994: 2000 requests, ~875,416 tokens (in flight ~875,416)
+  submitted batch_6aa63f871e0c8190a2fcdf6cda53d228: 592 requests, ~260,277 tokens (in flight ~1,135,693)
+  batch_6aa63f871e0c8190a2fcdf6cda53d228: completed, cached 592
+  batch_6aa63f8619fc8190b66c331a20476994: completed, cached 2000
+batches=2 cached=2592 unusable=0 pending=0
+2026-09-13T06:18:59Z replay fc_serial
+2026-09-13T06:19:39Z fc_serial DONE

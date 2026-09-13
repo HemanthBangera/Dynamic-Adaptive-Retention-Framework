@@ -1,0 +1,39 @@
+{
+ "by_model_and_channel": {
+  "gpt-4.1-nano-2025-04-14|batch": {
+   "requests": 63902,
+   "prompt_tokens": 10285294,
+   "completion_tokens": 956748,
+   "cost_usd_list_price": 1.411228600000026,
+   "cost_usd_billed": 0.705614300000013
+  },
+  "gpt-4o-mini-2024-07-18|sync": {
+   "requests": 17834,
+   "prompt_tokens": 76497291,
+   "completion_tokens": 177091,
+   "cost_usd_list_price": 11.580848250000049,
+   "cost_usd_billed": 11.580848250000049
+  },
+  "gpt-4.1-nano-2025-04-14|sync": {
+   "requests": 12725,
+   "prompt_tokens": 26356328,
+   "completion_tokens": 436911,
+   "cost_usd_list_price": 2.8103972000000006,
+   "cost_usd_billed": 2.8103972000000006
+  },
+  "gpt-4o-mini-2024-07-18|batch": {
+   "requests": 32141,
+   "prompt_tokens": 121384422,
+   "completion_tokens": 383731,
+   "cost_usd_list_price": 18.437901900000487,
+   "cost_usd_billed": 9.218950950000243
+  }
+ },
+ "total": {
+  "requests": 126602,
+  "prompt_tokens": 234523335,
+  "completion_tokens": 1954481,
+  "cost_usd_list_price": 34.24037595000056,
+  "cost_usd_billed": 24.315810700000306
+ }
+}

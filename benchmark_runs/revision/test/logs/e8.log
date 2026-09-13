@@ -1,0 +1,94 @@
+INFO Loading embedding model: all-MiniLM-L6-v2 ...
+INFO No device provided, using cpu
+INFO Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 13723.42it/s]
+/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  return self._model.get_sentence_embedding_dimension()
+INFO Embedding model loaded. Dimension: 384
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 11228.90it/s]
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+WARNING Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+INFO Embedding cache enabled at benchmark_runs/_emb_cache/minilm.sqlite (all-MiniLM-L6-v2|rev=1110a243fdf4706b3f48f1d95db1a4f5529b4d41|max_seq_length=256)
+/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/storage.py:227: UserWarning: Payload indexes have no effect in the local Qdrant. Please use server Qdrant if you need payload indexes.
+  self.client.create_payload_index(
+INFO E8: ruler_qa1_197K context 0 done (70 questions)
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+WARNING Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+[transformers] Token indices sequence length is longer than the specified maximum sequence length for this model (261 > 256). Running this sequence through the model will result in indexing errors
+INFO E8: ruler_qa2_421K context 0 done (70 questions)
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+WARNING Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+INFO E8: longmemeval_s* context 0 done (42 questions)
+INFO E8: longmemeval_s* context 1 done (41 questions)
+INFO E8: longmemeval_s* context 2 done (41 questions)
+INFO E8: longmemeval_s* context 3 done (40 questions)
+INFO E8: longmemeval_s* context 4 done (40 questions)
+longmemeval_s*|bm25|extractive|512               shown=6.8 recall=0.600 answer=0.260
+longmemeval_s*|bm25|extractive|1024              shown=13.8 recall=0.665 answer=0.294
+longmemeval_s*|bm25|extractive|2048              shown=27.9 recall=0.737 answer=0.319
+longmemeval_s*|bm25|llmlingua2|1024              shown=12.9 recall=0.665 answer=0.422
+longmemeval_s*|bm25|none|512                     shown=3.3 recall=0.491 answer=0.373
+longmemeval_s*|bm25|none|1024                    shown=6.7 recall=0.600 answer=0.426
+longmemeval_s*|bm25|none|2048                    shown=13.6 recall=0.665 answer=0.451
+longmemeval_s*|dars_rrf_k15|extractive|512       shown=11.4 recall=0.463 answer=0.240
+longmemeval_s*|dars_rrf_k15|extractive|1024      shown=23.2 recall=0.614 answer=0.279 EM=0.172
+longmemeval_s*|dars_rrf_k15|extractive|2048      shown=45.7 recall=0.709 answer=0.309
+longmemeval_s*|dars_rrf_k15|llmlingua2|1024      shown=21.9 recall=0.605 answer=0.392 EM=0.299
+longmemeval_s*|dars_rrf_k15|none|512             shown=6.1 recall=0.270 answer=0.324
+longmemeval_s*|dars_rrf_k15|none|1024            shown=12.3 recall=0.473 answer=0.373 EM=0.275
+longmemeval_s*|dars_rrf_k15|none|2048            shown=24.6 recall=0.628 answer=0.441
+longmemeval_s*|similarity|extractive|512         shown=11.4 recall=0.489 answer=0.235
+longmemeval_s*|similarity|extractive|1024        shown=23.2 recall=0.614 answer=0.279 EM=0.176
+longmemeval_s*|similarity|extractive|2048        shown=45.7 recall=0.709 answer=0.309
+longmemeval_s*|similarity|llmlingua2|1024        shown=22.0 recall=0.604 answer=0.392 EM=0.294
+longmemeval_s*|similarity|none|512               shown=6.1 recall=0.345 answer=0.328
+longmemeval_s*|similarity|none|1024              shown=12.3 recall=0.499 answer=0.377 EM=0.294
+longmemeval_s*|similarity|none|2048              shown=24.6 recall=0.628 answer=0.441
+ruler_qa1_197K|bm25|extractive|512               shown=7.0 recall=0.871 answer=0.486
+ruler_qa1_197K|bm25|extractive|1024              shown=14.4 recall=0.900 answer=0.500
+ruler_qa1_197K|bm25|extractive|2048              shown=29.2 recall=0.943 answer=0.514
+ruler_qa1_197K|bm25|llmlingua2|1024              shown=13.9 recall=0.900 answer=0.786
+ruler_qa1_197K|bm25|none|512                     shown=3.1 recall=0.814 answer=0.814
+ruler_qa1_197K|bm25|none|1024                    shown=6.6 recall=0.871 answer=0.886
+ruler_qa1_197K|bm25|none|2048                    shown=13.4 recall=0.900 answer=0.914
+ruler_qa1_197K|dars_rrf_k15|extractive|512       shown=7.4 recall=0.843 answer=0.457
+ruler_qa1_197K|dars_rrf_k15|extractive|1024      shown=15.0 recall=0.929 answer=0.557 EM=0.557
+ruler_qa1_197K|dars_rrf_k15|extractive|2048      shown=30.3 recall=0.971 answer=0.571
+ruler_qa1_197K|dars_rrf_k15|llmlingua2|1024      shown=14.6 recall=0.914 answer=0.786 EM=0.614
+ruler_qa1_197K|dars_rrf_k15|none|512             shown=3.4 recall=0.786 answer=0.800
+ruler_qa1_197K|dars_rrf_k15|none|1024            shown=7.1 recall=0.843 answer=0.857 EM=0.800
+ruler_qa1_197K|dars_rrf_k15|none|2048            shown=14.1 recall=0.914 answer=0.914
+ruler_qa1_197K|similarity|extractive|512         shown=7.4 recall=0.857 answer=0.457
+ruler_qa1_197K|similarity|extractive|1024        shown=15.0 recall=0.929 answer=0.557 EM=0.557
+ruler_qa1_197K|similarity|extractive|2048        shown=30.3 recall=0.971 answer=0.571
+ruler_qa1_197K|similarity|llmlingua2|1024        shown=14.6 recall=0.914 answer=0.786 EM=0.586
+ruler_qa1_197K|similarity|none|512               shown=3.2 recall=0.843 answer=0.857
+ruler_qa1_197K|similarity|none|1024              shown=6.8 recall=0.857 answer=0.857 EM=0.800
+ruler_qa1_197K|similarity|none|2048              shown=14.1 recall=0.914 answer=0.914
+ruler_qa2_421K|bm25|extractive|512               shown=8.5 recall=0.779 answer=0.400
+ruler_qa2_421K|bm25|extractive|1024              shown=16.6 recall=0.886 answer=0.471
+ruler_qa2_421K|bm25|extractive|2048              shown=32.7 recall=0.914 answer=0.529
+ruler_qa2_421K|bm25|llmlingua2|1024              shown=15.4 recall=0.879 answer=0.643
+ruler_qa2_421K|bm25|none|512                     shown=4.1 recall=0.669 answer=0.614
+ruler_qa2_421K|bm25|none|1024                    shown=8.0 recall=0.771 answer=0.671
+ruler_qa2_421K|bm25|none|2048                    shown=15.5 recall=0.886 answer=0.800
+ruler_qa2_421K|dars_rrf_k15|extractive|512       shown=9.0 recall=0.793 answer=0.371
+ruler_qa2_421K|dars_rrf_k15|extractive|1024      shown=17.8 recall=0.907 answer=0.500 EM=0.429
+ruler_qa2_421K|dars_rrf_k15|extractive|2048      shown=36.0 recall=0.929 answer=0.557
+ruler_qa2_421K|dars_rrf_k15|llmlingua2|1024      shown=16.5 recall=0.900 answer=0.657 EM=0.614
+ruler_qa2_421K|dars_rrf_k15|none|512             shown=4.1 recall=0.638 answer=0.586
+ruler_qa2_421K|dars_rrf_k15|none|1024            shown=8.3 recall=0.771 answer=0.657 EM=0.643
+ruler_qa2_421K|dars_rrf_k15|none|2048            shown=16.8 recall=0.900 answer=0.829
+ruler_qa2_421K|similarity|extractive|512         shown=8.9 recall=0.829 answer=0.429
+ruler_qa2_421K|similarity|extractive|1024        shown=17.8 recall=0.907 answer=0.500 EM=0.486
+ruler_qa2_421K|similarity|extractive|2048        shown=36.0 recall=0.929 answer=0.557
+ruler_qa2_421K|similarity|llmlingua2|1024        shown=16.6 recall=0.900 answer=0.657 EM=0.557
+ruler_qa2_421K|similarity|none|512               shown=4.1 recall=0.688 answer=0.614
+ruler_qa2_421K|similarity|none|1024              shown=8.2 recall=0.807 answer=0.686 EM=0.686
+ruler_qa2_421K|similarity|none|2048              shown=16.8 recall=0.900 answer=0.829

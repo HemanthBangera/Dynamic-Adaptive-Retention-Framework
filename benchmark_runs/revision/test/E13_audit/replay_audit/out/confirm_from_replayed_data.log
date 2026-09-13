@@ -1,0 +1,20 @@
+INFO Loading embedding model: all-MiniLM-L6-v2 ...
+INFO No device provided, using cpu
+INFO Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 10090.70it/s]
+/home/ubuntu/replay_audit/dars_archive/core/layer_d/embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  return self._model.get_sentence_embedding_dimension()
+INFO Embedding model loaded. Dimension: 384
+INFO Embedding cache enabled at benchmark_runs/_emb_cache/minilm.sqlite (all-MiniLM-L6-v2|rev=1110a243fdf4706b3f48f1d95db1a4f5529b4d41|max_seq_length=256)
+C1a  auroc               read_h4 - recency_lru        diff=+0.2160 [+0.2035,+0.2283] p=0 holm=0  confirmed
+C1b  auroc               read_h4 - frequency_lfu      diff=+0.5914 [+0.5770,+0.6052] p=0 holm=0  confirmed
+C2a  harmful             read_h5 - recency_lru        diff=-0.1581 [-0.1699,-0.1465] p=0 holm=0  confirmed
+C2b  harmful             read_h5 - fifo               diff=-0.0095 [-0.0141,-0.0050] p=0 holm=0  confirmed
+C3   auroc              write_h4 - read_h4            diff=+0.0332 [+0.0285,+0.0382] p=0 holm=0  confirmed
+C4   harmful            write_h5 - read_h5            diff=-0.0141 [-0.0171,-0.0111] p=0 holm=0  confirmed
+C5   auroc         utility_write - utility_read       diff=+0.0358 [+0.0318,+0.0400] p=0 holm=0  confirmed
+C6a  auroc              write_h4 - generative_agents  diff=+0.3851 [+0.3715,+0.3987] p=0 holm=0  confirmed
+C6b  auroc              write_h4 - memorybank         diff=+0.5038 [+0.4891,+0.5183] p=0 holm=0  confirmed
+C6c  harmful            write_h5 - generative_agents  diff=-0.1916 [-0.2042,-0.1789] p=0 holm=0  confirmed
+C6d  harmful            write_h5 - memorybank         diff=-0.2994 [-0.3162,-0.2824] p=0 holm=0  confirmed
+wrote /home/ubuntu/replay_audit/out/addendum_confirm_from_replayed_data/confirm_primary.json

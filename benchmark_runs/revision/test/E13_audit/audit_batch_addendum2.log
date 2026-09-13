@@ -1,0 +1,16 @@
+2026-09-13T06:43:33Z collect addendum2
+2026-09-13T06:46:11Z batch addendum2 (1594 requests)
+1594 request(s) still need answers (cached ones skipped)
+  submitted batch_6aa646b55ed48190aae7dc128c93387d: 1594 requests, ~749,436 tokens (in flight ~749,436)
+  batch_6aa646b55ed48190aae7dc128c93387d: completed, cached 1594
+batches=1 cached=1594 unusable=0 pending=0
+2026-09-13T06:49:15Z replay addendum2
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 7682.42it/s]
+/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  return self._model.get_sentence_embedding_dimension()
+D1a factconsolidation_sh_64k     bm25_dars_wrrf_k50_b0.5|best_last 0.900 vs bm25|best_first 0.857 diff +0.043 [-0.071,+0.157] p=0.5418 holm=1 not confirmed
+D1b factconsolidation_sh_262k    bm25_dars_wrrf_k50_b0.5|best_last 0.757 vs bm25|best_first 0.800 diff -0.043 [-0.171,+0.100] p=0.6054 holm=1 not confirmed
+D2a factconsolidation_sh_64k     dars_rrf_k50|best_last 0.900 vs dars_rrf_k50|best_first 0.557 diff +0.343 [+0.214,+0.471] p=0 holm=0 confirmed
+D2b factconsolidation_sh_262k    dars_rrf_k50|best_last 0.771 vs dars_rrf_k50|best_first 0.557 diff +0.214 [+0.071,+0.357] p=0.0034 holm=0.0102 confirmed
+wrote benchmark_runs/revision/addendum2/confirm_display_order.json
+2026-09-13T06:52:23Z addendum2 DONE

@@ -1,0 +1,11 @@
+{
+ "facts": [
+  9819,
+  9819
+ ],
+ "facts_with_count_differences": 0,
+ "dialogues": [],
+ "write_or_label_fields_differing": 0,
+ "component_values_differing": 5379,
+ "component_max_abs": 1.1102230246251565e-16
+}

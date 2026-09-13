@@ -1,0 +1,124 @@
+INFO Loading embedding model: all-MiniLM-L6-v2 ...
+INFO No device provided, using cpu
+INFO Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 6777.74it/s]
+C:\Users\Harsh\Desktop\minilunch\Dynamic-Adaptive-Retention-Framework\core\layer_d\embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  return self._model.get_sentence_embedding_dimension()
+INFO Embedding model loaded. Dimension: 384
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\ai-hyz___memory_agent_bench\default\0.0.0\7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 23:01:42 2026).
+WARNING Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\ai-hyz___memory_agent_bench\default\0.0.0\7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 23:01:42 2026).
+Filter:   0%|          | 0/110 [00:00<?, ? examples/s]Filter: 100%|██████████| 110/110 [00:00<00:00, 1034.21 examples/s]Filter: 100%|██████████| 110/110 [00:00<00:00, 895.61 examples/s] 
+[transformers] Token indices sequence length is longer than the specified maximum sequence length for this model (1052 > 256). Running this sequence through the model will result in indexing errors
+INFO Embedding cache enabled at benchmark_runs/_emb_cache/minilm.sqlite (all-MiniLM-L6-v2|rev=1110a243fdf4706b3f48f1d95db1a4f5529b4d41|max_seq_length=256)
+Batches:   0%|          | 0/9 [00:00<?, ?it/s]Batches:  11%|█         | 1/9 [00:02<00:23,  2.95s/it]Batches:  22%|██▏       | 2/9 [00:05<00:20,  3.00s/it]Batches:  33%|███▎      | 3/9 [00:08<00:17,  2.95s/it]Batches:  44%|████▍     | 4/9 [00:11<00:15,  3.02s/it]Batches:  56%|█████▌    | 5/9 [00:15<00:12,  3.14s/it]Batches:  67%|██████▋   | 6/9 [00:18<00:09,  3.11s/it]Batches:  78%|███████▊  | 7/9 [00:21<00:06,  3.16s/it]Batches:  89%|████████▉ | 8/9 [00:24<00:03,  3.07s/it]Batches: 100%|██████████| 9/9 [00:25<00:00,  2.29s/it]Batches: 100%|██████████| 9/9 [00:25<00:00,  2.79s/it]
+C:\Users\Harsh\Desktop\minilunch\Dynamic-Adaptive-Retention-Framework\core\layer_d\storage.py:227: UserWarning: Payload indexes have no effect in the local Qdrant. Please use server Qdrant if you need payload indexes.
+  self.client.create_payload_index(
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 54.05it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/9 [00:00<?, ?it/s]Batches:  11%|█         | 1/9 [00:03<00:24,  3.02s/it]Batches:  22%|██▏       | 2/9 [00:06<00:23,  3.36s/it]Batches:  33%|███▎      | 3/9 [00:10<00:20,  3.42s/it]Batches:  44%|████▍     | 4/9 [00:13<00:16,  3.36s/it]Batches:  56%|█████▌    | 5/9 [00:16<00:13,  3.27s/it]Batches:  67%|██████▋   | 6/9 [00:19<00:09,  3.13s/it]Batches:  78%|███████▊  | 7/9 [00:22<00:06,  3.07s/it]Batches:  89%|████████▉ | 8/9 [00:25<00:03,  3.07s/it]Batches: 100%|██████████| 9/9 [00:26<00:00,  2.44s/it]Batches: 100%|██████████| 9/9 [00:26<00:00,  2.94s/it]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 16.51it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/9 [00:00<?, ?it/s]Batches:  11%|█         | 1/9 [00:02<00:20,  2.62s/it]Batches:  22%|██▏       | 2/9 [00:05<00:18,  2.68s/it]Batches:  33%|███▎      | 3/9 [00:08<00:16,  2.72s/it]Batches:  44%|████▍     | 4/9 [00:11<00:15,  3.09s/it]Batches:  56%|█████▌    | 5/9 [00:14<00:12,  3.14s/it]Batches:  67%|██████▋   | 6/9 [00:18<00:09,  3.19s/it]Batches:  78%|███████▊  | 7/9 [00:21<00:06,  3.26s/it]Batches:  89%|████████▉ | 8/9 [00:24<00:03,  3.13s/it]Batches: 100%|██████████| 9/9 [00:25<00:00,  2.45s/it]Batches: 100%|██████████| 9/9 [00:25<00:00,  2.83s/it]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 28.19it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/10 [00:00<?, ?it/s]Batches:  10%|█         | 1/10 [00:02<00:23,  2.63s/it]Batches:  20%|██        | 2/10 [00:05<00:21,  2.75s/it]Batches:  30%|███       | 3/10 [00:08<00:19,  2.77s/it]Batches:  40%|████      | 4/10 [00:12<00:19,  3.27s/it]Batches:  50%|█████     | 5/10 [00:15<00:16,  3.39s/it]Batches:  60%|██████    | 6/10 [00:19<00:13,  3.38s/it]Batches:  70%|███████   | 7/10 [00:22<00:10,  3.49s/it]Batches:  80%|████████  | 8/10 [00:26<00:06,  3.46s/it]Batches:  90%|█████████ | 9/10 [00:30<00:03,  3.63s/it]Batches: 100%|██████████| 10/10 [00:32<00:00,  3.26s/it]Batches: 100%|██████████| 10/10 [00:32<00:00,  3.28s/it]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 32.79it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/10 [00:00<?, ?it/s]Batches:  10%|█         | 1/10 [00:02<00:25,  2.84s/it]Batches:  20%|██        | 2/10 [00:05<00:23,  2.88s/it]Batches:  30%|███       | 3/10 [00:09<00:22,  3.20s/it]Batches:  40%|████      | 4/10 [00:12<00:19,  3.22s/it]Batches:  50%|█████     | 5/10 [00:16<00:17,  3.40s/it]Batches:  60%|██████    | 6/10 [00:19<00:12,  3.17s/it]Batches:  70%|███████   | 7/10 [00:22<00:10,  3.37s/it]Batches:  80%|████████  | 8/10 [00:25<00:06,  3.19s/it]Batches:  90%|█████████ | 9/10 [00:29<00:03,  3.29s/it]Batches: 100%|██████████| 10/10 [00:31<00:00,  3.02s/it]Batches: 100%|██████████| 10/10 [00:31<00:00,  3.15s/it]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 30.42it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/10 [00:00<?, ?it/s]Batches:  10%|█         | 1/10 [00:02<00:25,  2.83s/it]Batches:  20%|██        | 2/10 [00:05<00:22,  2.84s/it]Batches:  30%|███       | 3/10 [00:09<00:22,  3.26s/it]Batches:  40%|████      | 4/10 [00:12<00:19,  3.30s/it]Batches:  50%|█████     | 5/10 [00:16<00:17,  3.53s/it]Batches:  60%|██████    | 6/10 [00:20<00:14,  3.59s/it]Batches:  70%|███████   | 7/10 [00:23<00:10,  3.57s/it]Batches:  80%|████████  | 8/10 [00:27<00:07,  3.69s/it]Batches:  90%|█████████ | 9/10 [00:31<00:03,  3.65s/it]Batches: 100%|██████████| 10/10 [00:31<00:00,  2.66s/it]Batches: 100%|██████████| 10/10 [00:31<00:00,  3.19s/it]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 21.06it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/10 [00:00<?, ?it/s]Batches:  10%|█         | 1/10 [00:03<00:28,  3.14s/it]Batches:  20%|██        | 2/10 [00:06<00:26,  3.31s/it]Batches:  30%|███       | 3/10 [00:10<00:23,  3.37s/it]Batches:  40%|████      | 4/10 [00:13<00:20,  3.49s/it]Batches:  50%|█████     | 5/10 [00:16<00:16,  3.34s/it]Batches:  60%|██████    | 6/10 [00:20<00:14,  3.50s/it]Batches:  70%|███████   | 7/10 [00:24<00:10,  3.48s/it]Batches:  80%|████████  | 8/10 [00:27<00:07,  3.51s/it]Batches:  90%|█████████ | 9/10 [00:30<00:03,  3.48s/it]Batches: 100%|██████████| 10/10 [00:33<00:00,  3.18s/it]Batches: 100%|██████████| 10/10 [00:33<00:00,  3.35s/it]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 49.90it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/14 [00:00<?, ?it/s]Batches:   7%|▋         | 1/14 [00:03<00:45,  3.53s/it]Batches:  14%|█▍        | 2/14 [00:07<00:42,  3.53s/it]Batches:  21%|██▏       | 3/14 [00:10<00:37,  3.40s/it]Batches:  29%|██▊       | 4/14 [00:14<00:36,  3.68s/it]Batches:  36%|███▌      | 5/14 [00:17<00:32,  3.57s/it]Batches:  43%|████▎     | 6/14 [00:21<00:27,  3.49s/it]Batches:  50%|█████     | 7/14 [00:24<00:23,  3.43s/it]Batches:  57%|█████▋    | 8/14 [00:27<00:20,  3.44s/it]Batches:  64%|██████▍   | 9/14 [00:31<00:16,  3.38s/it]Batches:  71%|███████▏  | 10/14 [00:34<00:14,  3.53s/it]Batches:  79%|███████▊  | 11/14 [00:38<00:10,  3.40s/it]Batches:  86%|████████▌ | 12/14 [00:41<00:06,  3.41s/it]Batches:  93%|█████████▎| 13/14 [00:44<00:03,  3.41s/it]Batches: 100%|██████████| 14/14 [00:46<00:00,  2.96s/it]Batches: 100%|██████████| 14/14 [00:46<00:00,  3.35s/it]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 33.31it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/17 [00:00<?, ?it/s]Batches:   6%|▌         | 1/17 [00:03<00:48,  3.04s/it]Batches:  12%|█▏        | 2/17 [00:06<00:48,  3.21s/it]Batches:  18%|█▊        | 3/17 [00:10<00:48,  3.49s/it]Batches:  24%|██▎       | 4/17 [00:13<00:45,  3.51s/it]Batches:  29%|██▉       | 5/17 [00:16<00:40,  3.36s/it]Batches:  35%|███▌      | 6/17 [00:20<00:37,  3.41s/it]Batches:  41%|████      | 7/17 [00:23<00:33,  3.40s/it]Batches:  47%|████▋     | 8/17 [00:27<00:31,  3.47s/it]Batches:  53%|█████▎    | 9/17 [00:30<00:26,  3.31s/it]Batches:  59%|█████▉    | 10/17 [00:33<00:22,  3.21s/it]Batches:  65%|██████▍   | 11/17 [00:36<00:19,  3.19s/it]Batches:  71%|███████   | 12/17 [00:39<00:15,  3.14s/it]Batches:  76%|███████▋  | 13/17 [00:42<00:12,  3.10s/it]Batches:  82%|████████▏ | 14/17 [00:45<00:09,  3.10s/it]Batches:  88%|████████▊ | 15/17 [00:48<00:05,  2.95s/it]Batches:  94%|█████████▍| 16/17 [00:51<00:02,  2.93s/it]Batches: 100%|██████████| 17/17 [00:52<00:00,  2.58s/it]Batches: 100%|██████████| 17/17 [00:52<00:00,  3.11s/it]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 16.76it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/12 [00:00<?, ?it/s]Batches:   8%|▊         | 1/12 [00:02<00:31,  2.85s/it]Batches:  17%|█▋        | 2/12 [00:05<00:28,  2.86s/it]Batches:  25%|██▌       | 3/12 [00:08<00:26,  2.90s/it]Batches:  33%|███▎      | 4/12 [00:11<00:22,  2.87s/it]Batches:  42%|████▏     | 5/12 [00:15<00:21,  3.12s/it]Batches:  50%|█████     | 6/12 [00:18<00:18,  3.14s/it]Batches:  58%|█████▊    | 7/12 [00:21<00:15,  3.11s/it]Batches:  67%|██████▋   | 8/12 [00:24<00:12,  3.21s/it]Batches:  75%|███████▌  | 9/12 [00:27<00:09,  3.15s/it]Batches:  83%|████████▎ | 10/12 [00:31<00:06,  3.30s/it]Batches:  92%|█████████▏| 11/12 [00:34<00:03,  3.11s/it]Batches: 100%|██████████| 12/12 [00:35<00:00,  2.61s/it]Batches: 100%|██████████| 12/12 [00:35<00:00,  2.96s/it]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 46.56it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"

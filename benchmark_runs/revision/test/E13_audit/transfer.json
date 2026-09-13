@@ -1,0 +1,300 @@
+{
+ "configs": {
+  "msc_h4": {
+   "lambda": 0.05,
+   "weights": [
+    0.2,
+    0.0,
+    0.8,
+    0.0
+   ]
+  },
+  "msc_h5": {
+   "lambda": 0.0005,
+   "weights": [
+    0.3,
+    0.0,
+    0.7,
+    0.0
+   ]
+  },
+  "alfworld_h3": {
+   "lambda": 0.0005,
+   "weights": [
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ]
+  },
+  "alfworld_h5": {
+   "lambda": 0.0005,
+   "weights": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ]
+  },
+  "default": {
+   "lambda": 0.005,
+   "weights": [
+    0.3,
+    0.2,
+    0.3,
+    0.2
+   ]
+  }
+ },
+ "msc": {
+  "msc_h4": {
+   "auroc": 0.890635766021679,
+   "harmful_deletion": {
+    "mean": 0.09640476618008716,
+    "ci_lo": 0.08856133504314674,
+    "ci_hi": 0.10419025963337662,
+    "n": 701
+   }
+  },
+  "msc_h5": {
+   "auroc": 0.890300843004098,
+   "harmful_deletion": {
+    "mean": 0.0944414655719934,
+    "ci_lo": 0.08642730159759404,
+    "ci_hi": 0.10210416599369879,
+    "n": 701
+   }
+  },
+  "alfworld_h3": {
+   "auroc": 0.24290491130364306,
+   "harmful_deletion": {
+    "mean": 0.706060613977875,
+    "ci_lo": 0.697061812711777,
+    "ci_hi": 0.7152307900729798,
+    "n": 701
+   }
+  },
+  "alfworld_h5": {
+   "auroc": 0.44917074183862954,
+   "harmful_deletion": {
+    "mean": 0.5311506788503935,
+    "ci_lo": 0.5204190801966302,
+    "ci_hi": 0.5415837690008517,
+    "n": 701
+   }
+  },
+  "default": {
+   "auroc": 0.7104694116745798,
+   "harmful_deletion": {
+    "mean": 0.32088307753429013,
+    "ci_lo": 0.3107076632156875,
+    "ci_hi": 0.330653386130829,
+    "n": 701
+   }
+  }
+ },
+ "alfworld": {
+  "test_in": {
+   "msc_h4": {
+    "location_mrr_score_only": {
+     "mean": 0.4327813852813853,
+     "ci_lo": 0.3801740298392084,
+     "ci_hi": 0.4872026966089466,
+     "n": 140
+    },
+    "harmful_deletion": {
+     "mean": 0.55,
+     "ci_lo": 0.4952380952380953,
+     "ci_hi": 0.6047619047619047,
+     "n": 140
+    }
+   },
+   "msc_h5": {
+    "location_mrr_score_only": {
+     "mean": 0.32933750773036485,
+     "ci_lo": 0.28763862476808905,
+     "ci_hi": 0.3733518926509998,
+     "n": 140
+    },
+    "harmful_deletion": {
+     "mean": 0.907142857142857,
+     "ci_lo": 0.8702380952380953,
+     "ci_hi": 0.9404761904761906,
+     "n": 140
+    }
+   },
+   "alfworld_h3": {
+    "location_mrr_score_only": {
+     "mean": 0.5099860853432283,
+     "ci_lo": 0.4545643617295404,
+     "ci_hi": 0.5658961940836941,
+     "n": 140
+    },
+    "harmful_deletion": {
+     "mean": 0.32976190476190476,
+     "ci_lo": 0.2916666666666667,
+     "ci_hi": 0.3678571428571429,
+     "n": 140
+    }
+   },
+   "alfworld_h5": {
+    "location_mrr_score_only": {
+     "mean": 0.3925597814883529,
+     "ci_lo": 0.34466238275613276,
+     "ci_hi": 0.44139786255411256,
+     "n": 140
+    },
+    "harmful_deletion": {
+     "mean": 0.09642857142857142,
+     "ci_lo": 0.06785714285714285,
+     "ci_hi": 0.12738095238095234,
+     "n": 140
+    }
+   },
+   "default": {
+    "location_mrr_score_only": {
+     "mean": 0.42067537621109047,
+     "ci_lo": 0.370287163729128,
+     "ci_hi": 0.47283223175633876,
+     "n": 140
+    },
+    "harmful_deletion": {
+     "mean": 0.3952380952380953,
+     "ci_lo": 0.34404761904761905,
+     "ci_hi": 0.44880952380952377,
+     "n": 140
+    }
+   }
+  },
+  "test_out": {
+   "msc_h4": {
+    "location_mrr_score_only": {
+     "mean": 0.38719528986704554,
+     "ci_lo": 0.33790768233039226,
+     "ci_hi": 0.43899736872542217,
+     "n": 131
+    },
+    "harmful_deletion": {
+     "mean": 0.52363184079602,
+     "ci_lo": 0.4676616915422886,
+     "ci_hi": 0.5771455223880593,
+     "n": 134
+    }
+   },
+   "msc_h5": {
+    "location_mrr_score_only": {
+     "mean": 0.2956649372679907,
+     "ci_lo": 0.25649162701166517,
+     "ci_hi": 0.33790384075212315,
+     "n": 131
+    },
+    "harmful_deletion": {
+     "mean": 0.8805970149253731,
+     "ci_lo": 0.8383084577114428,
+     "ci_hi": 0.9203980099502487,
+     "n": 134
+    }
+   },
+   "alfworld_h3": {
+    "location_mrr_score_only": {
+     "mean": 0.4845331725102718,
+     "ci_lo": 0.42839254045360914,
+     "ci_hi": 0.5426824405450359,
+     "n": 131
+    },
+    "harmful_deletion": {
+     "mean": 0.37437810945273636,
+     "ci_lo": 0.3345771144278607,
+     "ci_hi": 0.4129353233830845,
+     "n": 134
+    }
+   },
+   "alfworld_h5": {
+    "location_mrr_score_only": {
+     "mean": 0.3308796801163213,
+     "ci_lo": 0.30070156306797524,
+     "ci_hi": 0.3632719162728705,
+     "n": 131
+    },
+    "harmful_deletion": {
+     "mean": 0.13805970149253732,
+     "ci_lo": 0.10572139303482585,
+     "ci_hi": 0.17039800995024876,
+     "n": 134
+    }
+   },
+   "default": {
+    "location_mrr_score_only": {
+     "mean": 0.3865288655364991,
+     "ci_lo": 0.3367047313373649,
+     "ci_hi": 0.4368786970027427,
+     "n": 131
+    },
+    "harmful_deletion": {
+     "mean": 0.44154228855721395,
+     "ci_lo": 0.3942786069651741,
+     "ci_hi": 0.48880597014925375,
+     "n": 134
+    }
+   }
+  }
+ },
+ "note": "LongMemEval eviction needs stream re-runs per weight vector; reported separately",
+ "provenance": {
+  "preregistration_sha256": "a3dec99a953600c37efae8e572528c4f5059b95c87869460a0a4d1df3a965270",
+  "embedding_cache": {
+   "path": "benchmark_runs\\_emb_cache\\minilm.sqlite",
+   "namespace": "all-MiniLM-L6-v2|rev=1110a243fdf4706b3f48f1d95db1a4f5529b4d41|max_seq_length=256",
+   "hits": 0,
+   "misses": 0
+  },
+  "created_unix": 1789277243.5757494,
+  "git": {
+   "commit": "7b26e6bdb1bb1f97aa1753f27c0694a47ad288e7",
+   "branch": "improvement",
+   "dirty": true
+  },
+  "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "processor": "Intel64 Family 6 Model 154 Stepping 3, GenuineIntel",
+  "cpu_count": 16,
+  "packages": {
+   "qdrant-client": "1.17.1",
+   "sentence-transformers": "5.4.1",
+   "transformers": "5.6.2",
+   "torch": "2.11.0",
+   "numpy": "2.3.4",
+   "openai": "3.13.0",
+   "tiktoken": "0.12.0",
+   "nltk": "3.9.4",
+   "datasets": "4.8.5",
+   "rank-bm25": "0.2.2",
+   "rouge-score": "0.1.2"
+  },
+  "hf_snapshots": {
+   "memoryagentbench": "7ea066982b140a19337e17e60d45d4076e042faf",
+   "squad_v2": "3ffb306f725f7d2ce8394bc1873b24868140c412",
+   "hotpot_qa": "1908d6afbbead072334abe2965f91bd2709910ab",
+   "alfworld": "196514ef2e1fcab9a61cd995ede36a0cbb1bc979",
+   "msc": "78b67491c43823fc169cab827ab3f82805e0235b",
+   "embedding_model": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41"
+  },
+  "dars_settings": {
+   "weights": {
+    "w_r": 0.3,
+    "w_f": 0.2,
+    "w_u": 0.3,
+    "w_p": 0.2
+   },
+   "recency_decay_lambda_per_hour": 0.005,
+   "frequency_cap": 50,
+   "threshold_retain": 0.7,
+   "threshold_compress": 0.3,
+   "grace_period_seconds": 86400.0,
+   "embedding_model": "all-MiniLM-L6-v2",
+   "goal_description": "Effective action sequences, object locations, and task completion strategies for interactive household environments",
+   "openai_reader_model": "gpt-4o-mini-2024-07-18",
+   "openai_aux_model": "gpt-4.1-nano-2025-04-14"
+  }
+ }
+}

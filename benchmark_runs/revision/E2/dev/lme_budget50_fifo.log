@@ -1,4 +1,4 @@
-Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 5064.46it/s]
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 2928.09it/s]
 C:\Users\Harsh\Desktop\minilunch\Dynamic-Adaptive-Retention-Framework\core\layer_d\embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
   return self._model.get_sentence_embedding_dimension()
 Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
@@ -8,4 +8,4 @@ WARNING:datasets.packaged_modules.cache.cache:Found the latest cached dataset co
 [transformers] Token indices sequence length is longer than the specified maximum sequence length for this model (428 > 256). Running this sequence through the model will result in indexing errors
 C:\Users\Harsh\Desktop\minilunch\Dynamic-Adaptive-Retention-Framework\core\layer_d\storage.py:227: UserWarning: Payload indexes have no effect in the local Qdrant. Please use server Qdrant if you need payload indexes.
   self.client.create_payload_index(
-dars_blend_a0.5|oracle|dev                    recall=0.5908914728682171 precedence=None precedence_rank=None reader_acc=None
+dars_blend_a0.5|oracle|dev                    recall=0.5908914728682172 precedence=None precedence_rank=None reader_acc=None

@@ -1,0 +1,29 @@
+Using the latest cached version of the dataset since nayohan/multi_session_chat couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since nayohan/multi_session_chat couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\nayohan___multi_session_chat\default\0.0.0\78b67491c43823fc169cab827ab3f82805e0235b (last modified on Fri Sep 11 16:30:09 2026).
+WARNING Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\nayohan___multi_session_chat\default\0.0.0\78b67491c43823fc169cab827ab3f82805e0235b (last modified on Fri Sep 11 16:30:09 2026).
+INFO Loading embedding model: all-MiniLM-L6-v2 ...
+INFO No device provided, using cpu
+INFO Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 4487.94it/s]
+C:\Users\Harsh\Desktop\minilunch\Dynamic-Adaptive-Retention-Framework\core\layer_d\embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  return self._model.get_sentence_embedding_dimension()
+INFO Embedding model loaded. Dimension: 384
+INFO Embedding cache enabled at benchmark_runs/_emb_cache/minilm.sqlite (all-MiniLM-L6-v2|rev=1110a243fdf4706b3f48f1d95db1a4f5529b4d41|max_seq_length=256)
+C:\Users\Harsh\Desktop\minilunch\Dynamic-Adaptive-Retention-Framework\core\layer_d\storage.py:227: UserWarning: Payload indexes have no effect in the local Qdrant. Please use server Qdrant if you need payload indexes.
+  self.client.create_payload_index(
+INFO MSC: 50/701 dialogues (4s)
+INFO MSC: 100/701 dialogues (8s)
+INFO MSC: 150/701 dialogues (12s)
+INFO MSC: 200/701 dialogues (16s)
+INFO MSC: 250/701 dialogues (20s)
+INFO MSC: 300/701 dialogues (24s)
+INFO MSC: 350/701 dialogues (27s)
+INFO MSC: 400/701 dialogues (31s)
+INFO MSC: 450/701 dialogues (35s)
+INFO MSC: 500/701 dialogues (38s)
+INFO MSC: 550/701 dialogues (42s)
+INFO MSC: 600/701 dialogues (45s)
+INFO MSC: 650/701 dialogues (49s)
+INFO MSC: 700/701 dialogues (53s)
+wrote 13550 facts from 701 dialogues to benchmark_runs\revision\test\E13_audit\msc_test_writes

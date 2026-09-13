@@ -1,0 +1,3 @@
+{"source": "eventqa_65536", "questions": 25, "reproduced_logged_timeline": 25, "reproduced_under_timing_jitter": 0, "not_reproduced": 0}
+{"source": "ruler_qa1_197K", "questions": 5, "reproduced_logged_timeline": 4, "reproduced_under_timing_jitter": 1, "not_reproduced": 0}
+E0 PASS

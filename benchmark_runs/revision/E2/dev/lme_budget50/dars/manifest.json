@@ -31,21 +31,23 @@
  "lexical_tau": 0.5,
  "memory_budget_fraction": 0.5,
  "eviction_policy": "dars",
+ "eviction_weights": null,
  "seed": 0,
  "reader": null,
  "llm_usage": {},
- "elapsed_s": 37.25612783432007,
+ "elapsed_s": 30.195988416671753,
  "provenance": {
+  "preregistration_sha256": "ee20a194a4bed33abd0335cbef0bcafabec3e0f0cd904dff745463ce0a90c1c1",
   "embedding_cache": {
    "path": "benchmark_runs\\_emb_cache\\minilm.sqlite",
    "namespace": "all-MiniLM-L6-v2|rev=1110a243fdf4706b3f48f1d95db1a4f5529b4d41|max_seq_length=256",
    "hits": 12095,
    "misses": 0
   },
-  "created_unix": 1789134140.0785315,
+  "created_unix": 1789147127.4677026,
   "git": {
-   "commit": "f16c8c9c85932e54e9ff46b8c7715b4c7a303d26",
-   "branch": "revision/scirep-r1",
+   "commit": "7b26e6bdb1bb1f97aa1753f27c0694a47ad288e7",
+   "branch": "improvement",
    "dirty": true
   },
   "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]",

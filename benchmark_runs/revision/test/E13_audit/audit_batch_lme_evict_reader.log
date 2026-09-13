@@ -1,0 +1,22 @@
+2026-09-13T05:57:09Z collect lme_evict_reader
+2026-09-13T06:00:25Z batch lme_evict_reader (4800 requests)
+3056 request(s) still need answers (cached ones skipped)
+  submitted batch_6aa63bfeaec48190ae6df5c88cd6548e: 418 requests, ~898,827 tokens (in flight ~898,827)
+  submitted batch_6aa63bffd4b8819094175f96adec7d24: 417 requests, ~899,470 tokens (in flight ~1,798,297)
+  batch_6aa63bfeaec48190ae6df5c88cd6548e: completed, cached 418
+  submitted batch_6aa63c6869fc81908f2096c211fa3027: 417 requests, ~899,527 tokens (in flight ~1,798,997)
+  batch_6aa63bffd4b8819094175f96adec7d24: completed, cached 417
+  submitted batch_6aa63cbca2808190b64906b370d995f6: 418 requests, ~899,941 tokens (in flight ~1,799,468)
+  batch_6aa63c6869fc81908f2096c211fa3027: completed, cached 417
+  submitted batch_6aa63d1117e88190864ce966e64f3b20: 416 requests, ~897,971 tokens (in flight ~1,797,912)
+  batch_6aa63cbca2808190b64906b370d995f6: completed, cached 418
+  submitted batch_6aa63d65b1e88190a5e506ba0c9959bf: 417 requests, ~899,466 tokens (in flight ~1,797,437)
+  batch_6aa63d1117e88190864ce966e64f3b20: completed, cached 416
+  submitted batch_6aa63d91f6bc81909998a888ca53b331: 416 requests, ~898,399 tokens (in flight ~1,797,865)
+  batch_6aa63d65b1e88190a5e506ba0c9959bf: completed, cached 417
+  submitted batch_6aa63df9b6ec8190bc5706c3a9396de5: 137 requests, ~294,676 tokens (in flight ~1,193,075)
+  batch_6aa63d91f6bc81909998a888ca53b331: completed, cached 416
+  batch_6aa63df9b6ec8190bc5706c3a9396de5: completed, cached 137
+batches=8 cached=3056 unusable=0 pending=0
+2026-09-13T06:11:40Z replay lme_evict_reader
+2026-09-13T06:14:57Z lme_evict_reader DONE

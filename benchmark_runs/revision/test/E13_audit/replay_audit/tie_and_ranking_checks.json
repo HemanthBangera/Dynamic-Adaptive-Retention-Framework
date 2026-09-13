@@ -1,0 +1,11 @@
+{
+ "msc_facts_with_count_differences": 2,
+ "msc_count_difference_dialogues": [
+  "test:301"
+ ],
+ "msc_write_or_label_fields_differing": 0,
+ "e1_non_numeric_difference_fields": {
+  ".reader[].cached": 1026
+ },
+ "e1_ranked_lists_identical": true
+}

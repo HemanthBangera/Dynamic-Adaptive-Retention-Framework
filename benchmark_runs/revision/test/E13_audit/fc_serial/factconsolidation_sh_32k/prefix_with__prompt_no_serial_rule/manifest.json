@@ -1,0 +1,173 @@
+{
+ "experiment": "E2_stream",
+ "source": "factconsolidation_sh_32k",
+ "report_split": "test",
+ "methods": [
+  {
+   "name": "similarity",
+   "kind": "dars",
+   "rank_mode": "similarity",
+   "weights": [
+    0.3,
+    0.2,
+    0.3,
+    0.2
+   ],
+   "fetch_k": 50,
+   "rrf_k": 60,
+   "beta_sim": 1.0,
+   "beta_dars": 1.0,
+   "alpha": 0.5,
+   "seed": 0,
+   "first_stage": "vector"
+  },
+  {
+   "name": "bm25",
+   "kind": "bm25",
+   "rank_mode": "similarity",
+   "weights": [
+    0.3,
+    0.2,
+    0.3,
+    0.2
+   ],
+   "fetch_k": 50,
+   "rrf_k": 60,
+   "beta_sim": 1.0,
+   "beta_dars": 1.0,
+   "alpha": 0.5,
+   "seed": 0,
+   "first_stage": "vector"
+  },
+  {
+   "name": "dars_rrf_k50",
+   "kind": "dars",
+   "rank_mode": "rrf",
+   "weights": [
+    0.3,
+    0.2,
+    0.3,
+    0.2
+   ],
+   "fetch_k": 50,
+   "rrf_k": 60,
+   "beta_sim": 1.0,
+   "beta_dars": 1.0,
+   "alpha": 0.5,
+   "seed": 0,
+   "first_stage": "vector"
+  },
+  {
+   "name": "bm25_dars_wrrf_k50_b0.5",
+   "kind": "dars",
+   "rank_mode": "wrrf",
+   "weights": [
+    0.3,
+    0.2,
+    0.3,
+    0.2
+   ],
+   "fetch_k": 50,
+   "rrf_k": 60,
+   "beta_sim": 1.0,
+   "beta_dars": 0.5,
+   "alpha": 0.5,
+   "seed": 0,
+   "first_stage": "bm25"
+  }
+ ],
+ "feedback": [
+  "none"
+ ],
+ "budget": 256,
+ "decay_lambda_per_hour": 0.001,
+ "fact_step_s": 3600.0,
+ "question_step_s": 3600.0,
+ "lexical_tau": 0.5,
+ "serial_prefix": true,
+ "fc_prompt": "no_serial_rule",
+ "memory_budget_fraction": 0.0,
+ "eviction_policy": null,
+ "eviction_weights": null,
+ "seed": 0,
+ "reader": {
+  "model": "gpt-4o-mini-2024-07-18",
+  "temperature": 0.0,
+  "max_answer_tokens": 50,
+  "system_message": "You are a helpful assistant that can read the context and memorize it for future retrieval.",
+  "memory_format": "Memory {i}:\\n{text} joined by \\n, then \\n + query"
+ },
+ "llm_usage": {
+  "gpt-4o-mini-2024-07-18": {
+   "api_calls": 0,
+   "cache_hits": 400,
+   "api_failures": 0,
+   "rate_limit_retries": 0,
+   "transient_retries": 0,
+   "coalesced": 0,
+   "collected": 0,
+   "prompt_tokens": 0,
+   "completion_tokens": 0,
+   "cost_usd": 0.0,
+   "by_model": {}
+  }
+ },
+ "elapsed_s": 14.637365579605103,
+ "provenance": {
+  "preregistration_sha256": "a3dec99a953600c37efae8e572528c4f5059b95c87869460a0a4d1df3a965270",
+  "embedding_cache": {
+   "path": "benchmark_runs/_emb_cache/minilm.sqlite",
+   "namespace": "all-MiniLM-L6-v2|rev=1110a243fdf4706b3f48f1d95db1a4f5529b4d41|max_seq_length=256",
+   "hits": 9641,
+   "misses": 0
+  },
+  "created_unix": 1789280357.7491963,
+  "git": {
+   "commit": "7b26e6bdb1bb1f97aa1753f27c0694a47ad288e7",
+   "branch": "improvement",
+   "dirty": true
+  },
+  "python": "3.14.3 (main, Mar 24 2026, 22:50:36) [Clang 22.1.1 ]",
+  "platform": "Linux-7.0.0-1012-aws-x86_64-with-glibc2.39",
+  "processor": "x86_64",
+  "cpu_count": 8,
+  "packages": {
+   "qdrant-client": "1.17.1",
+   "sentence-transformers": "5.4.1",
+   "transformers": "5.6.2",
+   "torch": "2.11.0+cpu",
+   "numpy": "2.3.4",
+   "openai": "3.13.0",
+   "tiktoken": "0.12.0",
+   "nltk": "3.9.4",
+   "datasets": "4.8.5",
+   "rank-bm25": "0.2.2",
+   "rouge-score": "0.1.2"
+  },
+  "hf_snapshots": {
+   "memoryagentbench": "7ea066982b140a19337e17e60d45d4076e042faf",
+   "squad_v2": "3ffb306f725f7d2ce8394bc1873b24868140c412",
+   "hotpot_qa": "1908d6afbbead072334abe2965f91bd2709910ab",
+   "alfworld": "196514ef2e1fcab9a61cd995ede36a0cbb1bc979",
+   "msc": "78b67491c43823fc169cab827ab3f82805e0235b",
+   "embedding_model": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41"
+  },
+  "dars_settings": {
+   "weights": {
+    "w_r": 0.3,
+    "w_f": 0.2,
+    "w_u": 0.3,
+    "w_p": 0.2
+   },
+   "recency_decay_lambda_per_hour": 0.001,
+   "frequency_cap": 50,
+   "threshold_retain": 0.7,
+   "threshold_compress": 0.3,
+   "grace_period_seconds": 86400.0,
+   "embedding_model": "all-MiniLM-L6-v2",
+   "goal_description": "Effective action sequences, object locations, and task completion strategies for interactive household environments",
+   "openai_reader_model": "gpt-4o-mini-2024-07-18",
+   "openai_aux_model": "gpt-4.1-nano-2025-04-14"
+  }
+ }
+}

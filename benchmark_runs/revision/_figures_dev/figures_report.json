@@ -1,0 +1,18 @@
+{
+ "fig1": [],
+ "fig2": [
+  "C:\\Users\\Harsh\\Desktop\\minilunch\\Dynamic-Adaptive-Retention-Framework\\benchmark_runs\\revision\\E1\\dev_reader\\eventqa_65536_b5120: no reader outputs for no_memory",
+  "C:\\Users\\Harsh\\Desktop\\minilunch\\Dynamic-Adaptive-Retention-Framework\\benchmark_runs\\revision\\E1\\dev_reader\\eventqa_full_b5120\\per_question.jsonl",
+  "C:\\Users\\Harsh\\Desktop\\minilunch\\Dynamic-Adaptive-Retention-Framework\\benchmark_runs\\revision\\E1\\dev_reader\\eventqa_full_b5120\\per_question.jsonl",
+  "C:\\Users\\Harsh\\Desktop\\minilunch\\Dynamic-Adaptive-Retention-Framework\\benchmark_runs\\revision\\E1\\dev_reader\\eventqa_full_b5120\\per_question.jsonl",
+  "C:\\Users\\Harsh\\Desktop\\minilunch\\Dynamic-Adaptive-Retention-Framework\\benchmark_runs\\revision\\E1\\dev_reader\\eventqa_full_b5120\\per_question.jsonl",
+  "C:\\Users\\Harsh\\Desktop\\minilunch\\Dynamic-Adaptive-Retention-Framework\\benchmark_runs\\revision\\E1\\dev_reader\\ruler_qa1_197K_b5120: no reader outputs for no_memory",
+  "C:\\Users\\Harsh\\Desktop\\minilunch\\Dynamic-Adaptive-Retention-Framework\\benchmark_runs\\revision\\E1\\dev_reader\\ruler_qa2_421K_b5120: no reader outputs for no_memory",
+  "C:\\Users\\Harsh\\Desktop\\minilunch\\Dynamic-Adaptive-Retention-Framework\\benchmark_runs\\revision\\E1\\dev_reader\\longmemeval_s_b5120: no reader outputs for no_memory"
+ ],
+ "fig3": [],
+ "fig4": [],
+ "fig5": [],
+ "fig6": [],
+ "fig7": []
+}

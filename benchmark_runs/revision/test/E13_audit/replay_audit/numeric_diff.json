@@ -1,0 +1,773 @@
+{
+ "E1_per_question": {
+  "leaves": 127381,
+  "numeric_diffs": 1708,
+  "max_abs": 6.456630519124928e-08,
+  "max_rel": 9.257350534860796e-08,
+  "non_numeric": [
+   "[280].reader[0].cached: 'False' vs 'True'",
+   "[280].reader[1].cached: 'False' vs 'True'",
+   "[280].reader[2].cached: 'False' vs 'True'",
+   "[281].reader[0].cached: 'False' vs 'True'",
+   "[281].reader[1].cached: 'False' vs 'True'"
+  ],
+  "structural": [],
+  "by_field": {
+   "[].top_components[].P": {
+    "count": 1022,
+    "max_abs": 5.551115123125783e-17
+   },
+   "[].top_components[].sim": {
+    "count": 686,
+    "max_abs": 6.456630519124928e-08
+   }
+  },
+  "non_numeric_count": 1026,
+  "structural_count": 0
+ },
+ "E1_manifest": {
+  "leaves": 153,
+  "numeric_diffs": 0,
+  "max_abs": 0.0,
+  "max_rel": 0.0,
+  "non_numeric": [],
+  "structural": [
+   ".methods[0].first_stage: present on one side only",
+   ".methods[1].first_stage: present on one side only",
+   ".methods[2].first_stage: present on one side only",
+   ".methods[3].first_stage: present on one side only",
+   ".methods[4].first_stage: present on one side only"
+  ],
+  "by_field": {},
+  "non_numeric_count": 0,
+  "structural_count": 9
+ },
+ "E11_manifest": {
+  "leaves": 155,
+  "numeric_diffs": 0,
+  "max_abs": 0.0,
+  "max_rel": 0.0,
+  "non_numeric": [],
+  "structural": [
+   ".methods[0].first_stage: present on one side only",
+   ".methods[1].first_stage: present on one side only",
+   ".methods[2].first_stage: present on one side only",
+   ".methods[3].first_stage: present on one side only"
+  ],
+  "by_field": {},
+  "non_numeric_count": 0,
+  "structural_count": 4
+ },
+ "msc_test_s3_facts": {
+  "leaves": 137936,
+  "numeric_diffs": 3022,
+  "max_abs": 2,
+  "max_rel": 0.1,
+  "non_numeric": [],
+  "structural": [],
+  "by_field": {
+   "[].components.R": {
+    "count": 119,
+    "max_abs": 1.1102230246251565e-16
+   },
+   "[].components.P": {
+    "count": 2895,
+    "max_abs": 1.1102230246251565e-16
+   },
+   "[].components.F": {
+    "count": 2,
+    "max_abs": 0.025454704227978686
+   },
+   "[].components.U": {
+    "count": 2,
+    "max_abs": 0.00454545454545463
+   },
+   "[].frequency": {
+    "count": 2,
+    "max_abs": 2
+   },
+   "[].success": {
+    "count": 2,
+    "max_abs": 2
+   }
+  },
+  "non_numeric_count": 0,
+  "structural_count": 0
+ },
+ "confirm_primary": {
+  "leaves": 2084,
+  "numeric_diffs": 91,
+  "max_abs": 6.906199642164879e-07,
+  "max_rel": 1.6970591398790393e-06,
+  "non_numeric": [],
+  "structural": [],
+  "by_field": {
+   ".primary_by_split.test[].delong_p": {
+    "count": 4,
+    "max_abs": 2.439454888092385e-19
+   },
+   ".primary_by_split.validation[].delong_p": {
+    "count": 2,
+    "max_abs": 4.0540495122678424e-47
+   },
+   ".primary_by_split.validation[].auc_b": {
+    "count": 1,
+    "max_abs": 6.641801423290516e-07
+   },
+   ".primary_by_split.validation[].ci_lo": {
+    "count": 1,
+    "max_abs": 1.6817825243542472e-08
+   },
+   ".primary_by_split.validation[].diff": {
+    "count": 1,
+    "max_abs": 6.641801423290516e-07
+   },
+   ".primary_family[].delong_p": {
+    "count": 2,
+    "max_abs": 1.497166807104306e-103
+   },
+   ".primary_family[].auc_b": {
+    "count": 1,
+    "max_abs": 2.8097809745553093e-07
+   },
+   ".primary_family[].ci_hi": {
+    "count": 1,
+    "max_abs": 4.232482689325856e-07
+   },
+   ".primary_family[].ci_lo": {
+    "count": 1,
+    "max_abs": 9.428741676309471e-10
+   },
+   ".primary_family[].diff": {
+    "count": 1,
+    "max_abs": 2.8097809745553093e-07
+   },
+   ".secondary.embed_0.8.auroc.fifo.delong.se": {
+    "count": 1,
+    "max_abs": 8.673617379884035e-19
+   },
+   ".secondary.embed_0.8.auroc.frequency_lfu.delong.se": {
+    "count": 1,
+    "max_abs": 5.204170427930421e-18
+   },
+   ".secondary.embed_0.8.auroc.generative_agents.clustered.auc": {
+    "count": 1,
+    "max_abs": 2.4971212642110885e-07
+   },
+   ".secondary.embed_0.8.auroc.generative_agents.clustered.ci_hi": {
+    "count": 1,
+    "max_abs": 5.348897479384718e-07
+   },
+   ".secondary.embed_0.8.auroc.generative_agents.clustered.ci_lo": {
+    "count": 1,
+    "max_abs": 2.6590597357323276e-07
+   },
+   ".secondary.embed_0.8.auroc.generative_agents.delong.auc": {
+    "count": 1,
+    "max_abs": 2.4971212653213115e-07
+   },
+   ".secondary.embed_0.8.auroc.generative_agents.delong.ci_hi": {
+    "count": 1,
+    "max_abs": 2.505277285624885e-07
+   },
+   ".secondary.embed_0.8.auroc.generative_agents.delong.ci_lo": {
+    "count": 1,
+    "max_abs": 2.488965245017738e-07
+   },
+   ".secondary.embed_0.8.auroc.generative_agents.delong.se": {
+    "count": 1,
+    "max_abs": 4.161311096054221e-10
+   },
+   ".secondary.embed_0.8.auroc.mention_count.delong.se": {
+    "count": 1,
+    "max_abs": 8.239936510889834e-18
+   },
+   ".secondary.embed_0.8.auroc.metadata_model.delong.se": {
+    "count": 1,
+    "max_abs": 3.0357660829594124e-18
+   },
+   ".secondary.embed_0.8.auroc.read_h5.delong.se": {
+    "count": 1,
+    "max_abs": 8.673617379884035e-19
+   },
+   ".secondary.embed_0.8.auroc.recency_lru.delong.se": {
+    "count": 1,
+    "max_abs": 8.673617379884035e-19
+   },
+   ".secondary.embed_0.8.auroc.utility_read.delong.se": {
+    "count": 1,
+    "max_abs": 4.336808689942018e-19
+   },
+   ".secondary.embed_0.8.auroc.utility_write.delong.se": {
+    "count": 1,
+    "max_abs": 8.673617379884035e-19
+   },
+   ".secondary.embed_0.8.auroc.write_default.delong.se": {
+    "count": 1,
+    "max_abs": 1.3010426069826053e-18
+   },
+   ".secondary.embed_0.8.auroc.write_h4.delong.se": {
+    "count": 1,
+    "max_abs": 1.3010426069826053e-18
+   },
+   ".secondary.lex_0.5.auroc.fifo.delong.se": {
+    "count": 1,
+    "max_abs": 3.469446951953614e-18
+   },
+   ".secondary.lex_0.5.auroc.frequency_lfu.delong.se": {
+    "count": 1,
+    "max_abs": 2.6020852139652106e-18
+   },
+   ".secondary.lex_0.5.auroc.generative_agents.clustered.auc": {
+    "count": 1,
+    "max_abs": 2.8097809745553093e-07
+   },
+   ".secondary.lex_0.5.auroc.generative_agents.clustered.ci_hi": {
+    "count": 1,
+    "max_abs": 6.906199642164879e-07
+   },
+   ".secondary.lex_0.5.auroc.generative_agents.clustered.ci_lo": {
+    "count": 1,
+    "max_abs": 2.7358236076580056e-07
+   },
+   ".secondary.lex_0.5.auroc.generative_agents.delong.auc": {
+    "count": 1,
+    "max_abs": 2.8097809745553093e-07
+   },
+   ".secondary.lex_0.5.auroc.generative_agents.delong.ci_hi": {
+    "count": 1,
+    "max_abs": 2.8330765944328817e-07
+   },
+   ".secondary.lex_0.5.auroc.generative_agents.delong.ci_lo": {
+    "count": 1,
+    "max_abs": 2.786485354677737e-07
+   },
+   ".secondary.lex_0.5.auroc.generative_agents.delong.se": {
+    "count": 1,
+    "max_abs": 1.1885738539219037e-09
+   },
+   ".secondary.lex_0.5.auroc.memorybank.delong.se": {
+    "count": 1,
+    "max_abs": 1.734723475976807e-18
+   },
+   ".secondary.lex_0.5.auroc.mention_count.delong.se": {
+    "count": 1,
+    "max_abs": 1.734723475976807e-18
+   },
+   ".secondary.lex_0.5.auroc.metadata_model.delong.se": {
+    "count": 1,
+    "max_abs": 1.3010426069826053e-18
+   },
+   ".secondary.lex_0.5.auroc.read_default.delong.se": {
+    "count": 1,
+    "max_abs": 4.336808689942018e-19
+   },
+   ".secondary.lex_0.5.auroc.read_h4.delong.se": {
+    "count": 1,
+    "max_abs": 1.3010426069826053e-18
+   },
+   ".secondary.lex_0.5.auroc.recency_lru.delong.se": {
+    "count": 1,
+    "max_abs": 3.469446951953614e-18
+   },
+   ".secondary.lex_0.5.auroc.utility_write.delong.se": {
+    "count": 1,
+    "max_abs": 4.336808689942018e-19
+   },
+   ".secondary.lex_0.5.auroc.write_default.delong.se": {
+    "count": 1,
+    "max_abs": 4.336808689942018e-19
+   },
+   ".secondary.lex_0.5.auroc.write_h4.delong.se": {
+    "count": 1,
+    "max_abs": 4.336808689942018e-19
+   },
+   ".secondary.lex_0.6.auroc.fifo.delong.ci_hi": {
+    "count": 1,
+    "max_abs": 1.1102230246251565e-16
+   },
+   ".secondary.lex_0.6.auroc.fifo.delong.ci_lo": {
+    "count": 1,
+    "max_abs": 1.1102230246251565e-16
+   },
+   ".secondary.lex_0.6.auroc.fifo.delong.se": {
+    "count": 1,
+    "max_abs": 2.6020852139652106e-18
+   },
+   ".secondary.lex_0.6.auroc.frequency_lfu.delong.se": {
+    "count": 1,
+    "max_abs": 3.469446951953614e-18
+   },
+   ".secondary.lex_0.6.auroc.generative_agents.clustered.auc": {
+    "count": 1,
+    "max_abs": 2.6907132721909477e-07
+   },
+   ".secondary.lex_0.6.auroc.generative_agents.clustered.ci_hi": {
+    "count": 1,
+    "max_abs": 1.4203572795690178e-07
+   },
+   ".secondary.lex_0.6.auroc.generative_agents.clustered.ci_lo": {
+    "count": 1,
+    "max_abs": 2.2444875402705122e-08
+   },
+   ".secondary.lex_0.6.auroc.generative_agents.delong.auc": {
+    "count": 1,
+    "max_abs": 2.6907132721909477e-07
+   },
+   ".secondary.lex_0.6.auroc.generative_agents.delong.ci_hi": {
+    "count": 1,
+    "max_abs": 2.701220229717194e-07
+   },
+   ".secondary.lex_0.6.auroc.generative_agents.delong.ci_lo": {
+    "count": 1,
+    "max_abs": 2.6802063146647015e-07
+   },
+   ".secondary.lex_0.6.auroc.generative_agents.delong.se": {
+    "count": 1,
+    "max_abs": 5.360791003813925e-10
+   },
+   ".secondary.lex_0.6.auroc.memorybank.delong.se": {
+    "count": 1,
+    "max_abs": 2.6020852139652106e-18
+   },
+   ".secondary.lex_0.6.auroc.mention_count.delong.se": {
+    "count": 1,
+    "max_abs": 4.336808689942018e-18
+   },
+   ".secondary.lex_0.6.auroc.metadata_model.delong.se": {
+    "count": 1,
+    "max_abs": 8.673617379884035e-19
+   },
+   ".secondary.lex_0.6.auroc.read_default.delong.se": {
+    "count": 1,
+    "max_abs": 8.673617379884035e-19
+   },
+   ".secondary.lex_0.6.auroc.read_h5.delong.se": {
+    "count": 1,
+    "max_abs": 3.0357660829594124e-18
+   },
+   ".secondary.lex_0.6.auroc.recency_lru.delong.se": {
+    "count": 1,
+    "max_abs": 4.336808689942018e-18
+   },
+   ".secondary.lex_0.6.auroc.utility_read.delong.se": {
+    "count": 1,
+    "max_abs": 1.3010426069826053e-18
+   },
+   ".secondary.lex_0.6.auroc.utility_write.delong.se": {
+    "count": 1,
+    "max_abs": 1.734723475976807e-18
+   },
+   ".secondary.lex_0.6.auroc.write_default.delong.se": {
+    "count": 1,
+    "max_abs": 1.734723475976807e-18
+   },
+   ".secondary.lex_0.6.auroc.write_h4.delong.se": {
+    "count": 1,
+    "max_abs": 8.673617379884035e-19
+   },
+   ".secondary.lex_0.7.auroc.fifo.delong.se": {
+    "count": 1,
+    "max_abs": 6.5052130349130266e-18
+   },
+   ".secondary.lex_0.7.auroc.frequency_lfu.delong.se": {
+    "count": 1,
+    "max_abs": 2.6020852139652106e-18
+   },
+   ".secondary.lex_0.7.auroc.generative_agents.clustered.auc": {
+    "count": 1,
+    "max_abs": 2.5264748426678807e-07
+   },
+   ".secondary.lex_0.7.auroc.generative_agents.clustered.ci_hi": {
+    "count": 1,
+    "max_abs": 2.1347433376561753e-08
+   },
+   ".secondary.lex_0.7.auroc.generative_agents.clustered.ci_lo": {
+    "count": 1,
+    "max_abs": 2.228957494132544e-07
+   },
+   ".secondary.lex_0.7.auroc.generative_agents.delong.auc": {
+    "count": 1,
+    "max_abs": 2.5264748426678807e-07
+   },
+   ".secondary.lex_0.7.auroc.generative_agents.delong.ci_hi": {
+    "count": 1,
+    "max_abs": 2.524399183023718e-07
+   },
+   ".secondary.lex_0.7.auroc.generative_agents.delong.ci_lo": {
+    "count": 1,
+    "max_abs": 2.5285505023120436e-07
+   },
+   ".secondary.lex_0.7.auroc.generative_agents.delong.se": {
+    "count": 1,
+    "max_abs": 1.0590295567575181e-10
+   },
+   ".secondary.lex_0.7.auroc.memorybank.delong.se": {
+    "count": 1,
+    "max_abs": 1.734723475976807e-18
+   },
+   ".secondary.lex_0.7.auroc.mention_count.delong.se": {
+    "count": 1,
+    "max_abs": 4.336808689942018e-18
+   },
+   ".secondary.lex_0.7.auroc.metadata_model.delong.se": {
+    "count": 1,
+    "max_abs": 4.336808689942018e-18
+   },
+   ".secondary.lex_0.7.auroc.read_default.delong.se": {
+    "count": 1,
+    "max_abs": 8.673617379884035e-19
+   },
+   ".secondary.lex_0.7.auroc.read_h4.delong.se": {
+    "count": 1,
+    "max_abs": 8.673617379884035e-19
+   },
+   ".secondary.lex_0.7.auroc.read_h5.delong.se": {
+    "count": 1,
+    "max_abs": 6.071532165918825e-18
+   },
+   ".secondary.lex_0.7.auroc.recency_lru.delong.se": {
+    "count": 1,
+    "max_abs": 3.469446951953614e-18
+   },
+   ".secondary.lex_0.7.auroc.utility_read.delong.se": {
+    "count": 1,
+    "max_abs": 2.6020852139652106e-18
+   },
+   ".secondary.lex_0.7.auroc.utility_write.delong.se": {
+    "count": 1,
+    "max_abs": 4.336808689942018e-19
+   },
+   ".secondary.lex_0.7.auroc.write_h4.delong.se": {
+    "count": 1,
+    "max_abs": 1.734723475976807e-18
+   },
+   ".secondary.lex_0.7.auroc.write_h5.delong.se": {
+    "count": 1,
+    "max_abs": 1.734723475976807e-18
+   }
+  },
+  "non_numeric_count": 0,
+  "structural_count": 0
+ },
+ "confirm_secondary_s4": {
+  "leaves": 1550,
+  "numeric_diffs": 77,
+  "max_abs": 2.500072955324839e-07,
+  "max_rel": 4.3448959076352907e-07,
+  "non_numeric": [],
+  "structural": [],
+  "by_field": {
+   ".secondary.embed_0.8.auroc.fifo.delong.se": {
+    "count": 1,
+    "max_abs": 1.3010426069826053e-18
+   },
+   ".secondary.embed_0.8.auroc.frequency_lfu.delong.se": {
+    "count": 1,
+    "max_abs": 1.734723475976807e-18
+   },
+   ".secondary.embed_0.8.auroc.generative_agents.clustered.auc": {
+    "count": 1,
+    "max_abs": 5.763998833785422e-08
+   },
+   ".secondary.embed_0.8.auroc.generative_agents.clustered.ci_hi": {
+    "count": 1,
+    "max_abs": 4.03194777565119e-08
+   },
+   ".secondary.embed_0.8.auroc.generative_agents.clustered.ci_lo": {
+    "count": 1,
+    "max_abs": 5.282542747675478e-08
+   },
+   ".secondary.embed_0.8.auroc.generative_agents.delong.auc": {
+    "count": 1,
+    "max_abs": 5.763998833785422e-08
+   },
+   ".secondary.embed_0.8.auroc.generative_agents.delong.ci_hi": {
+    "count": 1,
+    "max_abs": 5.794769231126651e-08
+   },
+   ".secondary.embed_0.8.auroc.generative_agents.delong.ci_lo": {
+    "count": 1,
+    "max_abs": 5.733228436444193e-08
+   },
+   ".secondary.embed_0.8.auroc.generative_agents.delong.se": {
+    "count": 1,
+    "max_abs": 1.5699467420526858e-10
+   },
+   ".secondary.embed_0.8.auroc.memorybank.delong.se": {
+    "count": 1,
+    "max_abs": 8.673617379884035e-19
+   },
+   ".secondary.embed_0.8.auroc.mention_count.delong.se": {
+    "count": 1,
+    "max_abs": 4.336808689942018e-19
+   },
+   ".secondary.embed_0.8.auroc.metadata_model.delong.se": {
+    "count": 1,
+    "max_abs": 8.673617379884035e-19
+   },
+   ".secondary.embed_0.8.auroc.read_default.delong.se": {
+    "count": 1,
+    "max_abs": 4.336808689942018e-19
+   },
+   ".secondary.embed_0.8.auroc.read_h5.delong.se": {
+    "count": 1,
+    "max_abs": 4.336808689942018e-19
+   },
+   ".secondary.embed_0.8.auroc.recency_lru.delong.se": {
+    "count": 1,
+    "max_abs": 1.734723475976807e-18
+   },
+   ".secondary.embed_0.8.auroc.utility_read.delong.se": {
+    "count": 1,
+    "max_abs": 1.3010426069826053e-18
+   },
+   ".secondary.embed_0.8.auroc.utility_write.delong.se": {
+    "count": 1,
+    "max_abs": 5.204170427930421e-18
+   },
+   ".secondary.embed_0.8.auroc.write_default.delong.se": {
+    "count": 1,
+    "max_abs": 1.3010426069826053e-18
+   },
+   ".secondary.embed_0.8.auroc.write_h4.delong.se": {
+    "count": 1,
+    "max_abs": 1.734723475976807e-18
+   },
+   ".secondary.embed_0.8.auroc.write_h5.delong.se": {
+    "count": 1,
+    "max_abs": 1.3010426069826053e-18
+   },
+   ".secondary.lex_0.5.auroc.fifo.delong.se": {
+    "count": 1,
+    "max_abs": 4.336808689942018e-19
+   },
+   ".secondary.lex_0.5.auroc.generative_agents.clustered.auc": {
+    "count": 1,
+    "max_abs": 4.1088494495689076e-08
+   },
+   ".secondary.lex_0.5.auroc.generative_agents.clustered.ci_hi": {
+    "count": 1,
+    "max_abs": 1.6088180743167868e-07
+   },
+   ".secondary.lex_0.5.auroc.generative_agents.clustered.ci_lo": {
+    "count": 1,
+    "max_abs": 1.8487630271124544e-07
+   },
+   ".secondary.lex_0.5.auroc.generative_agents.delong.auc": {
+    "count": 1,
+    "max_abs": 4.1088494384666774e-08
+   },
+   ".secondary.lex_0.5.auroc.generative_agents.delong.ci_hi": {
+    "count": 1,
+    "max_abs": 4.142199483414544e-08
+   },
+   ".secondary.lex_0.5.auroc.generative_agents.delong.ci_lo": {
+    "count": 1,
+    "max_abs": 4.075499393518811e-08
+   },
+   ".secondary.lex_0.5.auroc.generative_agents.delong.se": {
+    "count": 1,
+    "max_abs": 1.7015640632611628e-10
+   },
+   ".secondary.lex_0.5.auroc.memorybank.delong.se": {
+    "count": 1,
+    "max_abs": 1.734723475976807e-18
+   },
+   ".secondary.lex_0.5.auroc.mention_count.delong.se": {
+    "count": 1,
+    "max_abs": 4.336808689942018e-19
+   },
+   ".secondary.lex_0.5.auroc.metadata_model.delong.se": {
+    "count": 1,
+    "max_abs": 8.673617379884035e-19
+   },
+   ".secondary.lex_0.5.auroc.read_h4.delong.se": {
+    "count": 1,
+    "max_abs": 4.336808689942018e-19
+   },
+   ".secondary.lex_0.5.auroc.read_h5.delong.se": {
+    "count": 1,
+    "max_abs": 4.336808689942018e-19
+   },
+   ".secondary.lex_0.5.auroc.utility_read.delong.se": {
+    "count": 1,
+    "max_abs": 4.336808689942018e-19
+   },
+   ".secondary.lex_0.5.auroc.write_default.delong.se": {
+    "count": 1,
+    "max_abs": 2.168404344971009e-19
+   },
+   ".secondary.lex_0.5.auroc.write_h4.delong.se": {
+    "count": 1,
+    "max_abs": 4.336808689942018e-19
+   },
+   ".secondary.lex_0.6.auroc.frequency_lfu.delong.ci_hi": {
+    "count": 1,
+    "max_abs": 5.551115123125783e-17
+   },
+   ".secondary.lex_0.6.auroc.frequency_lfu.delong.ci_lo": {
+    "count": 1,
+    "max_abs": 5.551115123125783e-17
+   },
+   ".secondary.lex_0.6.auroc.frequency_lfu.delong.se": {
+    "count": 1,
+    "max_abs": 8.673617379884035e-19
+   },
+   ".secondary.lex_0.6.auroc.generative_agents.clustered.auc": {
+    "count": 1,
+    "max_abs": 1.2824616701934133e-08
+   },
+   ".secondary.lex_0.6.auroc.generative_agents.clustered.ci_hi": {
+    "count": 1,
+    "max_abs": 8.20719116001456e-08
+   },
+   ".secondary.lex_0.6.auroc.generative_agents.clustered.ci_lo": {
+    "count": 1,
+    "max_abs": 1.1563394686220363e-08
+   },
+   ".secondary.lex_0.6.auroc.generative_agents.delong.auc": {
+    "count": 1,
+    "max_abs": 1.2824616701934133e-08
+   },
+   ".secondary.lex_0.6.auroc.generative_agents.delong.ci_hi": {
+    "count": 1,
+    "max_abs": 1.2908616842111087e-08
+   },
+   ".secondary.lex_0.6.auroc.generative_agents.delong.ci_lo": {
+    "count": 1,
+    "max_abs": 1.2740616561757179e-08
+   },
+   ".secondary.lex_0.6.auroc.generative_agents.delong.se": {
+    "count": 1,
+    "max_abs": 4.285796544045706e-11
+   },
+   ".secondary.lex_0.6.auroc.memorybank.delong.se": {
+    "count": 1,
+    "max_abs": 8.673617379884035e-19
+   },
+   ".secondary.lex_0.6.auroc.mention_count.delong.se": {
+    "count": 1,
+    "max_abs": 2.168404344971009e-18
+   },
+   ".secondary.lex_0.6.auroc.metadata_model.delong.se": {
+    "count": 1,
+    "max_abs": 1.3010426069826053e-18
+   },
+   ".secondary.lex_0.6.auroc.read_h5.delong.se": {
+    "count": 1,
+    "max_abs": 1.734723475976807e-18
+   },
+   ".secondary.lex_0.6.auroc.utility_read.delong.se": {
+    "count": 1,
+    "max_abs": 1.3010426069826053e-18
+   },
+   ".secondary.lex_0.6.auroc.utility_write.delong.se": {
+    "count": 1,
+    "max_abs": 2.168404344971009e-18
+   },
+   ".secondary.lex_0.6.auroc.write_default.delong.se": {
+    "count": 1,
+    "max_abs": 2.6020852139652106e-18
+   },
+   ".secondary.lex_0.6.auroc.write_h4.delong.se": {
+    "count": 1,
+    "max_abs": 4.336808689942018e-19
+   },
+   ".secondary.lex_0.6.auroc.write_h5.delong.se": {
+    "count": 1,
+    "max_abs": 4.336808689942018e-19
+   },
+   ".secondary.lex_0.7.auroc.fifo.delong.se": {
+    "count": 1,
+    "max_abs": 2.168404344971009e-18
+   },
+   ".secondary.lex_0.7.auroc.frequency_lfu.delong.se": {
+    "count": 1,
+    "max_abs": 1.734723475976807e-18
+   },
+   ".secondary.lex_0.7.auroc.generative_agents.clustered.auc": {
+    "count": 1,
+    "max_abs": 1.8372749099881958e-08
+   },
+   ".secondary.lex_0.7.auroc.generative_agents.clustered.ci_hi": {
+    "count": 1,
+    "max_abs": 2.500072955324839e-07
+   },
+   ".secondary.lex_0.7.auroc.generative_agents.clustered.ci_lo": {
+    "count": 1,
+    "max_abs": 2.0228105523933948e-08
+   },
+   ".secondary.lex_0.7.auroc.generative_agents.delong.auc": {
+    "count": 1,
+    "max_abs": 1.8372749099881958e-08
+   },
+   ".secondary.lex_0.7.auroc.generative_agents.delong.ci_hi": {
+    "count": 1,
+    "max_abs": 1.8422478098578665e-08
+   },
+   ".secondary.lex_0.7.auroc.generative_agents.delong.ci_lo": {
+    "count": 1,
+    "max_abs": 1.832302010118525e-08
+   },
+   ".secondary.lex_0.7.auroc.generative_agents.delong.se": {
+    "count": 1,
+    "max_abs": 2.5372396024458954e-11
+   },
+   ".secondary.lex_0.7.auroc.memorybank.delong.se": {
+    "count": 1,
+    "max_abs": 8.673617379884035e-19
+   },
+   ".secondary.lex_0.7.auroc.mention_count.delong.se": {
+    "count": 1,
+    "max_abs": 1.3010426069826053e-18
+   },
+   ".secondary.lex_0.7.auroc.metadata_model.delong.se": {
+    "count": 1,
+    "max_abs": 2.6020852139652106e-18
+   },
+   ".secondary.lex_0.7.auroc.read_h4.delong.se": {
+    "count": 1,
+    "max_abs": 2.6020852139652106e-18
+   },
+   ".secondary.lex_0.7.auroc.read_h5.delong.se": {
+    "count": 1,
+    "max_abs": 2.6020852139652106e-18
+   },
+   ".secondary.lex_0.7.auroc.recency_lru.delong.se": {
+    "count": 1,
+    "max_abs": 8.673617379884035e-19
+   },
+   ".secondary.lex_0.7.auroc.utility_read.delong.ci_hi": {
+    "count": 1,
+    "max_abs": 1.1102230246251565e-16
+   },
+   ".secondary.lex_0.7.auroc.utility_read.delong.ci_lo": {
+    "count": 1,
+    "max_abs": 1.1102230246251565e-16
+   },
+   ".secondary.lex_0.7.auroc.utility_read.delong.se": {
+    "count": 1,
+    "max_abs": 1.3010426069826053e-18
+   },
+   ".secondary.lex_0.7.auroc.utility_write.delong.se": {
+    "count": 1,
+    "max_abs": 1.3010426069826053e-18
+   },
+   ".secondary.lex_0.7.auroc.write_default.delong.se": {
+    "count": 1,
+    "max_abs": 4.336808689942018e-19
+   },
+   ".secondary.lex_0.7.auroc.write_h4.delong.se": {
+    "count": 1,
+    "max_abs": 3.469446951953614e-18
+   },
+   ".secondary.lex_0.7.auroc.write_h5.delong.se": {
+    "count": 1,
+    "max_abs": 1.734723475976807e-18
+   }
+  },
+  "non_numeric_count": 0,
+  "structural_count": 0
+ }
+}

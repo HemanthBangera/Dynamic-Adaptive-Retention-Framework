@@ -1,0 +1,8 @@
+2026-09-13T06:33:36Z collect fc_order
+2026-09-13T06:34:13Z batch fc_order (800 requests)
+800 request(s) still need answers (cached ones skipped)
+  submitted batch_6aa643e7f1788190a7769421a63648c1: 800 requests, ~379,786 tokens (in flight ~379,786)
+  batch_6aa643e7f1788190a7769421a63648c1: completed, cached 800
+batches=1 cached=800 unusable=0 pending=0
+2026-09-13T06:36:57Z replay fc_order
+2026-09-13T06:37:22Z fc_order DONE

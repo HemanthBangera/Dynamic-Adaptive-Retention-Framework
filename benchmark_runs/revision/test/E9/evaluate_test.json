@@ -1,0 +1,272 @@
+{
+ "split": "test",
+ "label": "lex_0.5",
+ "facts": 13550,
+ "dialogues": 701,
+ "base_rate": 0.4484870848708487,
+ "h4": {
+  "config": {
+   "lambda": 0.05,
+   "weights": [
+    0.2,
+    0.0,
+    0.8,
+    0.0
+   ]
+  },
+  "primary_comparators": [
+   "recency_lru",
+   "frequency_lfu"
+  ],
+  "auroc_selected": {
+   "auc": 0.890635766021679,
+   "ci_lo": 0.88472690363043,
+   "ci_hi": 0.896544628412928,
+   "se": 0.0030147811071312247,
+   "n_pos": 6077,
+   "n_neg": 7473
+  },
+  "auroc_default": {
+   "auc": 0.7104694116745798,
+   "ci_lo": 0.7017400818083565,
+   "ci_hi": 0.7191987415408031,
+   "se": 0.004453821567681453,
+   "n_pos": 6077,
+   "n_neg": 7473
+  },
+  "comparators": {
+   "recency_lru": {
+    "auc": 0.6635403441638983,
+    "ci_lo": 0.6544635790530529,
+    "ci_hi": 0.6726171092747437,
+    "se": 0.004631087704897537,
+    "n_pos": 6077,
+    "n_neg": 7473
+   },
+   "frequency_lfu": {
+    "auc": 0.24290491130364306,
+    "ci_lo": 0.23496850914805428,
+    "ci_hi": 0.25084131345923183,
+    "se": 0.004049259179347227,
+    "n_pos": 6077,
+    "n_neg": 7473
+   },
+   "fifo": {
+    "auc": 0.8661830277001155,
+    "ci_lo": 0.8602035475809304,
+    "ci_hi": 0.8721625078193005,
+    "se": 0.00305081122222164,
+    "n_pos": 6077,
+    "n_neg": 7473
+   },
+   "utility": {
+    "auc": 0.8752494994816622,
+    "ci_lo": 0.8692670606630774,
+    "ci_hi": 0.881231938300247,
+    "se": 0.0030523207904704047,
+    "n_pos": 6077,
+    "n_neg": 7473
+   },
+   "mention_count": {
+    "auc": 0.749659126098428,
+    "ci_lo": 0.7423595078251868,
+    "ci_hi": 0.7569587443716692,
+    "se": 0.003724363473420783,
+    "n_pos": 6077,
+    "n_neg": 7473
+   }
+  },
+  "paired": {
+   "recency_lru": {
+    "auc_a": 0.890635766021679,
+    "auc_b": 0.6635403441638983,
+    "diff": 0.22709542185778075,
+    "z": 46.5020894253461,
+    "p_value": 0.0
+   },
+   "frequency_lfu": {
+    "auc_a": 0.890635766021679,
+    "auc_b": 0.24290491130364306,
+    "diff": 0.647730854718036,
+    "z": 131.76447039704368,
+    "p_value": 0.0
+   },
+   "fifo": {
+    "auc_a": 0.890635766021679,
+    "auc_b": 0.8661830277001155,
+    "diff": 0.024452738321563583,
+    "z": 7.341996771320692,
+    "p_value": 2.1043047337655012e-13
+   },
+   "utility": {
+    "auc_a": 0.890635766021679,
+    "auc_b": 0.8752494994816622,
+    "diff": 0.015386266540016846,
+    "z": 15.919472232308264,
+    "p_value": 4.642765308380267e-57
+   },
+   "mention_count": {
+    "auc_a": 0.890635766021679,
+    "auc_b": 0.749659126098428,
+    "diff": 0.14097663992325105,
+    "z": 39.56809421915639,
+    "p_value": 0.0
+   }
+  },
+  "paired_default": {
+   "auc_a": 0.890635766021679,
+   "auc_b": 0.7104694116745798,
+   "diff": 0.18016635434709927,
+   "z": 50.778682255447954,
+   "p_value": 0.0
+  }
+ },
+ "h5": {
+  "config": {
+   "lambda": 0.0005,
+   "weights": [
+    0.3,
+    0.0,
+    0.7,
+    0.0
+   ]
+  },
+  "keep": 0.5,
+  "primary_comparators": [
+   "recency_lru",
+   "fifo"
+  ],
+  "selected": {
+   "mean": 0.0944414655719934,
+   "ci_lo": 0.08660940744348378,
+   "ci_hi": 0.10223137146773024,
+   "n": 701
+  },
+  "comparators": {
+   "default": {
+    "mean": 0.32088307753429013,
+    "ci_lo": 0.31071173016831005,
+    "ci_hi": 0.3307095605397139,
+    "n": 701
+   },
+   "recency_lru": {
+    "mean": 0.37919599816889404,
+    "ci_lo": 0.36943467433660016,
+    "ci_hi": 0.38906317173078947,
+    "n": 701
+   },
+   "fifo": {
+    "mean": 0.122379263231617,
+    "ci_lo": 0.11509401662887754,
+    "ci_hi": 0.12995279046322197,
+    "n": 701
+   },
+   "frequency_lfu": {
+    "mean": 0.706060613977875,
+    "ci_lo": 0.6969815562963744,
+    "ci_hi": 0.7153585010151521,
+    "n": 701
+   },
+   "mention_count": {
+    "mean": 0.27181847911163176,
+    "ci_lo": 0.2620692207024232,
+    "ci_hi": 0.2818620057328153,
+    "n": 701
+   }
+  },
+  "paired": {
+   "default": {
+    "diff": -0.22644161196229673,
+    "ci_lo": -0.23644190495073159,
+    "ci_hi": -0.21629788433550914,
+    "p_value": 0.0,
+    "n": 701
+   },
+   "recency_lru": {
+    "diff": -0.28475453259690064,
+    "ci_lo": -0.2960124621376405,
+    "ci_hi": -0.273759482414083,
+    "p_value": 0.0,
+    "n": 701
+   },
+   "fifo": {
+    "diff": -0.027937797659623623,
+    "ci_lo": -0.03569629906470134,
+    "ci_hi": -0.020432640944409847,
+    "p_value": 0.0,
+    "n": 701
+   },
+   "frequency_lfu": {
+    "diff": -0.6116191484058816,
+    "ci_lo": -0.6245188139745023,
+    "ci_hi": -0.5988006527075713,
+    "p_value": 0.0,
+    "n": 701
+   },
+   "mention_count": {
+    "diff": -0.17737701353963836,
+    "ci_lo": -0.18964676253370974,
+    "ci_hi": -0.1654042472426923,
+    "p_value": 0.0,
+    "n": 701
+   }
+  }
+ },
+ "provenance": {
+  "preregistration_sha256": "a3dec99a953600c37efae8e572528c4f5059b95c87869460a0a4d1df3a965270",
+  "embedding_cache": {
+   "path": "benchmark_runs\\_emb_cache\\minilm.sqlite",
+   "namespace": "all-MiniLM-L6-v2|rev=1110a243fdf4706b3f48f1d95db1a4f5529b4d41|max_seq_length=256",
+   "hits": 0,
+   "misses": 0
+  },
+  "created_unix": 1789189685.1782272,
+  "git": {
+   "commit": "7b26e6bdb1bb1f97aa1753f27c0694a47ad288e7",
+   "branch": "improvement",
+   "dirty": true
+  },
+  "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "processor": "Intel64 Family 6 Model 154 Stepping 3, GenuineIntel",
+  "cpu_count": 16,
+  "packages": {
+   "qdrant-client": "1.17.1",
+   "sentence-transformers": "5.4.1",
+   "transformers": "5.6.2",
+   "torch": "2.11.0",
+   "numpy": "2.3.4",
+   "openai": "3.13.0",
+   "tiktoken": "0.12.0",
+   "nltk": "3.9.4",
+   "datasets": "4.8.5",
+   "rank-bm25": "0.2.2",
+   "rouge-score": "0.1.2"
+  },
+  "hf_snapshots": {
+   "memoryagentbench": "7ea066982b140a19337e17e60d45d4076e042faf",
+   "squad_v2": "3ffb306f725f7d2ce8394bc1873b24868140c412",
+   "hotpot_qa": "1908d6afbbead072334abe2965f91bd2709910ab",
+   "alfworld": "196514ef2e1fcab9a61cd995ede36a0cbb1bc979",
+   "msc": "78b67491c43823fc169cab827ab3f82805e0235b",
+   "embedding_model": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41"
+  },
+  "dars_settings": {
+   "weights": {
+    "w_r": 0.3,
+    "w_f": 0.2,
+    "w_u": 0.3,
+    "w_p": 0.2
+   },
+   "recency_decay_lambda_per_hour": 0.005,
+   "frequency_cap": 50,
+   "threshold_retain": 0.7,
+   "threshold_compress": 0.3,
+   "grace_period_seconds": 86400.0,
+   "embedding_model": "all-MiniLM-L6-v2",
+   "goal_description": "Effective action sequences, object locations, and task completion strategies for interactive household environments",
+   "openai_reader_model": "gpt-4o-mini-2024-07-18",
+   "openai_aux_model": "gpt-4.1-nano-2025-04-14"
+  }
+ }
+}

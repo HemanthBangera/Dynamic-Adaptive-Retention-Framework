@@ -1,0 +1,50 @@
+INFO Loading embedding model: all-MiniLM-L6-v2 ...
+INFO No device provided, using cpu
+INFO Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 11061.66it/s]
+/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  return self._model.get_sentence_embedding_dimension()
+INFO Embedding model loaded. Dimension: 384
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+WARNING Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+WARNING Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+[transformers] Token indices sequence length is longer than the specified maximum sequence length for this model (261 > 256). Running this sequence through the model will result in indexing errors
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+WARNING Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+WARNING Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+WARNING Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+INFO E5: 968 judged items
+INFO Embedding cache enabled at benchmark_runs/_emb_cache/minilm.sqlite (all-MiniLM-L6-v2|rev=1110a243fdf4706b3f48f1d95db1a4f5529b4d41|max_seq_length=256)
+{
+ "items": 968,
+ "reference_positive_rate": 0.4700413223140496,
+ "consistency": {
+  "gpt-4.1-nano-2025-04-14: test-retest kappa": 0.9037710976163206,
+  "gpt-4.1-nano-2025-04-14: prompt-paraphrase kappa": 0.28378248315688165,
+  "gpt-4o-mini-2024-07-18: test-retest kappa": 0.9944968732234226,
+  "gpt-4o-mini-2024-07-18: prompt-paraphrase kappa": 0.5031977891827875,
+  "inter-judge kappa": 0.127347212162278
+ }
+}
+gpt-4.1-nano-2025-04-14|layer_b|s0            n= 968 acc=0.634 kappa=+0.263 neutral=0.000 | vs correct +0.259 vs evidence +0.171 | factconsolidation_mh_32k=-0.037 factconsolidation_sh_32k=-0.020 longmemeval_s=+0.255 ruler_qa1_197K=+0.164 ruler_qa2_421K=+0.013
+gpt-4.1-nano-2025-04-14|layer_b|s1            n= 968 acc=0.636 kappa=+0.268 neutral=0.000 | vs correct +0.268 vs evidence +0.159 | factconsolidation_mh_32k=-0.037 factconsolidation_sh_32k=-0.050 longmemeval_s=+0.226 ruler_qa1_197K=+0.172 ruler_qa2_421K=+0.118
+gpt-4.1-nano-2025-04-14|paraphrase|s0         n= 968 acc=0.573 kappa=+0.173 neutral=0.000 | vs correct +0.155 vs evidence +0.319 | factconsolidation_mh_32k=-0.045 factconsolidation_sh_32k=+0.021 longmemeval_s=+0.141 ruler_qa1_197K=+0.052 ruler_qa2_421K=+0.065
+gpt-4o-mini-2024-07-18|layer_b|s0             n= 968 acc=0.513 kappa=+0.071 neutral=0.000 | vs correct +0.072 vs evidence +0.306 | factconsolidation_mh_32k=-0.038 factconsolidation_sh_32k=-0.202 longmemeval_s=+0.096 ruler_qa1_197K=+0.462 ruler_qa2_421K=+0.131
+gpt-4o-mini-2024-07-18|layer_b|s1             n= 968 acc=0.512 kappa=+0.069 neutral=0.000 | vs correct +0.070 vs evidence +0.299 | factconsolidation_mh_32k=-0.038 factconsolidation_sh_32k=-0.202 longmemeval_s=+0.096 ruler_qa1_197K=+0.397 ruler_qa2_421K=+0.131
+gpt-4o-mini-2024-07-18|paraphrase|s0          n= 968 acc=0.518 kappa=+0.075 neutral=0.000 | vs correct +0.077 vs evidence +0.224 | factconsolidation_mh_32k=-0.033 factconsolidation_sh_32k=-0.138 longmemeval_s=+0.097 ruler_qa1_197K=+0.025 ruler_qa2_421K=+0.107
+lexical_tau0.3                                n= 968 acc=0.481 kappa=-0.074 neutral=0.000 | vs correct -0.081 vs evidence -0.006 | factconsolidation_mh_32k=+0.021 factconsolidation_sh_32k=+0.135 longmemeval_s=+0.011 ruler_qa1_197K=-0.025 ruler_qa2_421K=-0.055
+lexical_tau0.5                                n= 968 acc=0.538 kappa=+0.023 neutral=0.000 | vs correct +0.021 vs evidence -0.002 | factconsolidation_mh_32k=-0.052 factconsolidation_sh_32k=+0.117 longmemeval_s=-0.005 ruler_qa1_197K=+0.004 ruler_qa2_421K=-0.000
+lexical_tau0.7                                n= 968 acc=0.530 kappa=+0.000 neutral=0.000 | vs correct +0.000 vs evidence -0.000 | factconsolidation_mh_32k=+0.000 factconsolidation_sh_32k=+0.000 longmemeval_s=-0.000 ruler_qa1_197K=-0.000 ruler_qa2_421K=-0.000

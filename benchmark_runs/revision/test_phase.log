@@ -1,0 +1,80 @@
+[skip] e2_h2
+[skip] e2_h5
+[skip] e2_budget_sweep
+[skip] e2_dynamics
+[skip] e2_noise
+[skip] e9
+[run ] e10  2026-09-12T05:17:16Z
+[done] e10
+[run ] e3  2026-09-12T05:21:09Z
+[done] e3
+[run ] e4  2026-09-12T05:21:15Z
+[done] e4
+[run ] e1_ruler_qa1  2026-09-12T05:23:21Z
+[done] e1_ruler_qa1
+[run ] e1_ruler_qa2  2026-09-12T05:51:59Z
+[done] e1_ruler_qa2
+[run ] e1_lme  2026-09-12T06:20:53Z
+[done] e1_lme
+[run ] e1_fc_sh  2026-09-12T07:51:29Z
+[done] e1_fc_sh
+[run ] e1_fc_mh  2026-09-12T08:43:42Z
+[done] e1_fc_mh
+[run ] e1_eventqa65k  2026-09-12T10:01:42Z
+[skip] e2_h2
+[skip] e2_h5
+[skip] e2_budget_sweep
+[skip] e2_dynamics
+[skip] e2_noise
+[skip] e9
+[skip] e10
+[skip] e3
+[skip] e4
+[skip] e1_ruler_qa1
+[skip] e1_ruler_qa2
+[skip] e1_lme
+[skip] e1_fc_sh
+[skip] e1_fc_mh
+[run ] e1_eventqa65k  2026-09-12T13:11:18Z
+[skip] e2_h2
+[skip] e2_h5
+[skip] e2_budget_sweep
+[skip] e2_dynamics
+[skip] e2_noise
+[skip] e9
+[skip] e10
+[skip] e3
+[skip] e4
+[skip] e1_ruler_qa1
+[skip] e1_ruler_qa2
+[skip] e1_lme
+[skip] e1_fc_sh
+[skip] e1_fc_mh
+[run ] e1_eventqa65k  2026-09-12T13:40:42Z
+[run ] e1_eventqa65k  2026-09-12T16:53:01Z
+[done] e1_eventqa65k
+Test phase complete: 2026-09-12T16:53:26Z
+[run ] e1_eventqa_full  2026-09-12T17:13:39Z
+[done] e1_eventqa_full
+Test phase complete: 2026-09-12T17:15:04Z
+[run ] e5  2026-09-12T17:33:13Z
+[done] e5
+Test phase complete: 2026-09-12T17:34:00Z
+[run ] e7  2026-09-12T18:00:09Z
+[done] e7
+Test phase complete: 2026-09-12T18:00:37Z
+[run ] e8  2026-09-12T18:04:38Z
+[done] e8
+Test phase complete: 2026-09-12T18:05:34Z
+[run ] e11_detective  2026-09-12T18:07:34Z
+[done] e11_detective
+Test phase complete: 2026-09-12T18:07:47Z
+[run ] e11_icl  2026-09-12T18:07:48Z
+[done] e11_icl
+Test phase complete: 2026-09-12T18:07:57Z
+[run ] e6  2026-09-12T18:11:57Z
+[done] e6
+Test phase complete: 2026-09-12T18:16:32Z
+[run ] e2_feedback_sources  2026-09-13T06:36:53Z
+[done] e2_feedback_sources
+Test phase complete: 2026-09-13T06:46:54Z

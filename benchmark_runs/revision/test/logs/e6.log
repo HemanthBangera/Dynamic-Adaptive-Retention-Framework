@@ -1,0 +1,309 @@
+INFO Loading embedding model: all-MiniLM-L6-v2 ...
+INFO No device provided, using cpu
+INFO Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 8518.96it/s]
+/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  return self._model.get_sentence_embedding_dimension()
+INFO Embedding model loaded. Dimension: 384
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 9062.41it/s]
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+WARNING Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+WARNING Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+INFO Embedding cache enabled at benchmark_runs/_emb_cache/minilm.sqlite (all-MiniLM-L6-v2|rev=1110a243fdf4706b3f48f1d95db1a4f5529b4d41|max_seq_length=256)
+/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/storage.py:227: UserWarning: Payload indexes have no effect in the local Qdrant. Please use server Qdrant if you need payload indexes.
+  self.client.create_payload_index(
+INFO E6: ruler_qa1_197K done (70 items)
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+WARNING Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+[transformers] Token indices sequence length is longer than the specified maximum sequence length for this model (261 > 256). Running this sequence through the model will result in indexing errors
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+WARNING Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+INFO E6: ruler_qa2_421K done (70 items)
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+WARNING Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+WARNING Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+INFO E6: longmemeval_s* done (204 items)
+{
+ "items": 344,
+ "semantic_failure_rate": 0.0,
+ "shadow_vector_preserved_rate": 1.0,
+ "semantic": {
+  "n": 344,
+  "compression_ratio": {
+   "mean": 0.5573951924167948,
+   "ci_lo": 0.5186497558611171,
+   "ci_hi": 0.5965315197022135,
+   "n": 344
+  },
+  "answer_retention": {
+   "mean": 0.8869565217391304,
+   "ci_lo": 0.8352484979101359,
+   "ci_hi": 0.9389362761367407,
+   "n": 230
+  },
+  "reader_original": {
+   "mean": 0.6656976744186046,
+   "ci_lo": 0.47183098591549294,
+   "ci_hi": 0.8306264501160093,
+   "n": 344
+  },
+  "reader_accuracy": {
+   "mean": 0.5668604651162791,
+   "ci_lo": 0.37457014316418347,
+   "ci_hi": 0.7274831120092379,
+   "n": 344
+  },
+  "reader_delta_vs_original": {
+   "diff": -0.09883720930232558,
+   "ci_lo": -0.15649925037481258,
+   "ci_hi": -0.045774647887323945,
+   "p_value": 0.0,
+   "n": 344
+  },
+  "recall@10_kept_vector": {
+   "mean": 0.747093023255814,
+   "ci_lo": 0.588230115990058,
+   "ci_hi": 0.8784192678897486,
+   "n": 344
+  },
+  "recall@10_reembedded": {
+   "mean": 0.8226744186046512,
+   "ci_lo": 0.7288732394366197,
+   "ci_hi": 0.9088471849865952,
+   "n": 344
+  },
+  "kept_minus_reembedded": {
+   "diff": -0.0755813953488372,
+   "ci_lo": -0.1731537938491377,
+   "ci_hi": 0.0,
+   "p_value": 0.061,
+   "n": 344
+  }
+ },
+ "llmlingua2": {
+  "n": 344,
+  "compression_ratio": {
+   "mean": 0.5073701035612711,
+   "ci_lo": 0.4833886897599295,
+   "ci_hi": 0.5333316847943106,
+   "n": 344
+  },
+  "answer_retention": {
+   "mean": 0.8391304347826087,
+   "ci_lo": 0.7629310344827587,
+   "ci_hi": 0.9212640607424072,
+   "n": 230
+  },
+  "reader_original": {
+   "mean": 0.6656976744186046,
+   "ci_lo": 0.47183098591549294,
+   "ci_hi": 0.8306264501160093,
+   "n": 344
+  },
+  "reader_accuracy": {
+   "mean": 0.5290697674418605,
+   "ci_lo": 0.37369530462967027,
+   "ci_hi": 0.6600496277915633,
+   "n": 344
+  },
+  "reader_delta_vs_original": {
+   "diff": -0.13662790697674418,
+   "ci_lo": -0.1989247311827957,
+   "ci_hi": -0.06996982609227509,
+   "p_value": 0.0,
+   "n": 344
+  },
+  "recall@10_kept_vector": {
+   "mean": 0.747093023255814,
+   "ci_lo": 0.588230115990058,
+   "ci_hi": 0.8784192678897486,
+   "n": 344
+  },
+  "recall@10_reembedded": {
+   "mean": 0.875,
+   "ci_lo": 0.806970509383378,
+   "ci_hi": 0.938337801608579,
+   "n": 344
+  },
+  "kept_minus_reembedded": {
+   "diff": -0.12790697674418605,
+   "ci_lo": -0.27720322098621936,
+   "ci_hi": -0.0075,
+   "p_value": 0.0378,
+   "n": 344
+  }
+ },
+ "extractive": {
+  "n": 344,
+  "compression_ratio": {
+   "mean": 0.4475449385408736,
+   "ci_lo": 0.43508803213741704,
+   "ci_hi": 0.4606440120963713,
+   "n": 344
+  },
+  "answer_retention": {
+   "mean": 0.5043478260869565,
+   "ci_lo": 0.3898305084745763,
+   "ci_hi": 0.5892904135338345,
+   "n": 230
+  },
+  "reader_original": {
+   "mean": 0.6656976744186046,
+   "ci_lo": 0.47183098591549294,
+   "ci_hi": 0.8306264501160093,
+   "n": 344
+  },
+  "reader_accuracy": {
+   "mean": 0.36627906976744184,
+   "ci_lo": 0.1696113074204947,
+   "ci_hi": 0.5300925925925926,
+   "n": 344
+  },
+  "reader_delta_vs_original": {
+   "diff": -0.29941860465116277,
+   "ci_lo": -0.37220921949730335,
+   "ci_hi": -0.22829562046707572,
+   "p_value": 0.0,
+   "n": 344
+  },
+  "recall@10_kept_vector": {
+   "mean": 0.747093023255814,
+   "ci_lo": 0.588230115990058,
+   "ci_hi": 0.8784192678897486,
+   "n": 344
+  },
+  "recall@10_reembedded": {
+   "mean": 0.6976744186046512,
+   "ci_lo": 0.5551963944898787,
+   "ci_hi": 0.8217907690986017,
+   "n": 344
+  },
+  "kept_minus_reembedded": {
+   "diff": 0.04941860465116279,
+   "ci_lo": -0.015924838729370575,
+   "ci_hi": 0.10962696222183886,
+   "p_value": 0.146,
+   "n": 344
+  }
+ },
+ "llmlingua2@matched": {
+  "n": 344,
+  "compression_ratio": {
+   "mean": 0.5687616607813142,
+   "ci_lo": 0.5359071203319752,
+   "ci_hi": 0.601865347844717,
+   "n": 344
+  },
+  "answer_retention": {
+   "mean": 0.8956521739130435,
+   "ci_lo": 0.8489573965827338,
+   "ci_hi": 0.9496402877697842,
+   "n": 230
+  },
+  "reader_original": {
+   "mean": 0.6656976744186046,
+   "ci_lo": 0.47183098591549294,
+   "ci_hi": 0.8306264501160093,
+   "n": 344
+  },
+  "reader_accuracy": {
+   "mean": 0.5523255813953488,
+   "ci_lo": 0.36931505593251446,
+   "ci_hi": 0.7047146401985112,
+   "n": 344
+  },
+  "reader_delta_vs_original": {
+   "diff": -0.11337209302325581,
+   "ci_lo": -0.16666666666666666,
+   "ci_hi": -0.064,
+   "p_value": 0.0,
+   "n": 344
+  },
+  "recall@10_kept_vector": {
+   "mean": 0.747093023255814,
+   "ci_lo": 0.588230115990058,
+   "ci_hi": 0.8784192678897486,
+   "n": 344
+  },
+  "recall@10_reembedded": {
+   "mean": 0.8604651162790697,
+   "ci_lo": 0.7879746835443038,
+   "ci_hi": 0.9299191374663073,
+   "n": 344
+  },
+  "kept_minus_reembedded": {
+   "diff": -0.11337209302325581,
+   "ci_lo": -0.2560553633217993,
+   "ci_hi": 0.0024875621890547263,
+   "p_value": 0.0574,
+   "n": 344
+  }
+ },
+ "extractive@matched": {
+  "n": 344,
+  "compression_ratio": {
+   "mean": 0.46263809476750234,
+   "ci_lo": 0.4327816322066303,
+   "ci_hi": 0.49634988607061853,
+   "n": 344
+  },
+  "answer_retention": {
+   "mean": 0.5,
+   "ci_lo": 0.3769633507853403,
+   "ci_hi": 0.6037735849056604,
+   "n": 230
+  },
+  "reader_original": {
+   "mean": 0.6656976744186046,
+   "ci_lo": 0.47183098591549294,
+   "ci_hi": 0.8306264501160093,
+   "n": 344
+  },
+  "reader_accuracy": {
+   "mean": 0.37790697674418605,
+   "ci_lo": 0.17667324880482232,
+   "ci_hi": 0.5461346633416458,
+   "n": 344
+  },
+  "reader_delta_vs_original": {
+   "diff": -0.2877906976744186,
+   "ci_lo": -0.3719307703220315,
+   "ci_hi": -0.20696967159216403,
+   "p_value": 0.0,
+   "n": 344
+  },
+  "recall@10_kept_vector": {
+   "mean": 0.747093023255814,
+   "ci_lo": 0.588230115990058,
+   "ci_hi": 0.8784192678897486,
+   "n": 344
+  },
+  "recall@10_reembedded": {
+   "mean": 0.6773255813953488,
+   "ci_lo": 0.5237884906612824,
+   "ci_hi": 0.8204488778054863,
+   "n": 344
+  },
+  "kept_minus_reembedded": {
+   "diff": 0.06976744186046512,
+   "ci_lo": 0.0,
+   "ci_hi": 0.13794097187717366,
+   "p_value": 0.0586,
+   "n": 344
+  }
+ }
+}
