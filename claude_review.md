@@ -278,7 +278,7 @@ This is a **positive signal** — the project uses adversarial tests as a develo
 
 The file `.env.example` contains what appears to be a **real Gemini API key**:
 ```
-GEMINI_API_KEY=AlzaSyAHEQ5hVQrLUdzn8RtKafgXTxLt78WEH-E
+GEMINI_API_KEY=<your-gemini-api-key>
 ```
 
 This is a **security violation**. `.env.example` files should contain empty placeholders or clearly fake values, never real credentials. While `.env` is properly gitignored, `.env.example` is tracked by git. **This key should be rotated immediately.**
@@ -362,7 +362,7 @@ This is a **security violation**. `.env.example` files should contain empty plac
 
 ### 10.1 What Layer D Provides
 
-The `MemoryVault.initialize_collection()` method is **fully implemented** and production-ready:
+The `MemoryVault.initialize_collection()` method is **fully implemented** (an internal code review of initialisation only; not a claim about the method's effectiveness):
 
 1. Checks if collection exists (idempotent)
 2. Creates collection with configured vector size (384) and distance metric (Cosine)
