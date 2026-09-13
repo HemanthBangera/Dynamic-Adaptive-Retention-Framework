@@ -279,7 +279,7 @@ def main(argv: Optional[List[str]] = None) -> None:
     p.add_argument("--concurrency", type=int, default=8)
     p.add_argument("--n-boot", type=int, default=5000)
     args = p.parse_args(argv)
-    logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
+    logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s", force=True)
     for noisy in ("httpx", "core.layer_d.storage", "benchmarks.memory_agent_bench.loader"):
         logging.getLogger(noisy).setLevel(logging.WARNING)
     result = asyncio.run(run(args))

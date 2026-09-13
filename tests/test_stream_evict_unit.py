@@ -31,6 +31,30 @@ def test_lru_eviction_is_unchanged_and_removes_the_oldest():
     assert gone == [0, 1] and sorted(idx.ingested) == [2, 3]
 
 
+def test_random_eviction_does_not_depend_on_point_ids():
+    # Two stores of the same units get different random uuid4 point ids (so a different
+    # scroll order); with the same seed, random eviction must remove the same units.
+    a = evict(_index("evict_rand_a"), 2, "random", NOW, np.random.default_rng(7))
+    b = evict(_index("evict_rand_b"), 2, "random", NOW, np.random.default_rng(7))
+    assert a == b and len(a) == 2
+
+
 def test_no_eviction_below_capacity():
     idx = _index("evict_none")
     assert evict(idx, 10, "dars", NOW, np.random.default_rng(0), weights=(1.0, 0.0, 0.0, 0.0)) == []
+
+
+def test_memorybank_eviction_keeps_recalled_memories_longer():
+    idx = _index("evict_memorybank")
+    # all stored at different times; memory 0 is the oldest but has been recalled many times
+    for _ in range(5):
+        idx.vault.increment_frequency(idx.point_ids[0])
+    gone = evict(idx, 3, "memorybank", NOW, np.random.default_rng(0))
+    assert gone == [1]                 # the oldest never-recalled memory goes first
+
+
+def test_generative_agents_eviction_uses_importance_and_recency():
+    idx = _index("evict_ga")
+    importance = {TEXTS[0]: 10, TEXTS[1]: 1, TEXTS[2]: 1, TEXTS[3]: 1}
+    gone = evict(idx, 2, "generative_agents", NOW, np.random.default_rng(0), importance=importance)
+    assert 0 not in gone and 1 in gone  # poignant-but-old survives; mundane-and-old goes

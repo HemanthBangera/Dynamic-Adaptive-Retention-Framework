@@ -19,6 +19,8 @@ oracle          ground truth: evidence covered (LongMemEval / FactConsolidation)
                 reader's answer correct (EventQA, substring exact match); one verdict
                 for all shown memories, as in the Layer B design
 oracle_noisy:E  the oracle verdict flipped with probability E (seeded)
+oracle_unit     ground truth attributed per memory: each shown memory that is gold evidence for
+                the question succeeds, every other shown memory fails (unlabelled: no update)
 judge           the Layer B LLM judge (SuccessEvaluator, gpt-4.1-nano); NEUTRAL → no update
 lexical         deterministic per-memory attribution: a memory succeeds when the token F1
                 between the reader's answer and the memory is at least ``--lexical-tau``
@@ -90,6 +92,15 @@ def stream_methods() -> List[Method]:
     ]
 
 
+def extra_stream_methods() -> List[Method]:
+    """Methods run only when named in ``--methods``: DARS over a BM25 first stage."""
+    return [
+        Method("bm25_dars_rrf_k50", rank_mode="rrf", fetch_k=50, first_stage="bm25"),
+        Method("bm25_dars_wrrf_k50_b0.5", rank_mode="wrrf", fetch_k=50, beta_dars=0.5, first_stage="bm25"),
+        Method("bm25_dars_blend_a0.5", rank_mode="blend", fetch_k=50, alpha=0.5, first_stage="bm25"),
+    ]
+
+
 # ═══════════════════════════════════════════════════════════════════════════════
 #  Event schedules
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -120,7 +131,7 @@ def schedule(ctx: Context, args: argparse.Namespace) -> Tuple[List[Tuple[float, 
 def parse_feedback(spec: str) -> Tuple[str, float]:
     if spec.startswith("oracle_noisy:"):
         return "oracle_noisy", float(spec.split(":", 1)[1])
-    if spec not in ("none", "oracle", "judge", "lexical"):
+    if spec not in ("none", "oracle", "oracle_unit", "judge", "lexical"):
         raise ValueError(f"Unknown feedback source {spec!r}")
     return spec, 0.0
 
@@ -133,6 +144,18 @@ def oracle_verdict(fam: str, ev: Optional[Dict[str, float]], reader_metrics: Opt
     return bool(ev["group_recall"] > 0.0)
 
 
+SERIAL_RULE = ("Each fact in the knowledge pool is provided with a serial number at the beginning, and the newer "
+               "fact has larger serial number. \n You need to solve the conflicts of facts in the knowledge pool by "
+               "finding the newest fact with larger serial number. You need to answer a question based on this rule. ")
+
+
+def strip_serial_rule(formatted_query: str) -> str:
+    """MemoryAgentBench's FactConsolidation query without the instruction to resolve conflicts by serial number."""
+    if SERIAL_RULE not in formatted_query:
+        raise ValueError("the FactConsolidation serial-number rule was not found in the query template")
+    return formatted_query.replace(SERIAL_RULE, "")
+
+
 def lexical_verdicts(answer: str, memory_texts: Sequence[str], tau: float) -> List[bool]:
     return [f1_score(answer or "", t)[0] >= tau for t in memory_texts]
 
@@ -143,7 +166,8 @@ def lexical_verdicts(answer: str, memory_texts: Sequence[str], tau: float) -> Li
 
 
 def evict(index: MemoryIndex, capacity: int, policy: str, now: float, rng: np.random.Generator,
-          weights: Optional[Sequence[float]] = None) -> List[int]:
+          weights: Optional[Sequence[float]] = None,
+          importance: Optional[Dict[str, float]] = None) -> List[int]:
     """Delete memories until at most ``capacity`` remain; returns the evicted unit indices.
 
     ``dars`` eviction scores memories with ``weights`` (w_r, w_f, w_u, w_p) when given,
@@ -153,10 +177,24 @@ def evict(index: MemoryIndex, capacity: int, policy: str, now: float, rng: np.ra
     if excess <= 0:
         return []
     vault = index.vault
+    # Random keys are indexed by unit, not drawn in scroll order: the vault orders points
+    # by their (random uuid4) ids, so per-row draws would change with every run.
+    rand_keys = rng.random(len(index.units)) if policy == "random" else None
     rows = []
+    ga_raw = []            # generative_agents: (recency term, importance), normalised over the store below
     for chunk, _ in vault.get_all_memories(limit=2048, scroll_yield=True):
         for p in chunk:
             pl = p.payload
+            if policy == "memorybank":
+                # Ebbinghaus retention exp(-t/S): t in days since the last recall, S = 1 + recalls
+                days = max(now - pl.recency, 0.0) / 86400.0
+                rows.append((float(np.exp(-days / (1.0 + float(pl.frequency)))), index.unit_of[p.point_id], p.point_id))
+                continue
+            if policy == "generative_agents":
+                unit = index.unit_of[p.point_id]
+                hours = max(now - pl.recency, 0.0) / 3600.0
+                ga_raw.append((0.995 ** hours, float(importance[index.units[unit].text]), unit, p.point_id))
+                continue
             if policy == "dars" and weights is not None:
                 comps = vault.compute_components(pl.to_dict(), current_time=now)
                 key = sum(w * comps[c] for w, c in zip(weights, COMPONENTS))
@@ -169,10 +207,16 @@ def evict(index: MemoryIndex, capacity: int, policy: str, now: float, rng: np.ra
             elif policy == "fifo":
                 key = pl.created_at
             elif policy == "random":
-                key = float(rng.random())
+                key = float(rand_keys[index.unit_of[p.point_id]])
             else:
                 raise ValueError(f"Unknown eviction policy {policy!r}")
             rows.append((key, index.unit_of[p.point_id], p.point_id))
+    if ga_raw:
+        rec = np.array([r[0] for r in ga_raw])
+        imp = np.array([r[1] for r in ga_raw])
+        norm = lambda v: np.zeros_like(v) if v.max() - v.min() <= 0 else (v - v.min()) / (v.max() - v.min())
+        for key, (_, _, unit, pid) in zip(norm(rec) + norm(imp), ga_raw):
+            rows.append((float(key), unit, pid))
     # Ties (e.g. memories stored at the same time) are broken by a fixed pseudo-random
     # order per unit, never by position in the context.
     from zlib import crc32
@@ -252,7 +296,8 @@ async def run_context(ctx: Context, method: Method, feedback: str, args: argpars
             index.add(batches[b_ptr][1])
             if capacity is not None:
                 evicted_all.update(evict(index, capacity, args.eviction, batches[b_ptr][0], rng,
-                                         getattr(args, "eviction_weights", None)))
+                                         getattr(args, "eviction_weights", None),
+                                         getattr(args, "importance", None)))
             b_ptr += 1
         limit = min(len(index), args.budget // (min(unit_tokens) + MEMORY_HEADER_TOKENS) + 1) if len(index) else 0
         labelled = bool(labels and labels[q] and labels[q]["gold_is_newest"])
@@ -282,7 +327,8 @@ async def run_context(ctx: Context, method: Method, feedback: str, args: argpars
 
         reader_out = None
         if reader is not None:
-            reader_out = await reader.answer([ctx.units[u].text for u in shown], ctx.formatted_queries[q],
+            display = list(reversed(shown)) if getattr(args, "display_order", "best_first") == "best_last" else shown
+            reader_out = await reader.answer([ctx.units[u].text for u in display], ctx.formatted_queries[q],
                                              ctx.answers[q], seed=args.seed)
             rec["reader"] = {k: reader_out[k] for k in ("output", "parsed_output", "metrics", "cached")}
 
@@ -295,6 +341,14 @@ async def run_context(ctx: Context, method: Method, feedback: str, args: argpars
                 if verdict is not None:
                     await engine.apply_feedback(pids, success=verdict, current_time=now)
                 rec["verdict"] = verdict
+            elif kind == "oracle_unit":
+                gold = {u for g in ctx.evidence[q] for u in g}
+                if gold:
+                    for pid, u in zip(pids, shown):
+                        await engine.apply_feedback([pid], success=u in gold, current_time=now)
+                    rec["verdict"] = float(np.mean([u in gold for u in shown]))
+                else:
+                    rec["verdict"] = None
             elif kind == "judge":
                 if reader_out is None:
                     raise ValueError("--feedback judge needs --reader")
@@ -349,17 +403,31 @@ async def run(args: argparse.Namespace) -> Dict[str, Any]:
     out_dir = Path(args.out)
     out_dir.mkdir(parents=True, exist_ok=True)
     guard = WindowGuard()
-    contexts = load_contexts(args.source, guard, fc_seconds_per_serial=args.fact_step)
+    contexts = load_contexts(args.source, guard, fc_seconds_per_serial=args.fact_step,
+                             fc_serial_prefix=not args.no_serial_prefix)
+    if args.fc_prompt == "no_serial_rule":
+        for ctx in contexts:
+            ctx.formatted_queries = [strip_serial_rule(fq) for fq in ctx.formatted_queries]
     if args.contexts:
         keep = {int(c) for c in args.contexts.split(",")}
         contexts = [c for c in contexts if c.index in keep]
     methods = stream_methods()
     if args.methods:
         wanted = [m.strip() for m in args.methods.split(",") if m.strip()]
-        methods = [m for m in methods if m.name in wanted]
+        known = {m.name: m for m in methods + extra_stream_methods()}
+        unknown = [w for w in wanted if w not in known]
+        if unknown:
+            raise SystemExit(f"unknown methods: {unknown}")
+        methods = [known[w] for w in wanted]
 
     from config.settings import DARSConfig
     DARSConfig.RECENCY_DECAY_LAMBDA = float(args.decay_lambda)
+    args.importance = None
+    if getattr(args, "importance_file", None):
+        from benchmarks.dars_eval.importance import load_ratings
+        args.importance = load_ratings(Path(args.importance_file))
+    elif args.memory_budget and args.eviction == "generative_agents":
+        raise SystemExit("--eviction generative_agents needs --importance-file")
 
     reader = judge = None
     transports = []
@@ -400,7 +468,10 @@ async def run(args: argparse.Namespace) -> Dict[str, Any]:
     # Streams process every question (state must evolve through all of them), but only
     # the reported split is written or summarised — test rows stay unseen until the
     # pre-registered test run.
-    rows = [r for r in rows if args.report_split == "all" or r["split"] == args.report_split]
+    # Deterministic order: parallel streams finish in any order, and the summary's sums
+    # and bootstrap cluster order must not depend on it (bit-identical replays).
+    rows = sorted((r for r in rows if args.report_split == "all" or r["split"] == args.report_split),
+                  key=lambda r: (r["method"], r["feedback"], r["context"], r["step"]))
     with (out_dir / "per_question.jsonl").open("w", encoding="utf-8") as fh:
         for r in sorted(rows, key=lambda r: (r["method"], r["feedback"], r["context"], r["step"])):
             fh.write(json.dumps(r) + "\n")
@@ -416,6 +487,9 @@ async def run(args: argparse.Namespace) -> Dict[str, Any]:
         "fact_step_s": args.fact_step,
         "question_step_s": args.question_step,
         "lexical_tau": args.lexical_tau,
+        "serial_prefix": not args.no_serial_prefix,
+        "fc_prompt": args.fc_prompt,
+        "display_order": getattr(args, "display_order", "best_first"),
         "memory_budget_fraction": args.memory_budget,
         "eviction_policy": args.eviction if args.memory_budget else None,
         "eviction_weights": args.eviction_weights if args.memory_budget and args.eviction == "dars" else None,
@@ -446,17 +520,26 @@ def main(argv: Optional[List[str]] = None) -> None:
     p.add_argument("--reader", action="store_true")
     p.add_argument("--memory-budget", type=float, default=0.0,
                    help="keep at most this fraction of the context's units (0 = unlimited)")
-    p.add_argument("--eviction", choices=("dars", "lru", "lfu", "fifo", "random"), default="dars")
+    p.add_argument("--eviction", choices=("dars", "lru", "lfu", "fifo", "random", "memorybank", "generative_agents"),
+                   default="dars")
+    p.add_argument("--importance-file", default=None,
+                   help="importance ratings (benchmarks.dars_eval.importance output) for generative_agents eviction")
     p.add_argument("--eviction-weights", type=float, nargs=4, default=None,
                    help="weights (w_r w_f w_u w_p) for dars eviction (default: the retrieval method's)")
     p.add_argument("--report-split", choices=("dev", "test", "all"), default="dev",
                    help="split written and summarised (default dev; test only for the pre-registered run)")
+    p.add_argument("--no-serial-prefix", action="store_true",
+                   help="FactConsolidation: store bare facts, without the 'N. ' serial prefix")
+    p.add_argument("--display-order", choices=("best_first", "best_last"), default="best_first",
+                   help="order in which the shown memories reach the reader (best_last: highest-ranked next to the query)")
+    p.add_argument("--fc-prompt", choices=("mab", "no_serial_rule"), default="mab",
+                   help="FactConsolidation query: MemoryAgentBench's, or with its serial-number rule removed")
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--concurrency", type=int, default=8)
     p.add_argument("--parallel-streams", type=int, default=4)
     p.add_argument("--n-boot", type=int, default=5000)
     args = p.parse_args(argv)
-    logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
+    logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s", force=True)
     for noisy in ("httpx", "core.layer_d.storage", "core.layer_b.engine", "benchmarks.memory_agent_bench.loader"):
         logging.getLogger(noisy).setLevel(logging.WARNING)
     result = asyncio.run(run(args))

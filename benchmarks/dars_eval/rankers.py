@@ -9,7 +9,10 @@ storage and ranking code) — all at once (static protocols) or incrementally vi
 dars      ``MemoryVault.search_and_rerank`` with the method's rank mode
           (similarity | rrf | wrrf | blend) and weight vector.  Two-stage: the
           ``fetch_k`` nearest memories are reranked; when more slots are needed
-          (large token budgets) they follow similarity order.
+          (large token budgets) they follow similarity order.  With
+          ``first_stage="bm25"`` the candidates are the ``fetch_k`` best BM25
+          matches instead, fused with DARS by BM25 rank, and further slots follow
+          BM25 order: the DARS layer on top of a lexical retriever.
 bm25      Okapi BM25 over lower-cased word tokens (rank_bm25).
 recency   most recently stored-or-accessed memories first (LRU order; query-agnostic).
 random    a seeded random permutation per query.
@@ -55,6 +58,7 @@ class Method:
     beta_dars: float = 1.0
     alpha: float = 0.5
     seed: int = 0
+    first_stage: str = "vector"           # dars only: vector | bm25
 
     def as_dict(self) -> Dict[str, Any]:
         return asdict(self)
@@ -175,6 +179,10 @@ def rank(
 
     if method.kind != "dars":
         raise ValueError(f"Unknown method kind {method.kind!r}")
+    if method.first_stage == "bm25":
+        return _rank_bm25_first_stage(index, method, query_text, limit, current_time)
+    if method.first_stage != "vector":
+        raise ValueError(f"Unknown first stage {method.first_stage!r}")
 
     vault = index.vault
     vault.weights = DARSWeights(*method.weights)
@@ -206,6 +214,36 @@ def rank(
                 comps.append({"sim": float(m.score)} if m.score is not None else None)
                 seen.add(u)
     return ids[:limit], comps[:limit]
+
+
+def _rank_bm25_first_stage(index: "MemoryIndex", method: Method, query_text: str, limit: int,
+                           current_time: Optional[float]) -> Tuple[List[int], List[Optional[Dict[str, float]]]]:
+    """DARS fused over BM25 candidates: BM25 rank plays the role of the similarity rank."""
+    import time as _time
+
+    vault = index.vault
+    vault.weights = DARSWeights(*method.weights)
+    if not vault.weights.validate():
+        raise ValueError(f"Weights of {method.name} do not sum to 1: {method.weights}")
+    scores = np.asarray(index.bm25.get_scores(bm25_tokens(query_text)))
+    order = np.argsort(-scores, kind="stable")
+    fetch_k = max(1, min(int(method.fetch_k), len(order)))
+    now = current_time if current_time is not None else _time.time()
+    units = [index._bm25_units[i] for i in order[:fetch_k]]
+    comps: List[Dict[str, float]] = []
+    for r, i in enumerate(order[:fetch_k], 1):
+        payload = vault.get_memory(index.point_ids[index._bm25_units[i]]).payload.to_dict()
+        c = vault.compute_components(payload, current_time=now)
+        c["sim"] = float(scores[i])
+        c["sim_rank"] = r
+        comps.append(c)
+    final = rerank_candidates(comps, method)
+    ids = [units[i] for i in final]
+    out: List[Optional[Dict[str, float]]] = [comps[i] for i in final]
+    for i in order[fetch_k:limit]:
+        ids.append(index._bm25_units[i])
+        out.append({"sim": float(scores[i])})
+    return ids[:limit], out[:limit]
 
 
 def rerank_candidates(

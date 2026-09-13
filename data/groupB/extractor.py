@@ -116,6 +116,29 @@ def _capitalize(name: str) -> str:
 #  Walkthrough Parser
 # ═══════════════════════════════════════════════════════════════════════════════
 
+_SIM_ID = re.compile(r"\b([a-z][a-z0-9]*(?:_bar_[a-z0-9_]*)+)", re.IGNORECASE)
+
+
+def _canonical_name(token: str) -> str:
+    """Readable type name of a simulator identifier.
+
+    ALFWorld's out-of-distribution split names objects by simulator id
+    (``cd_bar__minus_00_dot_40_bar__plus_00_dot_86_bar__minus_00_dot_66``) while the
+    train and in-distribution splits use ``cd 1``.  The type is the leading segment,
+    except where a trailing alphabetic segment gives it instead
+    (``sink_bar__…_bar_sinkbasin`` is a ``sinkbasin``, not a ``sink``).
+    """
+    parts = [p for p in token.split("_bar_") if p]
+    if len(parts) > 1 and parts[-1].isalpha():
+        return parts[-1]
+    return parts[0]
+
+
+def _normalize_step(step: str) -> str:
+    """Rewrite simulator identifiers as ``<type> 1`` so one parser handles every split."""
+    return _SIM_ID.sub(lambda m: f"{_canonical_name(m.group(1))} 1", step)
+
+
 def _parse_walkthrough(walkthrough: List[str]) -> Dict[str, Optional[str]]:
     """Extract structured actors from the walkthrough action sequence.
 
@@ -130,7 +153,7 @@ def _parse_walkthrough(walkthrough: List[str]) -> Dict[str, Optional[str]]:
     }
 
     for step in walkthrough:
-        sl = step.strip().lower()
+        sl = _normalize_step(step.strip().lower())
 
         take = re.match(r"take\s+(\w+)\s+\d+\s+from\s+(\w+)\s+\d+", sl)
         if take:

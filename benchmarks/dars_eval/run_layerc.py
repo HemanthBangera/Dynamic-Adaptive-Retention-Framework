@@ -240,6 +240,9 @@ async def run(args: argparse.Namespace) -> None:
                     "texts": texts,
                 }
             records.append(rec)
+        if args.whole_context:
+            await whole_context_ranks(source, items, records[len(records) - len(items):], contexts, vectors,
+                                      compressed, unit_meta, names, args, emb, lingua, aux)
         logger.info("E6: %s done (%d items)", source, len(items))
 
     with (out / "items.jsonl").open("w", encoding="utf-8") as fh:
@@ -254,6 +257,79 @@ async def run(args: argparse.Namespace) -> None:
     (out / "summary.json").write_text(json.dumps(summary, indent=1), encoding="utf-8")
     (out / "manifest.json").write_text(json.dumps(manifest, indent=1, default=str), encoding="utf-8")
     print(json.dumps(summary, indent=1))
+
+
+async def whole_context_ranks(source: str, items: List[Dict[str, Any]], records: List[Dict[str, Any]],
+                              contexts: Dict[int, Any], vectors: Dict[int, np.ndarray],
+                              compressed: Dict[tuple, Dict[str, str]], unit_meta: Dict[tuple, Dict[str, Any]],
+                              names: Sequence[str], args: argparse.Namespace, emb, lingua, aux,
+                              chunk: int = 200) -> None:
+    """Re-embed *every* memory of each context after compressing it, then rank the evidence.
+
+    The target-only comparison re-embeds just the evidence memory while every competitor keeps
+    its full-length vector, which favours re-embedding. Here each compressor is applied to all
+    memories of the context, as a store that compresses its memories would do, so the evidence
+    competes against equally compressed text. A memory whose semantic compression fails keeps
+    its original text, as Layer C would leave it; the failure rate is recorded.
+    """
+    from core.layer_c.compressor import SemanticCompressor
+    from core.layer_d.storage import MemoryVault
+
+    for ci in sorted({it["context"] for it in items}):
+        ctx = contexts[ci]
+        V = vectors[ci]
+        n = len(ctx.units)
+        todo = [u for u in range(n) if (ci, u) not in compressed]
+        failures = 0
+        if "semantic" in args.compressors and todo:
+            wvault = MemoryVault(collection_name=f"layerc_all_{source}_{ci}", location=":memory:")
+            wvault.initialize_collection(recreate=True)
+            wcomp = SemanticCompressor(vault=wvault, transport=aux)
+            for lo in range(0, len(todo), chunk):
+                part = todo[lo:lo + chunk]
+                pids = [wvault.store_memory(ctx.units[u].text, predictive_value=0.0, vector_override=V[u].tolist())
+                        for u in part]
+                oks = await asyncio.gather(*(wcomp.compress_memory(pid, ctx.units[u].text) for pid, u in zip(pids, part)))
+                for pid, u, ok in zip(pids, part, oks):
+                    text = ctx.units[u].text
+                    meta = {"original_tokens": len(ENC.encode(text)), "semantic_ok": bool(ok), "matched_rate": FIXED_RATE}
+                    comp: Dict[str, str] = {}
+                    if ok:
+                        comp["semantic"] = wvault.get_memory(pid).payload.text_content
+                        meta["matched_rate"] = matched_rate(meta["original_tokens"], len(ENC.encode(comp["semantic"])))
+                    else:
+                        failures += 1
+                    compressed[(ci, u)] = comp
+                    unit_meta[(ci, u)] = meta
+        for u in todo:
+            text = ctx.units[u].text
+            comp = compressed.setdefault((ci, u), {})
+            rate = unit_meta.setdefault((ci, u), {"matched_rate": FIXED_RATE}).get("matched_rate", FIXED_RATE)
+            if lingua is not None:
+                comp["llmlingua2"] = lingua(text, rate=FIXED_RATE)
+                if "llmlingua2@matched" in names:
+                    comp["llmlingua2@matched"] = lingua(text, rate=rate)
+            if "extractive" in args.compressors:
+                comp["extractive"] = extractive_compress(text, emb, FIXED_RATE)
+                if "extractive@matched" in names:
+                    comp["extractive@matched"] = extractive_compress(text, emb, rate)
+        reembedded = {}
+        for name in names:
+            texts = [compressed[(ci, u)].get(name, ctx.units[u].text) for u in range(n)]
+            M = np.asarray(emb.encode_batch(texts, batch_size=64), dtype=np.float32)
+            reembedded[name] = M / np.linalg.norm(M, axis=1, keepdims=True)
+        for it, rec in zip(items, records):
+            if it["context"] != ci:
+                continue
+            qv = np.asarray(emb.encode(it["retrieval_query"]))
+            qv = qv / np.linalg.norm(qv)
+            rec["whole_context_semantic_failure_rate"] = failures / max(len(todo), 1)
+            for name in names:
+                if rec.get(name) is None:
+                    continue
+                sims = reembedded[name] @ qv
+                rec[name]["rank_reembedded_all"] = min(int((sims > sims[u]).sum()) + 1 for u in it["units"])
+        logger.info("E6 whole-context: %s context %d, %d memories (%d semantic failures)", source, ci, n, failures)
 
 
 def summarise(records: List[Dict[str, Any]], names: Sequence[str], n_boot: int) -> Dict[str, Any]:
@@ -286,6 +362,11 @@ def summarise(records: List[Dict[str, Any]], names: Sequence[str], n_boot: int) 
             "recall@10_reembedded": cluster_bootstrap_mean(hit_re, clusters, n_boot=n_boot).as_dict(),
             "kept_minus_reembedded": paired_bootstrap_diff(hit_kept, hit_re, clusters, n_boot=n_boot),
         }
+        if all("rank_reembedded_all" in r[name] for r in rs):
+            hit_all = [float(r[name]["rank_reembedded_all"] <= 10) for r in rs]
+            out[name]["recall@10_reembedded_whole_context"] = cluster_bootstrap_mean(hit_all, clusters, n_boot=n_boot).as_dict()
+            out[name]["kept_minus_reembedded_whole_context"] = paired_bootstrap_diff(hit_kept, hit_all, clusters, n_boot=n_boot)
+            out[name]["whole_context_minus_target_only"] = paired_bootstrap_diff(hit_all, hit_re, clusters, n_boot=n_boot)
     return out
 
 
@@ -296,10 +377,12 @@ def main(argv: Optional[List[str]] = None) -> None:
     p.add_argument("--split", choices=("dev", "test", "all"), default="dev")
     p.add_argument("--compressors", nargs="+", default=list(COMPRESSORS))
     p.add_argument("--max-items", type=int, default=0)
+    p.add_argument("--whole-context", action="store_true",
+                   help="also compress and re-embed every memory of each context (fair shadow-indexing test)")
     p.add_argument("--concurrency", type=int, default=8)
     p.add_argument("--n-boot", type=int, default=2000)
     args = p.parse_args(argv)
-    logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
+    logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s", force=True)
     for noisy in ("httpx", "core.layer_d.storage", "core.layer_c.compressor", "benchmarks.memory_agent_bench.loader"):
         logging.getLogger(noisy).setLevel(logging.WARNING)
     asyncio.run(run(args))

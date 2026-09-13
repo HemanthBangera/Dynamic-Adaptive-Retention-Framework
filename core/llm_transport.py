@@ -146,6 +146,38 @@ class RateLimiter:
             await asyncio.sleep(wait)
 
 
+_COLLECT_LOCK = threading.Lock()
+_COLLECT_SEEN: Dict[str, set] = {}
+
+
+def _collect_target(model: str) -> Optional[str]:
+    """Path to collect this model's requests into, or None to call the API normally.
+
+    ``DARS_LLM_COLLECT`` names the file; ``DARS_LLM_COLLECT_MODEL`` optionally restricts
+    collection to one model, so an experiment can batch its reader calls while its
+    (unrestricted) auxiliary model still runs live.
+    """
+    path = os.getenv("DARS_LLM_COLLECT", "").strip()
+    if not path:
+        return None
+    only = os.getenv("DARS_LLM_COLLECT_MODEL", "").strip()
+    return path if (not only or only == model) else None
+
+
+def _append_collect(path: str, key: str, request: Dict[str, Any]) -> None:
+    """Append one Batch API line, skipping keys already written in this process."""
+    line = json.dumps({"custom_id": key, "method": "POST", "url": "/v1/chat/completions",
+                       "body": request}, ensure_ascii=False)
+    with _COLLECT_LOCK:
+        seen = _COLLECT_SEEN.setdefault(path, set())
+        if key in seen:
+            return
+        seen.add(key)
+        Path(path).parent.mkdir(parents=True, exist_ok=True)
+        with open(path, "a", encoding="utf-8") as fh:
+            fh.write(line + "\n")
+
+
 _LIMITERS: Dict[str, RateLimiter] = {}
 _LIMITERS_LOCK = threading.Lock()
 
@@ -201,6 +233,9 @@ class UsageLedger:
     cache_hits: int = 0
     failures: int = 0
     rate_limit_retries: int = 0
+    transient_retries: int = 0
+    coalesced: int = 0
+    collected: int = 0
     prompt_tokens: int = 0
     completion_tokens: int = 0
     cost_usd: float = 0.0
@@ -225,6 +260,9 @@ class UsageLedger:
             "cache_hits": self.cache_hits,
             "api_failures": self.failures,
             "rate_limit_retries": self.rate_limit_retries,
+            "transient_retries": self.transient_retries,
+            "coalesced": self.coalesced,
+            "collected": self.collected,
             "prompt_tokens": self.prompt_tokens,
             "completion_tokens": self.completion_tokens,
             "cost_usd": round(self.cost_usd, 6),
@@ -247,6 +285,7 @@ class OpenAITransport:
         timeout: float = 120.0,
         max_retries: int = 8,
         rate_limit_retries: int = 8,
+        transient_retries: Optional[int] = None,
         max_concurrency: int = 8,
         cache_dir: Optional[Path] = DEFAULT_CACHE_DIR,
         use_cache: bool = True,
@@ -261,6 +300,10 @@ class OpenAITransport:
         self.timeout = float(timeout)
         self.max_retries = int(max_retries)
         self.rate_limit_retries = int(rate_limit_retries)
+        # Connection drops and 5xx are retried beyond the SDK's own retries, so a brief
+        # network outage cannot abort a run that takes days.
+        self.transient_retries = int(os.getenv("DARS_OPENAI_TRANSIENT_RETRIES", "8")
+                                     if transient_retries is None else transient_retries)
         self.max_concurrency = int(max_concurrency)
         if cache_dir is DEFAULT_CACHE_DIR and os.getenv("DARS_LLM_CACHE_DIR"):
             cache_dir = Path(os.environ["DARS_LLM_CACHE_DIR"])
@@ -271,6 +314,7 @@ class OpenAITransport:
         self.offline = bool(offline)
         self.ledger = ledger or UsageLedger()
         self._loop_clients: List[Tuple[asyncio.AbstractEventLoop, Any, asyncio.Semaphore]] = []
+        self._loop_inflight: List[Tuple[asyncio.AbstractEventLoop, Dict[str, "asyncio.Future"]]] = []
 
     def __repr__(self) -> str:
         return (
@@ -353,6 +397,21 @@ class OpenAITransport:
         self._loop_clients.append((loop, client, sem))
         return client, sem
 
+    def _inflight_for_loop(self) -> Dict[str, "asyncio.Future"]:
+        """This loop's in-flight requests, keyed by cache key.
+
+        Concurrent duplicate requests share one API call, so a run can never hold two
+        different answers to the same request while the cache keeps only one of them.
+        """
+        loop = asyncio.get_running_loop()
+        self._loop_inflight = [e for e in self._loop_inflight if not e[0].is_closed()]
+        for entry_loop, pending in self._loop_inflight:
+            if entry_loop is loop:
+                return pending
+        pending: Dict[str, "asyncio.Future"] = {}
+        self._loop_inflight.append((loop, pending))
+        return pending
+
     # ── Public API ─────────────────────────────────────────────────────
 
     async def complete(
@@ -375,54 +434,99 @@ class OpenAITransport:
         if self.offline:
             raise LLMCacheMiss(f"Offline mode: no cached response for request {key[:12]}")
 
+        collect = _collect_target(self.model)
+        if collect is not None:
+            # Collect mode: write the exact request out for the Batch API instead of calling
+            # the synchronous endpoint, and hand back a placeholder. The caller's outputs are
+            # meaningless in this pass, so a collect run must write to a scratch directory;
+            # the real numbers come from replaying the stage once the responses are cached.
+            _append_collect(collect, key, request)
+            self.ledger.collected += 1
+            return {"request": request, "text": "", "finish_reason": "collected",
+                    "model": self.model, "system_fingerprint": None,
+                    "usage": {"prompt_tokens": 0, "completion_tokens": 0}, "cost_usd": 0.0,
+                    "created": time.time(), "cached": False, "collected": True, "cache_key": key}
+
+        pending = self._inflight_for_loop()
+        waiting = pending.get(key)
+        if waiting is not None:              # identical request already in flight: share its answer
+            record = await waiting
+            self.ledger.coalesced += 1
+            return {**record, "cached": True, "coalesced": True, "cache_key": key}
+
         client, sem = self._client_for_loop()
-        from openai import OpenAIError, RateLimitError
+        from openai import APIConnectionError, InternalServerError, OpenAIError, RateLimitError
 
         limiter = rate_limiter_for(self.model)
         estimate = estimate_tokens(request)
+        future = asyncio.get_running_loop().create_future()
+        future.add_done_callback(lambda f: f.cancelled() or f.exception())   # never "never retrieved"
+        pending[key] = future
         attempt = 0
-        while True:
-            try:
-                async with sem:
-                    await limiter.acquire(estimate)
-                    resp = await client.chat.completions.create(**request)
-                break
-            except RateLimitError as exc:
-                attempt += 1
-                if "insufficient_quota" in str(exc) or attempt > self.rate_limit_retries:
+        transient = 0
+        try:
+            while True:
+                try:
+                    async with sem:
+                        await limiter.acquire(estimate)
+                        resp = await client.chat.completions.create(**request)
+                    break
+                except RateLimitError as exc:
+                    attempt += 1
+                    if "insufficient_quota" in str(exc) or attempt > self.rate_limit_retries:
+                        self.ledger.failures += 1
+                        raise LLMCallError(
+                            f"OpenAI call failed after retries ({type(exc).__name__}): {exc}"
+                        ) from exc
+                    self.ledger.rate_limit_retries += 1
+                    wait = max(_suggested_wait(exc) or 0.0, min(60.0, 2.0 ** attempt)) + random.uniform(0.0, 1.0)
+                    logger.warning("Rate limited on %s; retry %d/%d in %.1fs",
+                                   self.model, attempt, self.rate_limit_retries, wait)
+                    await asyncio.sleep(wait)
+                except (APIConnectionError, InternalServerError) as exc:
+                    transient += 1               # a dropped connection or a 5xx: wait and retry
+                    if transient > self.transient_retries:
+                        self.ledger.failures += 1
+                        raise LLMCallError(
+                            f"OpenAI call failed after retries ({type(exc).__name__}): {exc}"
+                        ) from exc
+                    self.ledger.transient_retries += 1
+                    wait = min(60.0, 2.0 ** transient) + random.uniform(0.0, 1.0)
+                    logger.warning("Transient error on %s (%s); retry %d/%d in %.1fs",
+                                   self.model, type(exc).__name__, transient, self.transient_retries, wait)
+                    await asyncio.sleep(wait)
+                except OpenAIError as exc:
                     self.ledger.failures += 1
                     raise LLMCallError(
                         f"OpenAI call failed after retries ({type(exc).__name__}): {exc}"
                     ) from exc
-                self.ledger.rate_limit_retries += 1
-                wait = max(_suggested_wait(exc) or 0.0, min(60.0, 2.0 ** attempt)) + random.uniform(0.0, 1.0)
-                logger.warning("Rate limited on %s; retry %d/%d in %.1fs",
-                               self.model, attempt, self.rate_limit_retries, wait)
-                await asyncio.sleep(wait)
-            except OpenAIError as exc:
-                self.ledger.failures += 1
-                raise LLMCallError(
-                    f"OpenAI call failed after retries ({type(exc).__name__}): {exc}"
-                ) from exc
 
-        choice = resp.choices[0]
-        usage = resp.usage
-        prompt_tokens = int(getattr(usage, "prompt_tokens", 0) or 0)
-        completion_tokens = int(getattr(usage, "completion_tokens", 0) or 0)
-        cost = self._cost(prompt_tokens, completion_tokens)
-        record = {
-            "request": request,
-            "text": (choice.message.content or "").strip(),
-            "finish_reason": choice.finish_reason,
-            "model": resp.model,
-            "system_fingerprint": getattr(resp, "system_fingerprint", None),
-            "usage": {"prompt_tokens": prompt_tokens, "completion_tokens": completion_tokens},
-            "cost_usd": cost,
-            "created": time.time(),
-        }
-        self.ledger.record(self.model, prompt_tokens, completion_tokens, cost)
-        if self.use_cache:
-            self._cache_put(key, record)
+            choice = resp.choices[0]
+            usage = resp.usage
+            prompt_tokens = int(getattr(usage, "prompt_tokens", 0) or 0)
+            completion_tokens = int(getattr(usage, "completion_tokens", 0) or 0)
+            cost = self._cost(prompt_tokens, completion_tokens)
+            record = {
+                "request": request,
+                "text": (choice.message.content or "").strip(),
+                "finish_reason": choice.finish_reason,
+                "model": resp.model,
+                "system_fingerprint": getattr(resp, "system_fingerprint", None),
+                "usage": {"prompt_tokens": prompt_tokens, "completion_tokens": completion_tokens},
+                "cost_usd": cost,
+                "created": time.time(),
+            }
+            self.ledger.record(self.model, prompt_tokens, completion_tokens, cost)
+            if self.use_cache:
+                self._cache_put(key, record)     # cache before releasing, so late duplicates hit it
+            if not future.done():
+                future.set_result(record)
+        except BaseException as exc:
+            if not future.done():
+                future.set_exception(exc)
+            raise
+        finally:
+            pending.pop(key, None)
         return {**record, "cached": False, "cache_key": key}
 
     async def generate_text(

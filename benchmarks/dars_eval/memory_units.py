@@ -250,9 +250,15 @@ def parse_facts(context: str) -> Dict[int, str]:
     return facts
 
 
-def fact_units(context: str, t0: float = 0.0, seconds_per_serial: float = 3600.0) -> List[MemoryUnit]:
-    """One unit per fact, ``"N. fact"``; a higher serial number is a newer fact (later timestamp)."""
+def fact_units(context: str, t0: float = 0.0, seconds_per_serial: float = 3600.0,
+               serial_prefix: bool = True) -> List[MemoryUnit]:
+    """One unit per fact, ``"N. fact"``; a higher serial number is a newer fact (later timestamp).
+
+    With ``serial_prefix=False`` the text is the bare fact: the serial survives only as the
+    unit's timestamp and metadata, so a reader can no longer tell versions apart from the text.
+    """
     return [
-        MemoryUnit(f"{serial}. {fact}", timestamp=t0 + serial * seconds_per_serial, meta={"serial": serial})
+        MemoryUnit(f"{serial}. {fact}" if serial_prefix else fact,
+                   timestamp=t0 + serial * seconds_per_serial, meta={"serial": serial})
         for serial, fact in sorted(parse_facts(context).items())
     ]

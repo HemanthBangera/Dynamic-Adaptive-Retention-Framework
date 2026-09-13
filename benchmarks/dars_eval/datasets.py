@@ -1,6 +1,13 @@
 """
 Load MemoryAgentBench sources and turn each context into memory units and
 per-question evidence groups (see ``memory_units`` and ``labels``).
+
+Supported families:
+- **Accurate Retrieval:** EventQA, RULER QA, LongMemEval.
+- **Conflict Resolution:** FactConsolidation.
+- **E11:**
+  - Test-Time Learning — in-context-learning (ICL) sources, one labelled example per unit;
+  - Long-Range Understanding — DetectiveQA, book chunks.
 """
 
 from __future__ import annotations
@@ -28,6 +35,8 @@ TASK_GOALS = {
     "ruler_qa": "Encyclopedic passages that state facts answering factual questions",
     "longmemeval": "Personal information, preferences, plans and events a user shared in past conversations with an assistant",
     "factconsolidation": "Current factual attributes of entities, where newer facts supersede older ones",
+    "icl": "Labelled example texts that map short user utterances to category labels",
+    "detective_qa": "Clues, suspects, motives and events in the plot of a detective novel",
 }
 
 
@@ -36,22 +45,33 @@ _EVENTQA_BOILERPLATE = (
     re.compile(r"These are the events that have already occurred:\s*"),
     re.compile(r"Below is a list of possible subsequent events:\s*"),
 )
+# DetectiveQA questions repeat a fixed worked example; the real question and its options
+# follow "Now Answer the Question:" and precede the final "Output:".
+_DETECTIVE_QUESTION = re.compile(r"Now Answer the Question:\s*(.*?)\s*Output:\s*$", re.DOTALL)
 
 
 def retrieval_query(source: str, question: str, guard: WindowGuard) -> str:
     """
     The text embedded / BM25-scored as the retrieval query (identical for every method).
 
-    The raw question field is used; for EventQA the fixed instruction sentences
-    are removed.  Queries longer than the embedder window keep their *tail*
-    (for EventQA: the latest events and the candidate options) instead of being
-    silently truncated at the head by the embedder.
+    The raw question field is used, with two exceptions:
+    - EventQA: the fixed instruction sentences are removed.
+    - DetectiveQA: only the question and its options are kept (the worked example is dropped).
+
+    Queries longer than the embedder window keep their *tail* (for EventQA: the latest
+    events and the candidate options) instead of being silently truncated at the head
+    by the embedder.
     """
     text = question
-    if family_of(source) == "eventqa":
+    fam = family_of(source)
+    if fam == "eventqa":
         for pattern in _EVENTQA_BOILERPLATE:
             text = pattern.sub(" ", text)
         text = re.sub(r"\s+\n", "\n", text).strip()
+    elif fam == "detective_qa":
+        m = _DETECTIVE_QUESTION.search(text)
+        if m:
+            text = m.group(1).strip()
     if guard.fits(text):
         return text
     # Keep the longest word-aligned tail that fits (original casing and punctuation preserved).
@@ -69,16 +89,33 @@ def retrieval_query(source: str, question: str, guard: WindowGuard) -> str:
 def split_name_for(source: str) -> str:
     if source.startswith("factconsolidation"):
         return "Conflict_Resolution"
+    if source.startswith("icl_"):
+        return "Test_Time_Learning"
+    if source.startswith("detective_qa"):
+        return "Long_Range_Understanding"
     return "Accurate_Retrieval"
 
 
 def family_of(source: str) -> str:
-    for fam in ("eventqa", "longmemeval", "factconsolidation"):
+    for fam in ("eventqa", "longmemeval", "factconsolidation", "detective_qa"):
         if source.startswith(fam):
             return fam
     if source.startswith("ruler_qa"):
         return "ruler_qa"
+    if source.startswith("icl_"):
+        return "icl"
     raise ValueError(f"Unsupported source {source!r}")
+
+
+def icl_units(context: str, guard: WindowGuard) -> List[MemoryUnit]:
+    """In-context-learning sources: one labelled example ("<text>\\nlabel: <id>") per memory unit."""
+    blocks = [b.strip() for b in context.split("\n\n") if b.strip()]
+    units = []
+    for i, block in enumerate(blocks):
+        if not guard.fits(block):
+            raise ValueError(f"ICL example {i} does not fit the embedding window")
+        units.append(MemoryUnit(block, None, {"example": i}))
+    return units
 
 
 @dataclass
@@ -98,7 +135,7 @@ class Context:
 
 
 def load_contexts(source: str, guard: WindowGuard, *, revision: str = "main",
-                  fc_seconds_per_serial: float = 3600.0) -> List[Context]:
+                  fc_seconds_per_serial: float = 3600.0, fc_serial_prefix: bool = True) -> List[Context]:
     rows, _stats = load_mab_filtered(split_name_for(source), source, revision=revision)
     fam = family_of(source)
     out: List[Context] = []
@@ -108,8 +145,11 @@ def load_contexts(source: str, guard: WindowGuard, *, revision: str = "main",
         formatted = [fq for fq, _a, _id in build_qa_pairs(row, source, agent_key=MAB_RAG_TEMPLATE_KEY)]
         q_times = None
         extra: Dict[str, Any] = {}
-        if fam == "eventqa":
+        if fam in ("eventqa", "detective_qa"):
             units = book_units(row["context"], guard)
+            evidence = [[] for _ in questions]
+        elif fam == "icl":
+            units = icl_units(row["context"], guard)
             evidence = [[] for _ in questions]
         elif fam == "ruler_qa":
             units = ruler_units(row["context"], guard)
@@ -121,7 +161,8 @@ def load_contexts(source: str, guard: WindowGuard, *, revision: str = "main",
             q_times = lme_question_times(row)
             extra["question_types"] = list(row["metadata"]["question_types"])
         else:
-            units = fact_units(row["context"], seconds_per_serial=fc_seconds_per_serial)
+            units = fact_units(row["context"], seconds_per_serial=fc_seconds_per_serial,
+                               serial_prefix=fc_serial_prefix)
             labels = fc_labels(row["context"], questions, answers, multi_hop="_mh_" in source)
             evidence = fc_evidence(units, labels)
             extra["fc_labels"] = labels

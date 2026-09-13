@@ -65,14 +65,20 @@ EMBED_LABEL_COS = 0.80
 # ═══════════════════════════════════════════════════════════════════════════════
 
 
-def load_msc_dialogues() -> Dict[int, Dict[int, Dict[str, Any]]]:
+def load_msc_dialogues(hf_split: str = "train", label_session: int = 3) -> Dict[int, Dict[int, Dict[str, Any]]]:
+    """Dialogues of one Hugging Face split that have every session up to ``label_session``.
+
+    The pre-registered E9 study uses ``train`` with sessions 0-3. The ``validation`` and ``test``
+    splits (five sessions each) were never used by it and serve the confirmatory addendum.
+    """
     from datasets import load_dataset
 
-    ds = load_dataset("nayohan/multi_session_chat", split="train")
+    ds = load_dataset("nayohan/multi_session_chat", split=hf_split)
     by: Dict[int, Dict[int, Dict[str, Any]]] = defaultdict(dict)
     for row in ds:
         by[int(row["dialoug_id"])][int(row["session_id"])] = row
-    return {d: s for d, s in by.items() if {0, 1, 2, 3} <= set(s)}
+    needed = set(range(label_session + 1))
+    return {d: s for d, s in by.items() if needed <= set(s)}
 
 
 def dialogue_splits(dialogue_ids: Sequence[int], seed: int = SPLIT_SEED,
@@ -110,6 +116,15 @@ def persona_sentences(session: Dict[str, Any]) -> List[Tuple[int, str]]:
 
 def run_dialogue(did: int, sessions: Dict[int, Dict[str, Any]], args: argparse.Namespace,
                  goal_vector: Optional[np.ndarray]) -> List[Dict[str, Any]]:
+    """Stream sessions 1 .. label_session-1, then label facts by session ``label_session``.
+
+    With ``args.record_writes`` each fact also carries its write history: the sessions whose
+    persona summary stated it (creation and every later restatement), the time of the last
+    such write, and how many later summaries it could have been restated in. These do not
+    depend on what retrieval returned, unlike recency, frequency and utility in the vault.
+    """
+    label_session = int(getattr(args, "label_session", 3))
+    record_writes = bool(getattr(args, "record_writes", False))
     vault = MemoryVault(collection_name=f"msc_{did}", location=":memory:",
                         weights=DARSWeights(*DEFAULT_WEIGHTS))
     vault.initialize_collection(recreate=True)
@@ -124,6 +139,8 @@ def run_dialogue(did: int, sessions: Dict[int, Dict[str, Any]], args: argparse.N
             j, score = best_match(sentence, [f["text"] for f in same])
             if j >= 0 and score >= args.dedup_tau:
                 same[j]["mentions"] += 1
+                same[j]["mention_sessions"].append(session_idx)
+                same[j]["last_write_time"] = when
                 continue
             vec = emb.encode(sentence)
             if goal_vector is not None:
@@ -133,11 +150,12 @@ def run_dialogue(did: int, sessions: Dict[int, Dict[str, Any]], args: argparse.N
             pid = vault.store_memory(sentence, predictive_value=p, vector_override=vec,
                                      tags=[f"speaker:{speaker}"], sim_timestamp=when)
             facts.append({"text": sentence, "speaker": speaker, "session": session_idx,
-                          "pid": pid, "mentions": 1})
+                          "pid": pid, "mentions": 1, "mention_sessions": [session_idx],
+                          "last_write_time": when})
 
     store(persona_sentences(sessions[0]), T0, 0)
 
-    for s in (1, 2):
+    for s in range(1, label_session):
         t_s = T0 + s * gap
         summary = persona_sentences(sessions[s])
         summary_by_speaker = {1: [t for sp, t in summary if sp == 1], 2: [t for sp, t in summary if sp == 2]}
@@ -157,8 +175,8 @@ def run_dialogue(did: int, sessions: Dict[int, Dict[str, Any]], args: argparse.N
                 vault.update_recency(m.point_id, current_time=now)
         store(summary, t_s + (len(turns) + 1) * turn_step, s)
 
-    t_end = T0 + 2 * gap + args.turn_step * 200
-    s3 = persona_sentences(sessions[3])
+    t_end = T0 + (label_session - 1) * gap + args.turn_step * 200
+    s3 = persona_sentences(sessions[label_session])
     s3_by_speaker = {1: [t for sp, t in s3 if sp == 1], 2: [t for sp, t in s3 if sp == 2]}
     s3_vecs = {sp: (np.asarray(emb.encode_batch(v)) if v else None) for sp, v in s3_by_speaker.items()}
 
@@ -178,13 +196,19 @@ def run_dialogue(did: int, sessions: Dict[int, Dict[str, Any]], args: argparse.N
             labels["embed_0.8"] = bool(cos.max() >= EMBED_LABEL_COS)
         else:
             labels["embed_0.8"] = False
-        rows.append({
+        row = {
             "dialogue": did, "speaker": f["speaker"], "text": f["text"], "created_session": f["session"],
             "mentions": f["mentions"], "frequency": payload["frequency"],
             "success": payload["success_count"], "failure": payload["failure_count"],
             "recency": payload["recency"], "created_at": payload["created_at"],
             "components": comps, "t_end": t_end, "labels": labels,
-        })
+        }
+        if record_writes:
+            row["mention_sessions"] = list(f["mention_sessions"])
+            row["last_write_time"] = f["last_write_time"]
+            row["opportunities"] = (label_session - 1) - f["session"]
+            row["label_session"] = label_session
+        rows.append(row)
     return rows
 
 
@@ -279,8 +303,15 @@ def cmd_run(args: argparse.Namespace) -> None:
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
     DARSConfig.RECENCY_DECAY_LAMBDA = float(args.decay_lambda)
-    dialogues = load_msc_dialogues()
-    splits = dialogue_splits(list(dialogues))
+    hf_split = getattr(args, "hf_split", "train")
+    label_session = int(getattr(args, "label_session", 3))
+    dialogues = load_msc_dialogues(hf_split, label_session)
+    if hf_split == "train":
+        splits = dialogue_splits(list(dialogues))
+    else:                       # an untouched split is used whole, never divided into dev/test
+        if args.split != "all":
+            raise SystemExit(f"--hf-split {hf_split} is used whole; pass --split all")
+        splits = {d: hf_split for d in dialogues}
     chosen = [d for d in sorted(dialogues) if args.split == "all" or splits[d] == args.split]
     if args.limit:
         chosen = chosen[: args.limit]
@@ -298,6 +329,8 @@ def cmd_run(args: argparse.Namespace) -> None:
         for i, did in enumerate(chosen):
             for r in run_dialogue(did, dialogues[did], args, goal_vector):
                 r["split"] = splits[did]
+                if hf_split != "train":     # dialogue ids restart in every split
+                    r["dialogue"] = f"{hf_split}:{did}"
                 fh.write(json.dumps(r) + "\n")
                 n_facts += 1
             if (i + 1) % 50 == 0:
@@ -317,6 +350,9 @@ def cmd_run(args: argparse.Namespace) -> None:
         "label_taus": list(LABEL_TAUS),
         "embed_label_cos": EMBED_LABEL_COS,
         "goal": args.goal,
+        "hf_split": hf_split,
+        "label_session": label_session,
+        "record_writes": bool(getattr(args, "record_writes", False)),
         "elapsed_s": time.time() - t0,
         "provenance": collect_provenance(),
     }
@@ -344,11 +380,13 @@ def tune(run_dir: Path, split: str, label: str = "lex_0.5") -> Dict[str, Any]:
         by_d[r["dialogue"]].append(i)
     groups = [np.array(ix) for ix in by_d.values() if y[ix].any()]
 
+    tie = np.random.default_rng(0).random(len(rows))      # the same seeded tie-break as eviction()
+
     def harmful(S: np.ndarray) -> float:
         rates = []
         for ix in groups:
             n_keep = max(1, int(math.ceil(0.5 * len(ix))))
-            kept = set(ix[np.argsort(-S[ix], kind="stable")[:n_keep]].tolist())
+            kept = set(ix[np.lexsort((tie[ix], -S[ix]))[:n_keep]].tolist())
             need = ix[y[ix]]
             rates.append(sum(1 for i in need if i not in kept) / len(need))
         return float(np.mean(rates))
@@ -501,6 +539,12 @@ def main(argv: Optional[List[str]] = None) -> None:
     r.add_argument("--feedback-tau", type=float, default=0.5)
     r.add_argument("--dedup-tau", type=float, default=0.5)
     r.add_argument("--goal", choices=("msc", "alfworld", "none"), default="msc")
+    r.add_argument("--hf-split", choices=("train", "validation", "test"), default="train",
+                   help="Hugging Face split; validation/test are the untouched confirmatory data")
+    r.add_argument("--label-session", type=int, default=3,
+                   help="session whose persona summary labels the facts; earlier sessions are streamed")
+    r.add_argument("--record-writes", action="store_true",
+                   help="also record each fact's write history (mention sessions, last write time)")
     r.set_defaults(func=cmd_run)
     a = sub.add_parser("analyze")
     a.add_argument("--run", required=True)
@@ -523,7 +567,7 @@ def main(argv: Optional[List[str]] = None) -> None:
     e.add_argument("--n-boot", type=int, default=10_000)
     e.set_defaults(func=cmd_evaluate)
     args = p.parse_args(argv)
-    logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
+    logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s", force=True)
     for noisy in ("httpx", "core.layer_d.storage"):
         logging.getLogger(noisy).setLevel(logging.WARNING)
     args.func(args)

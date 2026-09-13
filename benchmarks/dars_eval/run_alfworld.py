@@ -330,7 +330,8 @@ def analyze(run_dir: Path, split: str, n_boot: int, seed: int = 0) -> Dict[str, 
         report["h5"][str(keep)] = {}
         n_keep = int(math.ceil(keep * len(snapshot)))
         for name, sc in scores.items():
-            kept = set(sorted(sc, key=lambda p: (-sc[p], p))[:n_keep])
+            arr = np.array([sc[m["pid"]] for m in snapshot], dtype=float)
+            kept = {m["pid"] for m, k in zip(snapshot, _keep_mask(arr, n_keep, seed)) if k}
             rates = [sum(1 for p in r["needed"] if p not in kept) / len(r["needed"]) for r in rows if r["needed"]]
             report["h5"][str(keep)][name] = cluster_bootstrap_mean(rates, n_boot=n_boot).as_dict()
     return report
@@ -373,13 +374,16 @@ def cmd_run(args: argparse.Namespace) -> None:
         for pid, info in stream.meta.items():
             p = payloads[pid]
             comps = stream.vault.compute_components(p, current_time=now)
-            fh.write(json.dumps({
+            row = {
                 "pid": pid, "kind": info["kind"], "obj": info.get("obj"), "recep": info.get("recep"),
                 "tool": info.get("tool"), "action": info.get("action"), "task_type": info["task_type"],
                 "recency": p["recency"], "created_at": p["created_at"], "frequency": p["frequency"],
                 "success": p["success_count"], "failure": p["failure_count"],
                 "S": stream.vault.compute_dars_score(p, current_time=now), **comps,
-            }) + "\n")
+            }
+            if getattr(args, "snapshot_text", False):     # memory text, for text-based baselines (importance)
+                row["text"] = info["text"]
+            fh.write(json.dumps(row) + "\n")
 
     eval_sets = {"dev": dev_tasks}
     if args.eval_test:
@@ -560,13 +564,18 @@ def evaluate(run_dir: Path, split: str, h3: Tuple[float, str, float, Sequence[fl
         per["default_rrf"].append(_mrr([true[i] for i in _fused_order(sim, S0, "rrf", 0.0)])[0])
         per["similarity"].append(_mrr([true[i] for i in rank_candidates(c, ("sim",), rng_sim)])[0])
         per["count_prior"].append(_mrr([true[i] for i in rank_candidates(c, ("key", "count_prior"), rng_cnt)])[0])
-    h3_out = {
+    h3_out: Dict[str, Any] = {
         "config": {"lambda": lam3, "mode": mode3, "param": param3, "weights": list(w3)},
         "tasks": len(rows), "reachable_with_alternatives": len(tasks),
-        "mrr": {k: cluster_bootstrap_mean(v, n_boot=n_boot).as_dict() for k, v in per.items()},
-        "paired_vs_similarity": {k: paired_bootstrap_diff(v, per["similarity"], n_boot=n_boot)
-                                 for k, v in per.items() if k != "similarity"},
     }
+    if tasks:
+        h3_out["mrr"] = {k: cluster_bootstrap_mean(v, n_boot=n_boot).as_dict() for k, v in per.items()}
+        h3_out["paired_vs_similarity"] = {k: paired_bootstrap_diff(v, per["similarity"], n_boot=n_boot)
+                                          for k, v in per.items() if k != "similarity"}
+    else:
+        # No task offers a choice between location memories, so H3 cannot be scored here.
+        # Report it rather than failing: an unscorable split is a result, not an error.
+        h3_out["not_evaluable"] = "no task has more than one candidate location memory"
 
     snapshot = [json.loads(l) for l in (run_dir / "memories.jsonl").read_text(encoding="utf-8").splitlines() if l.strip()]
     now = json.loads((run_dir / "manifest.json").read_text(encoding="utf-8"))["now"]
@@ -625,6 +634,7 @@ def main(argv: Optional[List[str]] = None) -> None:
     r.add_argument("--task-step", type=float, default=3600.0)
     r.add_argument("--decay-lambda", type=float, default=0.005)
     r.add_argument("--eval-test", action="store_true", help="also write held-out test evaluation (pre-registered run only)")
+    r.add_argument("--snapshot-text", action="store_true", help="include each memory's text in memories.jsonl")
     r.set_defaults(func=cmd_run)
     a = sub.add_parser("analyze")
     a.add_argument("--run", required=True)
@@ -649,7 +659,7 @@ def main(argv: Optional[List[str]] = None) -> None:
     e.add_argument("--seed", type=int, default=0)
     e.set_defaults(func=cmd_evaluate)
     args = p.parse_args(argv)
-    logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
+    logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s", force=True)
     for noisy in ("httpx", "core.layer_d.storage"):
         logging.getLogger(noisy).setLevel(logging.WARNING)
     args.func(args)

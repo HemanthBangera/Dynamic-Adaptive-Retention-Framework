@@ -9,13 +9,20 @@ query    raw       the question text (as in E1)
                    question is still what the reader answers
 format   mab       MemoryAgentBench blocks ``Memory i:\\n<text>`` before the query
          xml       the real ``PromptConstructor`` XML (system_context, memory_stream
-                   with system_weight / last_accessed, current_user_query)
+                   with system_weight / last_accessed, current_user_query) with its
+                   character cap lifted, so it carries exactly the memories the mab
+                   format carries: a pure format contrast
 order    best_first   highest-ranked memory first (current implementation)
          best_last    highest-ranked memory last, i.e. next to the query (the
                       ordering the submitted manuscript described)
 
-is answered by the gpt-4o-mini reader and scored with MemoryAgentBench metrics;
-evidence recall is reported where labels exist (RULER).  Retrieval uses the
+plus the gateway exactly as implemented (``xml_capped``: PromptConstructor's default
+20,000-character cap, best-first, raw and reformulated query).  At B = 5120 that cap
+drops the lowest-ranked memories, so each row records how many memories reached the
+prompt and evidence recall counts only those.
+
+Every condition is answered by the gpt-4o-mini reader and scored with MemoryAgentBench
+metrics; evidence recall is reported where labels exist (RULER).  Retrieval uses the
 similarity ranking unless ``--method`` names another E1 method.
 """
 
@@ -42,24 +49,35 @@ from benchmarks.dars_eval.retrieval_eval import cut_to_budget, evidence_metrics
 from benchmarks.dars_eval.run_static import STATIC_TIME, default_methods
 from benchmarks.dars_eval.splits import question_splits
 from benchmarks.dars_eval.stats import cluster_bootstrap_mean, paired_bootstrap_diff
+from core.layer_a.prompt_constructor import PromptConstructor
 from core.layer_d.schema import MemoryPayload, MemoryPoint
 from third_party.memoryagentbench_eval import post_process
 
 logger = logging.getLogger(__name__)
 ENC = tiktoken.encoding_for_model("gpt-4o-mini")
 XML_SYSTEM = ("You are the assistant. Use the XML memory stream to answer the current user query.")
-CONDITIONS = list(itertools.product(("raw", "reform"), ("mab", "xml"), ("best_first", "best_last")))
+FACTORIAL = list(itertools.product(("raw", "reform"), ("mab", "xml"), ("best_first", "best_last")))
+GATEWAY_AS_IMPLEMENTED = [("raw", "xml_capped", "best_first"), ("reform", "xml_capped", "best_first")]
+CONDITIONS = FACTORIAL + GATEWAY_AS_IMPLEMENTED
 
 
-def xml_prompt(query: str, texts: List[str]) -> str:
-    from core.layer_a.prompt_constructor import PromptConstructor
-
+def xml_prompt(query: str, texts: List[str], max_chars: Optional[int]) -> str:
     points = [
         MemoryPoint(point_id=f"m{i}", vector=[],
                     payload=MemoryPayload(text_content=t, recency=STATIC_TIME), dars_score=None)
         for i, t in enumerate(texts)
     ]
-    return PromptConstructor.build(query=query, memories=points)
+    return PromptConstructor.build(query=query, memories=points, max_chars=max_chars)
+
+
+def prompt_units(shown: List[int], order: str, n_in_prompt: int) -> List[int]:
+    """Units that reached the prompt, in rank order.
+
+    The cap cuts the display order, so under best_last it drops the highest-ranked
+    memories rather than the lowest."""
+    ordered = shown if order == "best_first" else shown[::-1]
+    kept = set(ordered[:n_in_prompt])
+    return [u for u in shown if u in kept]
 
 
 async def run(args: argparse.Namespace) -> None:
@@ -100,18 +118,23 @@ async def run(args: argparse.Namespace) -> None:
                     if fmt == "mab":
                         answer = await reader.answer(texts, ctx.formatted_queries[q], ctx.answers[q])
                         metrics, output = answer["metrics"], answer["output"]
+                        n_in_prompt = len(texts)
                     else:
-                        prompt = xml_prompt(ctx.formatted_queries[q], texts)
+                        cap = PromptConstructor.DEFAULT_MAX_PROMPT_CHARS if fmt == "xml_capped" else None
+                        prompt = xml_prompt(ctx.formatted_queries[q], texts, max_chars=cap)
+                        n_in_prompt = prompt.count("<memory id=")   # memory text is XML-escaped
                         res = await reader_t.complete(prompt, system=XML_SYSTEM, seed=0,
                                                       max_tokens=reader.max_answer_tokens)
                         m, _extra = post_process({"output": res["text"]}, ctx.answers[q],
                                                  {"sub_dataset": source, "dataset": split_name_for(source)})
                         metrics = {k: float(v) for k, v in m.items() if isinstance(v, (bool, int, float))}
                         output = res["text"]
-                    ev = evidence_metrics(shown, ctx.evidence[q]) if ctx.evidence[q] else None
+                    included = prompt_units(shown, order, n_in_prompt)
+                    ev = evidence_metrics(included, ctx.evidence[q]) if ctx.evidence[q] else None
                     results.append({
                         "source": source, "context": ctx.index, "question": q,
                         "query": query_kind, "format": fmt, "order": order,
+                        "memories_shown": len(shown), "memories_in_prompt": n_in_prompt,
                         "reformulated": expanded if query_kind == "reform" else None,
                         "reformulation_fell_back": expanded == ctx.queries[q],
                         "evidence": ev, "metrics": metrics, "output": output,
@@ -128,6 +151,7 @@ async def run(args: argparse.Namespace) -> None:
     summary = summarise(rows, args.n_boot)
     manifest = {"experiment": "E7_layer_a", "sources": args.sources, "split": args.split,
                 "method": method.as_dict(), "budget": args.budget, "conditions": CONDITIONS,
+                "gateway_max_chars": PromptConstructor.DEFAULT_MAX_PROMPT_CHARS,
                 "xml_system": XML_SYSTEM,
                 "llm_usage": {reader_t.model: reader_t.ledger.as_dict(), aux.model: aux.ledger.as_dict()},
                 "provenance": collect_provenance()}
@@ -155,6 +179,8 @@ def summarise(rows: List[Dict[str, Any]], n_boot: int) -> Dict[str, Any]:
         if ev:
             entry["evidence_recall"] = cluster_bootstrap_mean(ev, n_boot=n_boot).as_dict()
         entry["reformulation_fallback_rate"] = float(np.mean([r["reformulation_fell_back"] for r in rs]))
+        entry["memories_in_prompt"] = float(np.mean([r["memories_in_prompt"] for r in rs]))
+        entry["truncation_rate"] = float(np.mean([r["memories_in_prompt"] < r["memories_shown"] for r in rs]))
         out["conditions"]["|".join(key)] = entry
 
     def contrast(a: tuple, b: tuple, name: str) -> None:
@@ -167,7 +193,9 @@ def summarise(rows: List[Dict[str, Any]], n_boot: int) -> Dict[str, Any]:
     contrast(("reform", "mab", "best_first"), ("raw", "mab", "best_first"), "reformulation (mab, best_first)")
     contrast(("raw", "xml", "best_first"), ("raw", "mab", "best_first"), "xml vs mab (raw, best_first)")
     contrast(("raw", "mab", "best_last"), ("raw", "mab", "best_first"), "best_last vs best_first (raw, mab)")
-    contrast(("reform", "xml", "best_first"), ("raw", "mab", "best_first"), "full gateway vs direct (best_first)")
+    contrast(("raw", "xml_capped", "best_first"), ("raw", "xml", "best_first"), "gateway cap vs uncapped (raw, xml, best_first)")
+    contrast(("reform", "xml_capped", "best_first"), ("raw", "mab", "best_first"),
+             "gateway as implemented vs direct (best_first)")
     return out
 
 
@@ -182,7 +210,7 @@ def main(argv: Optional[List[str]] = None) -> None:
     p.add_argument("--concurrency", type=int, default=8)
     p.add_argument("--n-boot", type=int, default=2000)
     args = p.parse_args(argv)
-    logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
+    logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s", force=True)
     for noisy in ("httpx", "core.layer_d.storage", "core.layer_a.reformulator", "benchmarks.memory_agent_bench.loader"):
         logging.getLogger(noisy).setLevel(logging.WARNING)
     asyncio.run(run(args))

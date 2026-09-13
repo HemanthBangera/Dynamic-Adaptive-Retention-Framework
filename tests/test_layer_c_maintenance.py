@@ -75,6 +75,7 @@ class TestDecisionEngine:
         await janitor.triage_memory(mem)
         assert vault.get_memory(pid) is not None
 
+    @requires_gemini          # the bypassed memory lands in COMPRESS, which calls the LLM compressor
     @pytest.mark.asyncio
     async def test_grace_period_bypassed_by_priority_tag(self, vault):
         pid = vault.store_memory("Priority bypass", tags=["system:high_priority_distillation"])

@@ -9,6 +9,9 @@ Statistics for the revision experiments.
 * Cohen's kappa for agreement between binary raters.
 * AUROC with DeLong variance (single and paired), via the fast algorithm of
   Sun & Xu (2014).
+* AUROC with a two-stage clustered bootstrap (single and paired). DeLong treats
+  items as independent; when they are nested in dialogues or tasks, the
+  clustered interval is the honest one.
 """
 
 from __future__ import annotations
@@ -88,6 +91,30 @@ def paired_bootstrap_diff(a: Sequence[float], b: Sequence[float], clusters: Opti
         "ci_lo": float(np.quantile(boots, alpha)),
         "ci_hi": float(np.quantile(boots, 1 - alpha)),
         "p_value": float(min(1.0, p)),
+        "n": int(len(d)),
+    }
+
+
+def paired_bootstrap_noninferiority(a: Sequence[float], b: Sequence[float], margin: float,
+                                    clusters: Optional[Sequence] = None, n_boot: int = 10_000,
+                                    seed: int = 0, level: float = 0.95) -> Dict[str, float]:
+    """
+    Non-inferiority of ``a`` to ``b`` with margin ``margin`` (H0: mean(a − b) ≤ −margin).
+
+    Returns the mean difference, its clustered-bootstrap percentile CI, and the one-sided
+    bootstrap p-value p = Pr*(Δ* ≤ −margin).  With α = (1 − level) / 2, p < α is equivalent
+    to the lower CI bound exceeding −margin.
+    """
+    d = np.asarray(a, dtype=float) - np.asarray(b, dtype=float)
+    groups = _groups(clusters if clusters is not None else np.arange(len(d)))
+    boots = _two_stage_means(d, groups, n_boot, np.random.default_rng(seed))
+    alpha = (1 - level) / 2
+    return {
+        "diff": float(d.mean()),
+        "ci_lo": float(np.quantile(boots, alpha)),
+        "ci_hi": float(np.quantile(boots, 1 - alpha)),
+        "margin": float(margin),
+        "p_one_sided": float(np.mean(boots <= -margin)),
         "n": int(len(d)),
     }
 
@@ -191,3 +218,71 @@ def auroc_delong_paired(scores_a: Sequence[float], scores_b: Sequence[float],
     zval = diff / sqrt(var)
     return {"auc_a": float(aucs[0]), "auc_b": float(aucs[1]), "diff": diff,
             "z": float(zval), "p_value": float(2 * sps.norm.sf(abs(zval)))}
+
+
+def _auc_by_rank(scores: np.ndarray, labels: np.ndarray) -> float:
+    """Mann–Whitney AUROC with mid-ranks for ties; NaN if a class is missing."""
+    n1 = int(labels.sum())
+    n0 = int(labels.size - n1)
+    if n1 == 0 or n0 == 0:
+        return float("nan")
+    ranks = sps.rankdata(scores)
+    return float((ranks[labels].sum() - n1 * (n1 + 1) / 2) / (n1 * n0))
+
+
+def _two_stage_sample(groups: List[np.ndarray], rng: np.random.Generator) -> np.ndarray:
+    """Item indices of one two-stage replicate: clusters with replacement, then items within each."""
+    picks = rng.integers(0, len(groups), size=len(groups))
+    return np.concatenate([groups[g][rng.integers(0, len(groups[g]), size=len(groups[g]))] for g in picks])
+
+
+def auroc_cluster_bootstrap(scores: Sequence[float], labels: Sequence[bool], clusters: Optional[Sequence] = None,
+                            n_boot: int = 2000, seed: int = 0, level: float = 0.95) -> Dict[str, float]:
+    """AUROC with a percentile CI from the two-stage clustered bootstrap.
+
+    Replicates that happen to contain a single class are skipped and counted.
+    """
+    s = np.asarray(scores, dtype=float)
+    lab = np.asarray(labels, dtype=bool)
+    if lab.all() or not lab.any():
+        raise ValueError("AUROC needs both positive and negative labels")
+    groups = _groups(clusters if clusters is not None else np.arange(len(s)))
+    rng = np.random.default_rng(seed)
+    boots = []
+    for _ in range(n_boot):
+        ix = _two_stage_sample(groups, rng)
+        a = _auc_by_rank(s[ix], lab[ix])
+        if a == a:
+            boots.append(a)
+    boots_arr = np.asarray(boots)
+    alpha = (1 - level) / 2
+    return {"auc": _auc_by_rank(s, lab), "ci_lo": float(np.quantile(boots_arr, alpha)),
+            "ci_hi": float(np.quantile(boots_arr, 1 - alpha)), "n": int(len(s)), "clusters": len(groups),
+            "n_boot": int(len(boots_arr)), "skipped": int(n_boot - len(boots_arr))}
+
+
+def auroc_cluster_bootstrap_paired(scores_a: Sequence[float], scores_b: Sequence[float], labels: Sequence[bool],
+                                   clusters: Optional[Sequence] = None, n_boot: int = 2000, seed: int = 0,
+                                   level: float = 0.95) -> Dict[str, float]:
+    """Difference of two AUROCs on the same items, resampled together; two-sided bootstrap p-value."""
+    a = np.asarray(scores_a, dtype=float)
+    b = np.asarray(scores_b, dtype=float)
+    lab = np.asarray(labels, dtype=bool)
+    if lab.all() or not lab.any():
+        raise ValueError("AUROC needs both positive and negative labels")
+    groups = _groups(clusters if clusters is not None else np.arange(len(a)))
+    rng = np.random.default_rng(seed)
+    diffs = []
+    for _ in range(n_boot):
+        ix = _two_stage_sample(groups, rng)
+        da = _auc_by_rank(a[ix], lab[ix])
+        if da == da:
+            diffs.append(da - _auc_by_rank(b[ix], lab[ix]))
+    d = np.asarray(diffs)
+    alpha = (1 - level) / 2
+    auc_a, auc_b = _auc_by_rank(a, lab), _auc_by_rank(b, lab)
+    p = 2 * min((d <= 0).mean(), (d >= 0).mean())
+    return {"auc_a": auc_a, "auc_b": auc_b, "diff": auc_a - auc_b,
+            "ci_lo": float(np.quantile(d, alpha)), "ci_hi": float(np.quantile(d, 1 - alpha)),
+            "p_value": float(min(1.0, p)), "n": int(len(a)), "clusters": len(groups),
+            "n_boot": int(len(d)), "skipped": int(n_boot - len(d))}
