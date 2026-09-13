@@ -563,3 +563,11 @@ The scanner test added in the previous entry brings the suite to 408 tests. The 
 checked: 0 checksum mismatches; 408 tests pass with the archived cache and network access blocked; without a key 381
 pass and 27 are skipped; the SI regenerates identically. SI Note S12 now takes the suite size and all counts from
 this one check (`replay_audit/out/final_archive_check.log`), and the manuscript and letter say 408.
+
+---
+
+## 2026-09-13T20:27Z — archive DOI kept out of generated files (no analysis)
+
+SI Note S15 no longer carries a placeholder for the Zenodo DOI. It refers to the article's Code availability statement,
+so the DOI appears only in the manuscript and response letter, which are not part of the archive. Reserving the DOI
+therefore requires no change to the archived code. The note on the re-checked build no longer calls it the latest.

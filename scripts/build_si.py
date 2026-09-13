@@ -300,7 +300,7 @@ def s_e0_availability(lines: List[str]) -> None:
               "and are withdrawn; efficiency is now measured at equal token budgets (Note S8). The pre-registered H1 DARS "
               "configuration is the submitted fusion rule applied to the new memory units.", "",
               "## Note S15 — Data, code and archive", "",
-              "- Code: GitHub repository (public) and a Zenodo archive ⟦DOI⟧ containing the code, run artifacts and manifests, "
+              "- Code: GitHub repository (public) and a Zenodo archive (DOI in the article's Code availability statement) containing the code, run artifacts and manifests, "
               "the pre-registration, both addenda, the deviations log, the embedding cache (vectors keyed by hashes, no text) and "
               "the LLM response cache. The archive is built and checked by `scripts/build_archive.py`, which writes "
               "`ARCHIVE_REPORT.json`, `DATA_NOTICE.md` and `SHA256SUMS`.",
@@ -386,7 +386,7 @@ def replay_audit_lines() -> List[str]:
              "- Manifests of E1 and E11 lack the `first_stage` method field added later with the BM25 first stage "
              "(schema only).",
              (lambda fc: f"- Later builds changed no analysis result, only documentation, reporting, figure numbering, archive "
-                         f"tooling and these audit files. The latest was re-checked the same way (SHA-256 `{fc['archive_sha256'][:16]}…`): "
+                         f"tooling and these audit files. One of them (SHA-256 `{fc['archive_sha256'][:16]}…`) was re-checked the same way: "
                          f"{fc['checksum_mismatches']} checksum mismatches; with the archived "
                          f"cache {fc['pytest_placeholder_key_archived_cache'].get('passed', 0)} tests passed; without a key "
                          f"{fc['pytest_no_key'].get('passed', 0)} passed and {fc['pytest_no_key'].get('skipped', 0)} were skipped"
