@@ -1,7 +1,7 @@
 {
  "archive_sha256": "3568685e55a8f5b5d7512135b57d4acda0bbe89cbb881a43ad4b4de8f7158ca1",
  "archive_files_unpacked": 138862,
- "environment": "fresh directory and virtual environment (uv; Python 3.14.3; torch 2.11.0 CPU; experiments/requirements-vm.txt); network blocked through an unreachable proxy; placeholder API key; DARS_LLM_OFFLINE=1 for the replays",
+ "environment": "fresh directory and virtual environment (uv; Python 3.14.3; torch 2.11.0 CPU; experiments/requirements-vm.txt); datasets, the embedding model and tokenizer encodings taken from the host's local download caches; network then blocked through an unreachable proxy; placeholder API key; DARS_LLM_OFFLINE=1 for the replays",
  "archive_checks": {
   "llm_cache_records": 137802,
   "unredacted_cache_records": 0,

@@ -538,3 +538,19 @@ paragraph at 16:11Z (file modification time 16:11:13Z). The content is unchanged
   Note S12 now reads these counts from that check (`E13_audit/replay_audit/out/final_archive_check.log`).
 - **ALFWorld task counts.** The Methods now give the 3,553 training tasks as 3,198 streamed plus 355 for development,
   matching the letter.
+
+---
+
+## 2026-09-13T20:00Z — archive rebuild from the pushed commit: two check defects fixed (no analysis)
+
+The archive was rebuilt from the pushed commit `3af8ea9`. The build and its check exposed two defects.
+
+- **A false positive in the secret scan.** The scanner collects KEY/TOKEN/SECRET assignment values from git history.
+  It picked up a made-up value in its own unit test (`tests/test_build_archive_unit.py`), which became part of
+  history with the commit, and then flagged that test. Assignment values are no longer collected from `tests/`;
+  provider key patterns are still collected from every file. A unit test was added. The only historical value left
+  is the Gemini key from `df0ae5c`.
+- **An incomplete description of the replay environment.** The replay audit used the host's local download caches
+  for datasets, the embedding model and tokenizer encodings, and blocked the network only after that. The re-check
+  after a reboot failed because the tokenizer cache had lived in `/tmp`. SI Note S15 now describes the environment
+  exactly.

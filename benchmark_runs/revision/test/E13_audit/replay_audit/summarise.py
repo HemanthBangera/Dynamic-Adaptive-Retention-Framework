@@ -34,8 +34,9 @@ def main() -> None:
         "archive_sha256": re.search(r"archive sha256 ([0-9a-f]{64})", log).group(1),
         "archive_files_unpacked": int(re.search(r"unpacked: (\d+) files", log).group(1)),
         "environment": ("fresh directory and virtual environment (uv; Python 3.14.3; torch 2.11.0 CPU; "
-                        "experiments/requirements-vm.txt); network blocked through an unreachable proxy; "
-                        "placeholder API key; DARS_LLM_OFFLINE=1 for the replays"),
+                        "experiments/requirements-vm.txt); datasets, the embedding model and tokenizer encodings "
+                        "taken from the host's local download caches; network then blocked through an unreachable "
+                        "proxy; placeholder API key; DARS_LLM_OFFLINE=1 for the replays"),
         "archive_checks": {
             "llm_cache_records": report["llm_cache"]["records"],
             "unredacted_cache_records": len(report["unredacted_cache_records"]),

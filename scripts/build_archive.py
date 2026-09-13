@@ -115,18 +115,26 @@ ASSIGNMENT = re.compile(rb"([A-Za-z0-9_]*(?:KEY|TOKEN|SECRET|PASSWORD)[A-Za-z0-9
 
 def history_secret_values(repo: Path) -> List[bytes]:
     """Every non-placeholder key-shaped string or KEY/TOKEN/SECRET assignment value ever committed, so a key
-    leaked in history cannot reappear in the archive."""
+    leaked in history cannot reappear in the archive.
+
+    Provider key patterns are collected from every file. Assignment values are not collected from ``tests/``,
+    whose fixtures assign made-up values to KEY variables on purpose (the secret scanner's own tests among them);
+    a real provider key committed there is still caught by its pattern."""
     log = subprocess.run(["git", "log", "-p", "--all", "--no-color"], cwd=repo, capture_output=True).stdout
     found = set()
     for pattern in SECRET_PATTERNS.values():
         for m in pattern.finditer(log):
             if not looks_like_placeholder(m.group(0)):
                 found.add(m.group(0))
-    for m in ASSIGNMENT.finditer(log):
-        value = m.group(2)
-        if (not looks_like_placeholder(value) and re.fullmatch(rb"[A-Za-z0-9_\-]{20,}", value)
-                and not re.fullmatch(rb"[a-z_]+", value)):
-            found.add(value)
+    for block in re.split(rb"(?m)^(?=diff --git )", log):
+        header = re.match(rb"diff --git a/(\S+)", block)
+        if header and header.group(1).startswith(b"tests/"):
+            continue
+        for m in ASSIGNMENT.finditer(block):
+            value = m.group(2)
+            if (not looks_like_placeholder(value) and re.fullmatch(rb"[A-Za-z0-9_\-]{20,}", value)
+                    and not re.fullmatch(rb"[a-z_]+", value)):
+                found.add(value)
     return sorted(found)
 
 

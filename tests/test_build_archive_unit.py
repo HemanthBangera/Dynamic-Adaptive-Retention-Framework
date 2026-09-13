@@ -92,3 +92,18 @@ def test_keys_committed_in_history_become_known_values(tmp_path):
     (tmp_path / "out" / "copy.md").write_text("old key: " + leaked, encoding="utf-8")
     findings = scan_secrets(tmp_path / "out", values)
     assert "known_secret_0" in {f["kind"] for f in findings} and blocking(findings)
+
+
+def test_assignment_fixtures_in_tests_are_not_treated_as_leaked_values(tmp_path):
+    import os
+
+    subprocess.run(["git", "init", "-q"], cwd=tmp_path, check=True)
+    ident = {"GIT_AUTHOR_NAME": "t", "GIT_AUTHOR_EMAIL": "t@t", "GIT_COMMITTER_NAME": "t", "GIT_COMMITTER_EMAIL": "t@t"}
+    (tmp_path / "tests").mkdir()
+    (tmp_path / "tests" / "test_x.py").write_text("MY_API_KEY = 'plain-fixture-value-98765'", encoding="utf-8")
+    (tmp_path / "cfg.env").write_text("SERVICE_TOKEN=Rq7vLm2Xk9Tz4Wb8Hn3Pc6Yd", encoding="utf-8")
+    for cmd in (["git", "add", "."], ["git", "commit", "-q", "-m", "c"]):
+        subprocess.run(cmd, cwd=tmp_path, check=True, capture_output=True, env={**os.environ, **ident})
+    values = history_secret_values(tmp_path)
+    assert b"Rq7vLm2Xk9Tz4Wb8Hn3Pc6Yd" in values
+    assert not any(b"plain-fixture-value" in v for v in values)
