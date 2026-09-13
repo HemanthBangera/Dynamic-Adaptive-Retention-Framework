@@ -67,6 +67,17 @@ def main() -> None:
         out["validation_s3_checks"] = json.loads(val.read_text(encoding="utf-8"))
     out["numeric_differences_by_field"] = {k: v.get("by_field", {}) for k, v in numeric.items()
                                            if k in ("E1_per_question", "msc_test_s3_facts")}
+    final = HERE / "out" / "final_archive_check.log"
+    if final.exists():
+        text = final.read_text(encoding="utf-8", errors="replace")
+        runs = [{k: int(v) for v, k in re.findall(r"(\d+) (passed|failed|skipped)", l)}
+                for l in text.splitlines() if re.search(r"\d+ passed", l)]
+        out["final_archive_check"] = {
+            "archive_sha256": re.search(r"tarball ([0-9a-f]{64})", text).group(1),
+            "checksum_mismatches": int(re.search(r"checksums: (\d+) mismatches", text).group(1)),
+            "pytest_placeholder_key_archived_cache": runs[0], "pytest_no_key": runs[1],
+            "si_regenerated_identically": "identical to submission SI: True" in text,
+        }
     confirm = HERE / "confirm_from_replayed_data.json"
     if confirm.exists():
         out["confirm_from_replayed_data"] = json.loads(confirm.read_text(encoding="utf-8"))

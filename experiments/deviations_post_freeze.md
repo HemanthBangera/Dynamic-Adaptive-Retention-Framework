@@ -518,3 +518,23 @@ hash file:
 The previous entry's heading and the two hash-log lines that follow it read 16:25Z and 16:27Z. Those times were typed
 rather than read from the clock, and they are wrong. The entry was written at about 16:10Z, and its closing code-state
 paragraph at 16:11Z (file modification time 16:11:13Z). The content is unchanged and the recorded hashes stay valid.
+
+---
+
+## 2026-09-13T19:13Z — reporting corrections found while reviewing the response letter (no analysis)
+
+- **Efficiency (R2.7).**
+  - The letter listed budgets of 1,024–16,384 tokens for every method, plus accuracy-versus-budget curves and per-query
+    cost. In fact, retrieval methods were compared at those budgets in E1, with reader accuracy at 5,120. Compression
+    (E8) used 512, 1,024 and 2,048 tokens, with reader accuracy at 1,024. No per-query cost was computed; the total
+    API cost is in SI Note S13. The letter and SI Note S8 now say this.
+  - E8's manifest note named the laptop CPU, but E8 ran on EC2, as its provenance records. The note in
+    `run_efficiency.py` no longer names a host; SI Note S8 gives the recorded platform.
+- **Per-memory feedback credit.** "Removed most of the harm" held only for blending (0.350 against 0.316, with 0.356
+  without feedback). With rank fusion it halved the harm (0.218 against 0.158, with 0.278 without feedback). The
+  manuscript and letter now give both.
+- **Test counts.** The manuscript and letter said 405 tests. The re-checked archive build ran 407 (the two document-
+  builder tests were added later): all pass with the archived cache, and without a key 380 pass and 27 are skipped. SI
+  Note S12 now reads these counts from that check (`E13_audit/replay_audit/out/final_archive_check.log`).
+- **ALFWorld task counts.** The Methods now give the 3,553 training tasks as 3,198 streamed plus 355 for development,
+  matching the letter.

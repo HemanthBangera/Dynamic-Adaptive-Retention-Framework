@@ -208,7 +208,13 @@ def s_layers(lines: List[str]) -> None:
         lines += ["", "No difference between keeping the original vector and re-embedding the compressed text survives Holm "
                   "correction. Shadow indexing guarantees an unchanged ranking; it did not make memories more retrievable.", ""]
     e8 = j(T / "E8" / "summary.json")
-    lines += ["## Note S8 — Efficiency at equal token budgets (E8)", "", "| Source · method · compression · budget | n shown | tokens | evidence recall | answer present | reader EM | latency ms |", "|---|---|---|---|---|---|---|"]
+    e8m = j(T / "E8" / "manifest.json")
+    lines += ["## Note S8 — Efficiency at equal token budgets (E8)", "",
+              f"Budgets {', '.join(f'{b:,}' for b in e8m['budgets'])} tokens; compression rate {e8m['compression_rate']}; reader at "
+              f"{e8m['reader_budget']:,} tokens. Latency is the median ranking wall-clock per query on the host recorded in the "
+              f"manifest ({e8m['provenance'].get('platform')}), measured while other jobs ran, and is indicative only; the "
+              "manifest's latency note names the laptop CPU in error. Retrieval methods without compression are compared at "
+              "larger budgets in E1 (Note S11).", "", "| Source · method · compression · budget | n shown | tokens | evidence recall | answer present | reader EM | latency ms |", "|---|---|---|---|---|---|---|"]
     for k, v in e8.items():
         if k == "provenance" or not isinstance(v, dict) or "n_shown" not in v:
             continue
@@ -328,13 +334,13 @@ def _replay() -> Dict[str, Any]:
 
 
 def tests_sentence() -> str:
-    ra = _replay().get("pytest")
-    if not ra:
+    fc = _replay().get("final_archive_check")
+    if not fc:
         return ""
-    nk, pk = ra["no_key_network_blocked"], ra["placeholder_key_archived_cache_network_blocked"]
-    return (f"Tests of the LLM-backed layers need a provider key: in the archive replay audit (Note S15), with no key and network "
-            f"access blocked, {nk.get('passed', 0)} tests passed and {nk.get('skipped', 0)} were skipped; with a placeholder key "
-            f"and the archived response cache, all {pk.get('passed', 0)} passed.")
+    nk, pk = fc["pytest_no_key"], fc["pytest_placeholder_key_archived_cache"]
+    return (f"Tests of the LLM-backed layers need a provider key. Run from the re-checked archive build (Note S15) with network access "
+            f"blocked: with no key, {nk.get('passed', 0)} tests passed and {nk.get('skipped', 0)} were skipped; with a placeholder "
+            f"key and the archived response cache, all {pk.get('passed', 0)} passed.")
 
 
 def replay_audit_lines() -> List[str]:
@@ -381,6 +387,13 @@ def replay_audit_lines() -> List[str]:
              f"- Primary confirmatory family recomputed from the regenerated MSC data: {cf.get('summary')}",
              "- Manifests of E1 and E11 lack the `first_stage` method field added later with the BM25 first stage "
              "(schema only).",
+             (lambda fc: f"- A later build, differing only in documentation, the document and figure builders, one test marker, the figure "
+                         f"numbering and these audit files, was re-checked the same way: {fc['checksum_mismatches']} checksum mismatches; with the archived "
+                         f"cache {fc['pytest_placeholder_key_archived_cache'].get('passed', 0)} tests passed; without a key "
+                         f"{fc['pytest_no_key'].get('passed', 0)} passed and {fc['pytest_no_key'].get('skipped', 0)} were skipped"
+                         + ("; this document regenerated identically." if fc["si_regenerated_identically"] else
+                            "; this document did NOT regenerate identically."))(ra["final_archive_check"])
+             if ra.get("final_archive_check") else "- Final archive check: ⟦pending⟧",
              "- Tables and document: `primary.json`/`primary.md`, `exploratory.json`/`exploratory.md` and this Supplementary "
              "Information regenerated identically (line endings aside).", ""]
     return lines

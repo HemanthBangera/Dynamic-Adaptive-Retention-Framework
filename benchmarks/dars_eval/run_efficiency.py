@@ -193,7 +193,7 @@ async def run(args: argparse.Namespace) -> None:
         "reader_budget": args.reader_budget,
         "compression_cache": {k: {"path": str(c.path), "new_compressions": c.misses} for k, c in compressors.items()},
         "llm_usage": reader_t.ledger.as_dict() if reader_t else None,
-        "latency_note": "ranking wall-clock on a shared CPU (i5-12500H); indicative only",
+        "latency_note": "ranking wall-clock on the host in provenance.platform, with other jobs running; indicative only",
         "provenance": collect_provenance(),
     }
     (out / "summary.json").write_text(json.dumps(summary, indent=1), encoding="utf-8")
