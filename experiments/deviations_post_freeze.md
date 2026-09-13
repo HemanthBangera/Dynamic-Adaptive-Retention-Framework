@@ -554,3 +554,12 @@ The archive was rebuilt from the pushed commit `3af8ea9`. The build and its chec
   for datasets, the embedding model and tokenizer encodings, and blocked the network only after that. The re-check
   after a reboot failed because the tokenizer cache had lived in `/tmp`. SI Note S15 now describes the environment
   exactly.
+
+---
+
+## 2026-09-13T20:11Z — test counts taken from the latest archive check (no analysis)
+
+The scanner test added in the previous entry brings the suite to 408 tests. The archive built from `2b1bd1e` was
+checked: 0 checksum mismatches; 408 tests pass with the archived cache and network access blocked; without a key 381
+pass and 27 are skipped; the SI regenerates identically. SI Note S12 now takes the suite size and all counts from
+this one check (`replay_audit/out/final_archive_check.log`), and the manuscript and letter say 408.

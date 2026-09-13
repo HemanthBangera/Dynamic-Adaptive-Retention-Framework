@@ -258,12 +258,10 @@ def s_tables(lines: List[str]) -> None:
 
 
 def s_verification_cost(lines: List[str]) -> None:
-    try:
-        out = subprocess.run([sys.executable, "-m", "pytest", "--collect-only", "-q"], cwd=ROOT, capture_output=True, text=True, timeout=900).stdout
-        m = re.search(r"(\d+) tests? collected", out)
-        n = m.group(1) if m else "⟦N⟧"
-    except Exception:
-        n = "⟦N⟧"
+    fc = _replay().get("final_archive_check") or {}
+    counts = [fc.get("pytest_placeholder_key_archived_cache", {}), fc.get("pytest_no_key", {})]
+    totals = {sum(c.values()) for c in counts if c}
+    n = f"{totals.pop():,}" if len(totals) == 1 else "⟦N⟧"       # one suite size, from the same archive check
     lines += ["## Note S12 — Implementation verification", "",
               f"The automated suite has {n} tests. They run locally against Qdrant's in-memory mode, with mocked or cached LLM "
               f"responses. {tests_sentence()} The suite covers every layer, the evaluation harness, the statistics (including clustered AUROC), the "
@@ -387,8 +385,9 @@ def replay_audit_lines() -> List[str]:
              f"- Primary confirmatory family recomputed from the regenerated MSC data: {cf.get('summary')}",
              "- Manifests of E1 and E11 lack the `first_stage` method field added later with the BM25 first stage "
              "(schema only).",
-             (lambda fc: f"- A later build, differing only in documentation, the document and figure builders, one test marker, the figure "
-                         f"numbering and these audit files, was re-checked the same way: {fc['checksum_mismatches']} checksum mismatches; with the archived "
+             (lambda fc: f"- Later builds changed no analysis result, only documentation, reporting, figure numbering, archive "
+                         f"tooling and these audit files. The latest was re-checked the same way (SHA-256 `{fc['archive_sha256'][:16]}…`): "
+                         f"{fc['checksum_mismatches']} checksum mismatches; with the archived "
                          f"cache {fc['pytest_placeholder_key_archived_cache'].get('passed', 0)} tests passed; without a key "
                          f"{fc['pytest_no_key'].get('passed', 0)} passed and {fc['pytest_no_key'].get('skipped', 0)} were skipped"
                          + ("; this document regenerated identically." if fc["si_regenerated_identically"] else

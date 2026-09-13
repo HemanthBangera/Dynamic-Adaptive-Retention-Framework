@@ -219,13 +219,13 @@
   }
  },
  "final_archive_check": {
-  "archive_sha256": "fb6178de151f99a455b5ddac070fda26eec7c7595103bf9b855b35e87956f4a5",
+  "archive_sha256": "1136e0d65e40fad71e2503938d9c965c05457483073a6643f6eb2747c06b0196",
   "checksum_mismatches": 0,
   "pytest_placeholder_key_archived_cache": {
-   "passed": 407
+   "passed": 408
   },
   "pytest_no_key": {
-   "passed": 380,
+   "passed": 381,
    "skipped": 27
   },
   "si_regenerated_identically": true
