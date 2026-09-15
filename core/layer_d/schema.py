@@ -67,6 +67,11 @@ class MemoryPayload:
     is_compressed: bool = False
     source: str = ""
     tags: List[str] = field(default_factory=list)
+
+    # ── Concurrency control (optimistic, see MemoryVault._conditional_patch)
+    version: int = 0
+    write_nonce: str = ""
+
     original_vector: list[float] | None = field(default=None)
 
     # ── Serialisation ──────────────────────────────────────────────────
@@ -110,8 +115,9 @@ class MemoryPoint:
     point_id: str                                   # UUID-4 string
     vector: List[float]                             # 384-dim embedding
     payload: MemoryPayload
-    score: Optional[float] = None                   # Cosine similarity (search)
+    score: Optional[float] = None                   # Cosine similarity (search) or fused score (rerank)
     dars_score: Optional[float] = None              # Computed DARS score
+    components: Optional[Dict[str, float]] = None   # R, F, U, P, S, sim, sim_rank, dars_rank (rerank)
 
     @staticmethod
     def generate_id() -> str:

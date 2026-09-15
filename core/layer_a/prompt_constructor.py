@@ -1,5 +1,5 @@
 import logging
-from typing import List
+from typing import List, Optional
 from core.layer_d.schema import MemoryPoint
 
 logger = logging.getLogger(__name__)
@@ -8,6 +8,7 @@ logger = logging.getLogger(__name__)
 class PromptConstructor:
     """Packages memories to prevent Prompt Confusion via XML tagging."""
 
+    DEFAULT_MAX_PROMPT_CHARS = 20000
     _distillation_queue: List[str] = []
 
     @staticmethod
@@ -17,10 +18,13 @@ class PromptConstructor:
         return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
 
     @classmethod
-    def build(cls, query: str, memories: List[MemoryPoint]) -> str:
+    def build(cls, query: str, memories: List[MemoryPoint],
+              max_chars: Optional[int] = DEFAULT_MAX_PROMPT_CHARS) -> str:
         """
         Constructs the structured XML-encapsulated prompt.
-        Enforces a 20,000-character budget and truncates outliers.
+        Enforces a character budget (default 20,000; ``max_chars=None`` disables it)
+        and truncates outliers. Memories are added in the given order, so the budget
+        drops the ones at the end of the list.
 
         Pure function: does NOT mutate any input MemoryPoint objects.
         Oversized memories are queued for distillation via get_distillation_queue().
@@ -42,7 +46,6 @@ class PromptConstructor:
         memory_xml = ["<memory_stream>"]
 
         current_len = len(system_context) + len("<memory_stream>\n") + len("</memory_stream>\n") + len(query) + 50
-        MAX_PROMPT_CHARS = 20000
 
         for m in memories:
             mid = m.point_id
@@ -62,7 +65,7 @@ class PromptConstructor:
                 f"    </memory>"
             )
 
-            if current_len + len(xml_str) > MAX_PROMPT_CHARS:
+            if max_chars is not None and current_len + len(xml_str) > max_chars:
                 logger.warning("dars_gateway_context_truncated_total: Skipped adding memory %s due to MAX_PROMPT_CHARS limit.", mid)
                 break
 

@@ -1,0 +1,41 @@
+weights=(0.3, 0.2, 0.3, 0.2)  min successes to RETAIN by P: {'0.0': 11, '0.03': 10, '0.2': 6, '0.5': 3}
+  λ=0.005 P=0.00 k= 0: S=0.450 (compress) → delete after 138.6 h
+  λ=0.005 P=0.00 k=10: S=0.697 (compress) → delete after inf h
+  λ=0.005 P=0.03 k= 0: S=0.456 (compress) → delete after 146.8 h
+  λ=0.005 P=0.03 k=10: S=0.703 (retain) → delete after inf h
+  λ=0.005 P=0.20 k= 0: S=0.490 (compress) → delete after 200.7 h
+  λ=0.005 P=0.20 k=10: S=0.737 (retain) → delete after inf h
+  λ=0.005 P=0.50 k= 0: S=0.550 (compress) → delete after 358.4 h
+  λ=0.005 P=0.50 k=10: S=0.797 (retain) → delete after inf h
+  MSC: base {'delete': 0.0, 'compress': 0.980590405904059, 'retain': 0.01940959409594096}; worst shift -0.10 (both) changes 15.1% of tiers, κ=0.176
+  ALFWorld: base {'delete': 0.7965990843688685, 'compress': 0.20340091563113147, 'retain': 0.0}; worst shift -0.10 (both) changes 18.7% of tiers, κ=0.569
+weights=(0.2, 0.0, 0.8, 0.0)  min successes to RETAIN by P: {'0.0': 1, '0.03': 1, '0.2': 1, '0.5': 1}
+  λ=0.005 P=0.00 k= 0: S=0.600 (compress) → delete after inf h
+  λ=0.005 P=0.00 k=10: S=0.933 (retain) → delete after inf h
+  λ=0.005 P=0.03 k= 0: S=0.600 (compress) → delete after inf h
+  λ=0.005 P=0.03 k=10: S=0.933 (retain) → delete after inf h
+  λ=0.005 P=0.20 k= 0: S=0.600 (compress) → delete after inf h
+  λ=0.005 P=0.20 k=10: S=0.933 (retain) → delete after inf h
+  λ=0.005 P=0.50 k= 0: S=0.600 (compress) → delete after inf h
+  λ=0.005 P=0.50 k=10: S=0.933 (retain) → delete after inf h
+  MSC: base {'delete': 0.2901845018450184, 'compress': 0.4567527675276753, 'retain': 0.2530627306273063}; worst shift -0.10 (both) changes 25.2% of tiers, κ=0.583
+weights=(0.3, 0.0, 0.7, 0.0)  min successes to RETAIN by P: {'0.0': 1, '0.03': 1, '0.2': 1, '0.5': 1}
+  λ=0.005 P=0.00 k= 0: S=0.650 (compress) → delete after inf h
+  λ=0.005 P=0.00 k=10: S=0.942 (retain) → delete after inf h
+  λ=0.005 P=0.03 k= 0: S=0.650 (compress) → delete after inf h
+  λ=0.005 P=0.03 k=10: S=0.942 (retain) → delete after inf h
+  λ=0.005 P=0.20 k= 0: S=0.650 (compress) → delete after inf h
+  λ=0.005 P=0.20 k=10: S=0.942 (retain) → delete after inf h
+  λ=0.005 P=0.50 k= 0: S=0.650 (compress) → delete after inf h
+  λ=0.005 P=0.50 k=10: S=0.942 (retain) → delete after inf h
+  MSC: base {'delete': 0.0, 'compress': 0.7391143911439114, 'retain': 0.2608856088560886}; worst shift -0.10 (both) changes 31.9% of tiers, κ=0.408
+weights=(0.0, 0.0, 0.0, 1.0)  min successes to RETAIN by P: {'0.0': None, '0.03': None, '0.2': None, '0.5': None}
+  λ=0.005 P=0.00 k= 0: S=0.000 (delete) → delete after 0.0 h
+  λ=0.005 P=0.00 k=10: S=0.000 (delete) → delete after 0.0 h
+  λ=0.005 P=0.03 k= 0: S=0.030 (delete) → delete after 0.0 h
+  λ=0.005 P=0.03 k=10: S=0.030 (delete) → delete after 0.0 h
+  λ=0.005 P=0.20 k= 0: S=0.200 (delete) → delete after 0.0 h
+  λ=0.005 P=0.20 k=10: S=0.200 (delete) → delete after 0.0 h
+  λ=0.005 P=0.50 k= 0: S=0.500 (compress) → delete after inf h
+  λ=0.005 P=0.50 k=10: S=0.500 (compress) → delete after inf h
+  ALFWorld: base {'delete': 0.9999182472204055, 'compress': 8.175277959450622e-05, 'retain': 0.0}; worst shift -0.10 (both) changes 5.4% of tiers, κ=0.003

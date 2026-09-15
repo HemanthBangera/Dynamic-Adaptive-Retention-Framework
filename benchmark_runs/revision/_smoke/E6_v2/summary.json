@@ -1,0 +1,270 @@
+{
+ "items": 3,
+ "semantic_failure_rate": 0.0,
+ "shadow_vector_preserved_rate": 1.0,
+ "semantic": {
+  "n": 3,
+  "compression_ratio": {
+   "mean": 0.4422912254332627,
+   "ci_lo": 0.3352941176470588,
+   "ci_hi": 0.5952380952380952,
+   "n": 3
+  },
+  "answer_retention": {
+   "mean": 1.0,
+   "ci_lo": 1.0,
+   "ci_hi": 1.0,
+   "n": 3
+  },
+  "reader_original": {
+   "mean": 1.0,
+   "ci_lo": 1.0,
+   "ci_hi": 1.0,
+   "n": 3
+  },
+  "reader_accuracy": {
+   "mean": 1.0,
+   "ci_lo": 1.0,
+   "ci_hi": 1.0,
+   "n": 3
+  },
+  "reader_delta_vs_original": {
+   "diff": 0.0,
+   "ci_lo": 0.0,
+   "ci_hi": 0.0,
+   "p_value": 1.0,
+   "n": 3
+  },
+  "recall@10_kept_vector": {
+   "mean": 1.0,
+   "ci_lo": 1.0,
+   "ci_hi": 1.0,
+   "n": 3
+  },
+  "recall@10_reembedded": {
+   "mean": 1.0,
+   "ci_lo": 1.0,
+   "ci_hi": 1.0,
+   "n": 3
+  },
+  "kept_minus_reembedded": {
+   "diff": 0.0,
+   "ci_lo": 0.0,
+   "ci_hi": 0.0,
+   "p_value": 1.0,
+   "n": 3
+  }
+ },
+ "llmlingua2": {
+  "n": 3,
+  "compression_ratio": {
+   "mean": 0.4529153666886809,
+   "ci_lo": 0.4365079365079365,
+   "ci_hi": 0.46188426590148257,
+   "n": 3
+  },
+  "answer_retention": {
+   "mean": 1.0,
+   "ci_lo": 1.0,
+   "ci_hi": 1.0,
+   "n": 3
+  },
+  "reader_original": {
+   "mean": 1.0,
+   "ci_lo": 1.0,
+   "ci_hi": 1.0,
+   "n": 3
+  },
+  "reader_accuracy": {
+   "mean": 1.0,
+   "ci_lo": 1.0,
+   "ci_hi": 1.0,
+   "n": 3
+  },
+  "reader_delta_vs_original": {
+   "diff": 0.0,
+   "ci_lo": 0.0,
+   "ci_hi": 0.0,
+   "p_value": 1.0,
+   "n": 3
+  },
+  "recall@10_kept_vector": {
+   "mean": 1.0,
+   "ci_lo": 1.0,
+   "ci_hi": 1.0,
+   "n": 3
+  },
+  "recall@10_reembedded": {
+   "mean": 0.6666666666666666,
+   "ci_lo": 0.3333333333333333,
+   "ci_hi": 1.0,
+   "n": 3
+  },
+  "kept_minus_reembedded": {
+   "diff": 0.3333333333333333,
+   "ci_lo": 0.0,
+   "ci_hi": 0.6666666666666666,
+   "p_value": 0.67,
+   "n": 3
+  }
+ },
+ "extractive": {
+  "n": 3,
+  "compression_ratio": {
+   "mean": 0.4523498288204171,
+   "ci_lo": 0.34117647058823525,
+   "ci_hi": 0.5158730158730159,
+   "n": 3
+  },
+  "answer_retention": {
+   "mean": 0.0,
+   "ci_lo": 0.0,
+   "ci_hi": 0.0,
+   "n": 3
+  },
+  "reader_original": {
+   "mean": 1.0,
+   "ci_lo": 1.0,
+   "ci_hi": 1.0,
+   "n": 3
+  },
+  "reader_accuracy": {
+   "mean": 0.3333333333333333,
+   "ci_lo": 0.0,
+   "ci_hi": 1.0,
+   "n": 3
+  },
+  "reader_delta_vs_original": {
+   "diff": -0.6666666666666666,
+   "ci_lo": -1.0,
+   "ci_hi": 0.0,
+   "p_value": 0.08,
+   "n": 3
+  },
+  "recall@10_kept_vector": {
+   "mean": 1.0,
+   "ci_lo": 1.0,
+   "ci_hi": 1.0,
+   "n": 3
+  },
+  "recall@10_reembedded": {
+   "mean": 0.0,
+   "ci_lo": 0.0,
+   "ci_hi": 0.0,
+   "n": 3
+  },
+  "kept_minus_reembedded": {
+   "diff": 1.0,
+   "ci_lo": 1.0,
+   "ci_hi": 1.0,
+   "p_value": 0.0,
+   "n": 3
+  }
+ },
+ "llmlingua2@matched": {
+  "n": 3,
+  "compression_ratio": {
+   "mean": 0.404612739404705,
+   "ci_lo": 0.3058823529411765,
+   "ci_hi": 0.5238095238095238,
+   "n": 3
+  },
+  "answer_retention": {
+   "mean": 0.6666666666666666,
+   "ci_lo": 0.0,
+   "ci_hi": 1.0,
+   "n": 3
+  },
+  "reader_original": {
+   "mean": 1.0,
+   "ci_lo": 1.0,
+   "ci_hi": 1.0,
+   "n": 3
+  },
+  "reader_accuracy": {
+   "mean": 0.6666666666666666,
+   "ci_lo": 0.0,
+   "ci_hi": 1.0,
+   "n": 3
+  },
+  "reader_delta_vs_original": {
+   "diff": -0.3333333333333333,
+   "ci_lo": -1.0,
+   "ci_hi": 0.0,
+   "p_value": 0.46,
+   "n": 3
+  },
+  "recall@10_kept_vector": {
+   "mean": 1.0,
+   "ci_lo": 1.0,
+   "ci_hi": 1.0,
+   "n": 3
+  },
+  "recall@10_reembedded": {
+   "mean": 0.3333333333333333,
+   "ci_lo": 0.0,
+   "ci_hi": 1.0,
+   "n": 3
+  },
+  "kept_minus_reembedded": {
+   "diff": 0.6666666666666666,
+   "ci_lo": 0.0,
+   "ci_hi": 1.0,
+   "p_value": 0.1,
+   "n": 3
+  }
+ },
+ "extractive@matched": {
+  "n": 3,
+  "compression_ratio": {
+   "mean": 0.2900112348462421,
+   "ci_lo": 0.15294117647058825,
+   "ci_hi": 0.5158730158730159,
+   "n": 3
+  },
+  "answer_retention": {
+   "mean": 0.0,
+   "ci_lo": 0.0,
+   "ci_hi": 0.0,
+   "n": 3
+  },
+  "reader_original": {
+   "mean": 1.0,
+   "ci_lo": 1.0,
+   "ci_hi": 1.0,
+   "n": 3
+  },
+  "reader_accuracy": {
+   "mean": 0.3333333333333333,
+   "ci_lo": 0.0,
+   "ci_hi": 1.0,
+   "n": 3
+  },
+  "reader_delta_vs_original": {
+   "diff": -0.6666666666666666,
+   "ci_lo": -1.0,
+   "ci_hi": 0.0,
+   "p_value": 0.08,
+   "n": 3
+  },
+  "recall@10_kept_vector": {
+   "mean": 1.0,
+   "ci_lo": 1.0,
+   "ci_hi": 1.0,
+   "n": 3
+  },
+  "recall@10_reembedded": {
+   "mean": 0.3333333333333333,
+   "ci_lo": 0.0,
+   "ci_hi": 1.0,
+   "n": 3
+  },
+  "kept_minus_reembedded": {
+   "diff": 0.6666666666666666,
+   "ci_lo": 0.0,
+   "ci_hi": 1.0,
+   "p_value": 0.1,
+   "n": 3
+  }
+ }
+}

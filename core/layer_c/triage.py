@@ -73,9 +73,9 @@ class TriageOrchestrator:
             points = []
             for r in records:
                 p = MemoryPoint(
-                    point_id=r.id,
+                    point_id=str(r.id),
                     vector=[],
-                    payload=MemoryPayload(**r.payload) if isinstance(r.payload, dict) else r.payload
+                    payload=MemoryPayload.from_dict(r.payload) if isinstance(r.payload, dict) else r.payload
                 )
                 points.append(p)
             
@@ -99,30 +99,35 @@ class TriageOrchestrator:
         except Exception as e:
             logger.error(f"Failed to process high priority queue: {e}")
 
-    async def trigger_maintenance(self) -> bool:
+    async def trigger_maintenance(self, current_time: Optional[float] = None) -> bool:
         """Volume-Based trigger: runs if total memory count > MAX_MEMORY_THRESHOLD."""
         loop = asyncio.get_running_loop()
         count = await loop.run_in_executor(None, self.vault.count_memories)
-        
+
         if count > self.MAX_MEMORY_THRESHOLD:
             logger.info(f"Volume Trigger Met ({count} > {self.MAX_MEMORY_THRESHOLD}). Starting triage.")
-            await self.run_maintenance()
+            await self.run_maintenance(current_time=current_time)
             return True
         else:
             logger.info(f"Volume ({count}) below threshold ({self.MAX_MEMORY_THRESHOLD}). Maintenance skipped.")
             return False
 
-    async def run_maintenance(self) -> None:
-        """Manual/Scheduled trigger: iterates DB in chunks to avoid memory spikes."""
+    async def run_maintenance(self, current_time: Optional[float] = None) -> None:
+        """Manual/Scheduled trigger: iterates DB in chunks to avoid memory spikes.
+
+        Best-effort per point: every memory in every chunk is triaged even if some
+        fail; failures are then surfaced to the caller as one RuntimeError.
+        """
         logger.info("Initializing DARS Maintenance Cycle (Layer C)...")
         loop = asyncio.get_running_loop()
-        
+
         def start_generator():
             return self.vault.get_all_memories(limit=100, scroll_yield=True, with_vectors=False)
-            
+
+        point_errors: list[tuple[str, BaseException]] = []
         try:
             gen = await loop.run_in_executor(None, start_generator)
-            
+
             def next_chunk():
                 try:
                     return next(gen)
@@ -133,17 +138,27 @@ class TriageOrchestrator:
                 chunk_data = await loop.run_in_executor(None, next_chunk)
                 if chunk_data is None:
                     break
-                
+
                 chunk_points, next_offset = chunk_data
-                
-                tasks = [self.janitor.triage_memory(pt) for pt in chunk_points]
+
+                tasks = [self.janitor.triage_memory(pt, current_time=current_time) for pt in chunk_points]
                 if tasks:
-                    await asyncio.gather(*tasks)
-                
+                    results = await asyncio.gather(*tasks, return_exceptions=True)
+                    for pt, res in zip(chunk_points, results):
+                        if isinstance(res, BaseException):
+                            logger.error("Triage failed for %s: %s", pt.point_id, res)
+                            point_errors.append((pt.point_id, res))
+
                 if next_offset is None:
                     break
-
-            logger.info("Maintenance Cycle Completed successfully.")
         except Exception as e:
             logger.error(f"Maintenance cycle encountered a critical error: {e}")
             raise
+
+        if point_errors:
+            first_pid, first_err = point_errors[0]
+            raise RuntimeError(
+                f"Maintenance cycle finished with {len(point_errors)} failed point(s); "
+                f"first failure on {first_pid}: {first_err}"
+            ) from first_err
+        logger.info("Maintenance Cycle Completed successfully.")

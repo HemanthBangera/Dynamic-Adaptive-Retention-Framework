@@ -1,0 +1,8 @@
+[Unit]
+Description=Publish DARS test-phase status and artifacts to S3
+
+[Service]
+Type=oneshot
+User=ubuntu
+Environment=HOME=/home/ubuntu
+ExecStart=/bin/bash /home/ubuntu/dars/aws_scripts/sync_status.sh

@@ -39,8 +39,10 @@ class TestReformulatorLive:
 
     @pytest.mark.asyncio
     async def test_fallback_on_missing_key(self):
+        """No Gemini key and no transport at all → fail open to the raw query."""
         r = QueryReformulator()
         r.api_key = ""
+        r.transport = None
         result = await r.reformulate_query("Test fallback")
         assert result == "Test fallback"
 

@@ -1,0 +1,149 @@
+{
+ "judge_error_rate": 0.366,
+ "datasets": [
+  {
+   "dataset": "MSC",
+   "split": "test",
+   "facts": 13550,
+   "label": "lex_0.5",
+   "keep": 0.5,
+   "verdicts_per_memory": 3.6445018450184503,
+   "baselines": {
+    "recency_lru": {
+     "auroc": 0.6635403441638983,
+     "harmful_deletion": 0.37919599816889404
+    },
+    "fifo": {
+     "auroc": 0.8661830277001155,
+     "harmful_deletion": 0.122379263231617
+    },
+    "frequency_lfu": {
+     "auroc": 0.24290491130364306,
+     "harmful_deletion": 0.706060613977875
+    }
+   },
+   "curve": [
+    {
+     "eps": 0.0,
+     "auroc": 0.890635766021679,
+     "auroc_sd": 0.0,
+     "harmful_deletion": 0.0944414655719934,
+     "harmful_sd": 0.0
+    },
+    {
+     "eps": 0.05,
+     "auroc": 0.8847283185294499,
+     "auroc_sd": 0.0010930544182178364,
+     "harmful_deletion": 0.10195509237948612,
+     "harmful_sd": 0.0010773501218124335
+    },
+    {
+     "eps": 0.1,
+     "auroc": 0.8746442576964197,
+     "auroc_sd": 0.00145460396800633,
+     "harmful_deletion": 0.11259007951946609,
+     "harmful_sd": 0.0021566077533172624
+    },
+    {
+     "eps": 0.15,
+     "auroc": 0.8597564385206743,
+     "auroc_sd": 0.0017135502515700288,
+     "harmful_deletion": 0.12767905339232016,
+     "harmful_sd": 0.0029245136083161285
+    },
+    {
+     "eps": 0.2,
+     "auroc": 0.8385114259504917,
+     "auroc_sd": 0.001236257341401425,
+     "harmful_deletion": 0.14937335251529257,
+     "harmful_sd": 0.0022070493802188677
+    },
+    {
+     "eps": 0.3,
+     "auroc": 0.7719630657201535,
+     "auroc_sd": 0.002099553954477698,
+     "harmful_deletion": 0.21347283680022625,
+     "harmful_sd": 0.004532304555507342
+    },
+    {
+     "eps": 0.4,
+     "auroc": 0.6705302844284734,
+     "auroc_sd": 0.002890719544275132,
+     "harmful_deletion": 0.3095360440795533,
+     "harmful_sd": 0.0035041015317865956
+    },
+    {
+     "eps": 0.5,
+     "auroc": 0.5426639120624716,
+     "auroc_sd": 0.0028968115246123614,
+     "harmful_deletion": 0.4322344468813798,
+     "harmful_sd": 0.005401237953887682
+    }
+   ],
+   "auroc_crosses_recency_at": 0.40546659777331234,
+   "harmful_crosses_fifo_at": 0.13243820220857502
+  },
+  {
+   "dataset": "ALFWorld",
+   "split": "test_in",
+   "memories": 24464,
+   "tasks_with_needed": 140,
+   "keep": 0.5,
+   "verdicts_per_memory": 1.546026814911707,
+   "baselines": {
+    "recency_lru": {
+     "harmful_deletion": 1.0
+    },
+    "fifo": {
+     "harmful_deletion": 0.994047619047619
+    },
+    "frequency_lfu": {
+     "harmful_deletion": 0.32976190476190476
+    }
+   },
+   "curve": [
+    {
+     "eps": 0.0,
+     "harmful_deletion": 0.09642857142857142,
+     "harmful_sd": 0.0
+    },
+    {
+     "eps": 0.05,
+     "harmful_deletion": 0.09642857142857142,
+     "harmful_sd": 0.0
+    },
+    {
+     "eps": 0.1,
+     "harmful_deletion": 0.09642857142857142,
+     "harmful_sd": 0.0
+    },
+    {
+     "eps": 0.15,
+     "harmful_deletion": 0.09642857142857142,
+     "harmful_sd": 0.0
+    },
+    {
+     "eps": 0.2,
+     "harmful_deletion": 0.09642857142857142,
+     "harmful_sd": 0.0
+    },
+    {
+     "eps": 0.3,
+     "harmful_deletion": 0.09642857142857142,
+     "harmful_sd": 0.0
+    },
+    {
+     "eps": 0.4,
+     "harmful_deletion": 0.09642857142857142,
+     "harmful_sd": 0.0
+    },
+    {
+     "eps": 0.5,
+     "harmful_deletion": 0.09642857142857142,
+     "harmful_sd": 0.0
+    }
+   ],
+   "harmful_crosses_fifo_at": null
+  }
+ ]
+}

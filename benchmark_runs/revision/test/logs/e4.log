@@ -1,0 +1,170 @@
+INFO Loading embedding model: all-MiniLM-L6-v2 ...
+INFO No device provided, using cpu
+INFO Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 8082.42it/s]
+C:\Users\Harsh\Desktop\minilunch\Dynamic-Adaptive-Retention-Framework\core\layer_d\embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  return self._model.get_sentence_embedding_dimension()
+INFO Embedding model loaded. Dimension: 384
+INFO Embedding cache enabled at benchmark_runs/_emb_cache/minilm.sqlite (all-MiniLM-L6-v2|rev=1110a243fdf4706b3f48f1d95db1a4f5529b4d41|max_seq_length=256)
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\ai-hyz___memory_agent_bench\default\0.0.0\7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 23:34:27 2026).
+WARNING Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\ai-hyz___memory_agent_bench\default\0.0.0\7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 23:34:27 2026).
+C:\Users\Harsh\Desktop\minilunch\Dynamic-Adaptive-Retention-Framework\core\layer_d\storage.py:227: UserWarning: Payload indexes have no effect in the local Qdrant. Please use server Qdrant if you need payload indexes.
+  self.client.create_payload_index(
+INFO E4: ruler_qa1_197K context 0 done (70 questions, 1489 units)
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\ai-hyz___memory_agent_bench\default\0.0.0\7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 23:34:27 2026).
+WARNING Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\ai-hyz___memory_agent_bench\default\0.0.0\7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 23:34:27 2026).
+[transformers] Token indices sequence length is longer than the specified maximum sequence length for this model (261 > 256). Running this sequence through the model will result in indexing errors
+INFO E4: ruler_qa2_421K context 0 done (70 questions, 3719 units)
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\ai-hyz___memory_agent_bench\default\0.0.0\7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 23:34:27 2026).
+WARNING Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\ai-hyz___memory_agent_bench\default\0.0.0\7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 23:34:27 2026).
+INFO E4: longmemeval_s* context 0 done (42 questions, 2311 units)
+INFO E4: longmemeval_s* context 1 done (42 questions, 2305 units)
+INFO E4: longmemeval_s* context 2 done (42 questions, 2483 units)
+INFO E4: longmemeval_s* context 3 done (42 questions, 2332 units)
+INFO E4: longmemeval_s* context 4 done (42 questions, 2363 units)
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\ai-hyz___memory_agent_bench\default\0.0.0\7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 23:34:27 2026).
+WARNING Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\ai-hyz___memory_agent_bench\default\0.0.0\7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 23:34:27 2026).
+INFO E4: factconsolidation_sh_32k context 0 done (70 questions, 2310 units)
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\ai-hyz___memory_agent_bench\default\0.0.0\7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 23:34:27 2026).
+WARNING Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\ai-hyz___memory_agent_bench\default\0.0.0\7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 23:34:27 2026).
+INFO E4: factconsolidation_mh_32k context 0 done (70 questions, 2310 units)
+== ruler_qa1_197K
+  none|dars_rrf_k15                  top10_changed=0.000  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  none|dars_rrf_k50                  top10_changed=0.000  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  none|dars_wrrf_k50_b0.5            top10_changed=0.000  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  none|dars_blend_a0.5               top10_changed=0.000  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  none|dars_blend_a0.8               top10_changed=0.000  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  as_submitted|dars_rrf_k15          top10_changed=0.094  group_recall@1024 diff=-0.014 [-0.043,+0.000]
+  as_submitted|dars_rrf_k50          top10_changed=0.219  group_recall@1024 diff=-0.014 [-0.043,+0.000]
+  as_submitted|dars_wrrf_k50_b0.5    top10_changed=0.090  group_recall@1024 diff=-0.014 [-0.043,+0.000]
+  as_submitted|dars_blend_a0.5       top10_changed=0.009  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  as_submitted|dars_blend_a0.8       top10_changed=0.004  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  task|dars_rrf_k15                  top10_changed=0.167  group_recall@1024 diff=+0.000 [-0.043,+0.043]
+  task|dars_rrf_k50                  top10_changed=0.381  group_recall@1024 diff=-0.200 [-0.314,-0.100]
+  task|dars_wrrf_k50_b0.5            top10_changed=0.203  group_recall@1024 diff=+0.000 [-0.057,+0.057]
+  task|dars_blend_a0.5               top10_changed=0.040  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  task|dars_blend_a0.8               top10_changed=0.011  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  dynamic|dars_rrf_k15               top10_changed=0.161  group_recall@1024 diff=+0.043 [+0.000,+0.100]
+  dynamic|dars_rrf_k50               top10_changed=0.314  group_recall@1024 diff=+0.057 [+0.000,+0.129]
+  dynamic|dars_wrrf_k50_b0.5         top10_changed=0.186  group_recall@1024 diff=+0.043 [+0.000,+0.100]
+  dynamic|dars_blend_a0.5            top10_changed=0.070  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  dynamic|dars_blend_a0.8            top10_changed=0.029  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  oracle|dars_rrf_k15                top10_changed=0.134  group_recall@1024 diff=+0.029 [+0.000,+0.071]
+  oracle|dars_rrf_k50                top10_changed=0.297  group_recall@1024 diff=+0.057 [-0.014,+0.143]
+  oracle|dars_wrrf_k50_b0.5          top10_changed=0.177  group_recall@1024 diff=+0.029 [-0.029,+0.086]
+  oracle|dars_blend_a0.5             top10_changed=0.056  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  oracle|dars_blend_a0.8             top10_changed=0.023  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+== ruler_qa2_421K
+  none|dars_rrf_k15                  top10_changed=0.000  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  none|dars_rrf_k50                  top10_changed=0.000  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  none|dars_wrrf_k50_b0.5            top10_changed=0.000  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  none|dars_blend_a0.5               top10_changed=0.000  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  none|dars_blend_a0.8               top10_changed=0.000  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  as_submitted|dars_rrf_k15          top10_changed=0.153  group_recall@1024 diff=-0.036 [-0.079,+0.000]
+  as_submitted|dars_rrf_k50          top10_changed=0.311  group_recall@1024 diff=-0.119 [-0.195,-0.050]
+  as_submitted|dars_wrrf_k50_b0.5    top10_changed=0.163  group_recall@1024 diff=-0.043 [-0.079,-0.014]
+  as_submitted|dars_blend_a0.5       top10_changed=0.013  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  as_submitted|dars_blend_a0.8       top10_changed=0.006  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  task|dars_rrf_k15                  top10_changed=0.174  group_recall@1024 diff=-0.036 [-0.086,+0.014]
+  task|dars_rrf_k50                  top10_changed=0.401  group_recall@1024 diff=-0.183 [-0.262,-0.107]
+  task|dars_wrrf_k50_b0.5            top10_changed=0.184  group_recall@1024 diff=-0.057 [-0.107,-0.014]
+  task|dars_blend_a0.5               top10_changed=0.023  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  task|dars_blend_a0.8               top10_changed=0.007  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  dynamic|dars_rrf_k15               top10_changed=0.183  group_recall@1024 diff=-0.069 [-0.119,-0.021]
+  dynamic|dars_rrf_k50               top10_changed=0.463  group_recall@1024 diff=-0.298 [-0.376,-0.219]
+  dynamic|dars_wrrf_k50_b0.5         top10_changed=0.214  group_recall@1024 diff=-0.055 [-0.098,-0.014]
+  dynamic|dars_blend_a0.5            top10_changed=0.033  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  dynamic|dars_blend_a0.8            top10_changed=0.010  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  oracle|dars_rrf_k15                top10_changed=0.181  group_recall@1024 diff=-0.048 [-0.093,-0.007]
+  oracle|dars_rrf_k50                top10_changed=0.474  group_recall@1024 diff=-0.269 [-0.348,-0.193]
+  oracle|dars_wrrf_k50_b0.5          top10_changed=0.211  group_recall@1024 diff=-0.055 [-0.098,-0.014]
+  oracle|dars_blend_a0.5             top10_changed=0.036  group_recall@1024 diff=-0.007 [-0.021,+0.000]
+  oracle|dars_blend_a0.8             top10_changed=0.006  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+== longmemeval_s*
+  none|dars_rrf_k15                  top10_changed=0.000  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  none|dars_rrf_k50                  top10_changed=0.000  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  none|dars_wrrf_k50_b0.5            top10_changed=0.000  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  none|dars_blend_a0.5               top10_changed=0.000  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  none|dars_blend_a0.8               top10_changed=0.000  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  as_submitted|dars_rrf_k15          top10_changed=0.181  group_recall@1024 diff=-0.025 [-0.063,+0.013]
+  as_submitted|dars_rrf_k50          top10_changed=0.452  group_recall@1024 diff=-0.179 [-0.250,-0.112]
+  as_submitted|dars_wrrf_k50_b0.5    top10_changed=0.220  group_recall@1024 diff=-0.057 [-0.114,-0.008]
+  as_submitted|dars_blend_a0.5       top10_changed=0.031  group_recall@1024 diff=-0.005 [-0.024,+0.010]
+  as_submitted|dars_blend_a0.8       top10_changed=0.010  group_recall@1024 diff=-0.002 [-0.010,+0.000]
+  task|dars_rrf_k15                  top10_changed=0.183  group_recall@1024 diff=-0.045 [-0.081,-0.007]
+  task|dars_rrf_k50                  top10_changed=0.457  group_recall@1024 diff=-0.188 [-0.260,-0.120]
+  task|dars_wrrf_k50_b0.5            top10_changed=0.228  group_recall@1024 diff=-0.070 [-0.113,-0.030]
+  task|dars_blend_a0.5               top10_changed=0.040  group_recall@1024 diff=-0.007 [-0.019,+0.000]
+  task|dars_blend_a0.8               top10_changed=0.010  group_recall@1024 diff=-0.002 [-0.010,+0.000]
+  dynamic|dars_rrf_k15               top10_changed=0.177  group_recall@1024 diff=-0.021 [-0.051,+0.008]
+  dynamic|dars_rrf_k50               top10_changed=0.435  group_recall@1024 diff=-0.142 [-0.199,-0.090]
+  dynamic|dars_wrrf_k50_b0.5         top10_changed=0.227  group_recall@1024 diff=-0.056 [-0.091,-0.025]
+  dynamic|dars_blend_a0.5            top10_changed=0.056  group_recall@1024 diff=-0.002 [-0.025,+0.017]
+  dynamic|dars_blend_a0.8            top10_changed=0.018  group_recall@1024 diff=+0.002 [-0.010,+0.017]
+  oracle|dars_rrf_k15                top10_changed=0.179  group_recall@1024 diff=-0.004 [-0.038,+0.031]
+  oracle|dars_rrf_k50                top10_changed=0.441  group_recall@1024 diff=-0.150 [-0.214,-0.086]
+  oracle|dars_wrrf_k50_b0.5          top10_changed=0.225  group_recall@1024 diff=-0.057 [-0.106,-0.020]
+  oracle|dars_blend_a0.5             top10_changed=0.052  group_recall@1024 diff=-0.002 [-0.019,+0.015]
+  oracle|dars_blend_a0.8             top10_changed=0.015  group_recall@1024 diff=+0.002 [-0.010,+0.017]
+== factconsolidation_sh_32k
+  none|dars_rrf_k15                  top10_changed=0.000  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  none|dars_rrf_k50                  top10_changed=0.000  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  none|dars_wrrf_k50_b0.5            top10_changed=0.000  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  none|dars_blend_a0.5               top10_changed=0.000  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  none|dars_blend_a0.8               top10_changed=0.000  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  as_submitted|dars_rrf_k15          top10_changed=0.141  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  as_submitted|dars_rrf_k50          top10_changed=0.313  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  as_submitted|dars_wrrf_k50_b0.5    top10_changed=0.143  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  as_submitted|dars_blend_a0.5       top10_changed=0.024  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  as_submitted|dars_blend_a0.8       top10_changed=0.004  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  task|dars_rrf_k15                  top10_changed=0.187  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  task|dars_rrf_k50                  top10_changed=0.440  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  task|dars_wrrf_k50_b0.5            top10_changed=0.224  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  task|dars_blend_a0.5               top10_changed=0.034  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  task|dars_blend_a0.8               top10_changed=0.010  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  dynamic|dars_rrf_k15               top10_changed=0.181  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  dynamic|dars_rrf_k50               top10_changed=0.449  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  dynamic|dars_wrrf_k50_b0.5         top10_changed=0.231  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  dynamic|dars_blend_a0.5            top10_changed=0.059  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  dynamic|dars_blend_a0.8            top10_changed=0.014  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  oracle|dars_rrf_k15                top10_changed=0.187  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  oracle|dars_rrf_k50                top10_changed=0.444  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  oracle|dars_wrrf_k50_b0.5          top10_changed=0.240  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  oracle|dars_blend_a0.5             top10_changed=0.049  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  oracle|dars_blend_a0.8             top10_changed=0.010  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+== factconsolidation_mh_32k
+  none|dars_rrf_k15                  top10_changed=0.000  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  none|dars_rrf_k50                  top10_changed=0.000  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  none|dars_wrrf_k50_b0.5            top10_changed=0.000  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  none|dars_blend_a0.5               top10_changed=0.000  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  none|dars_blend_a0.8               top10_changed=0.000  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  as_submitted|dars_rrf_k15          top10_changed=0.156  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  as_submitted|dars_rrf_k50          top10_changed=0.294  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  as_submitted|dars_wrrf_k50_b0.5    top10_changed=0.139  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  as_submitted|dars_blend_a0.5       top10_changed=0.013  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  as_submitted|dars_blend_a0.8       top10_changed=0.006  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  task|dars_rrf_k15                  top10_changed=0.167  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  task|dars_rrf_k50                  top10_changed=0.409  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  task|dars_wrrf_k50_b0.5            top10_changed=0.196  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  task|dars_blend_a0.5               top10_changed=0.030  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  task|dars_blend_a0.8               top10_changed=0.009  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  dynamic|dars_rrf_k15               top10_changed=0.187  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  dynamic|dars_rrf_k50               top10_changed=0.467  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  dynamic|dars_wrrf_k50_b0.5         top10_changed=0.227  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  dynamic|dars_blend_a0.5            top10_changed=0.046  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  dynamic|dars_blend_a0.8            top10_changed=0.011  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  oracle|dars_rrf_k15                top10_changed=0.174  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  oracle|dars_rrf_k50                top10_changed=0.431  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  oracle|dars_wrrf_k50_b0.5          top10_changed=0.226  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  oracle|dars_blend_a0.5             top10_changed=0.043  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  oracle|dars_blend_a0.8             top10_changed=0.009  group_recall@1024 diff=+0.000 [+0.000,+0.000]

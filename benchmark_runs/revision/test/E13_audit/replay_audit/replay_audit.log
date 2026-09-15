@@ -1,0 +1,172 @@
+2026-09-13T14:52:52Z archive sha256 3568685e55a8f5b5d7512135b57d4acda0bbe89cbb881a43ad4b4de8f7158ca1
+2026-09-13T14:53:06Z unpacked: 138862 files
+2026-09-13T14:53:06Z fresh venv
+Using CPython 3.14.3
+Creating virtual environment at: .venv
+Activate with: source .venv/bin/activate
+Resolved 10 packages in 157ms
+Installed 10 packages in 1.12s
+ + filelock==3.32.3
+ + fsspec==2026.7.0
+ + jinja2==3.1.6
+ + markupsafe==3.0.3
+ + mpmath==1.3.0
+ + networkx==3.6.1
+ + setuptools==78.1.0
+ + sympy==1.14.0
+ + torch==2.11.0+cpu
+ + typing-extensions==4.16.0
+Resolved 103 packages in 167ms
+Prepared 2 packages in 15ms
+Uninstalled 1 package in 5ms
+Installed 94 packages in 1.68s
+ + absl-py==2.5.0
+ + accelerate==1.15.0
+ + aiohappyeyeballs==2.7.1
+ + aiohttp==3.13.5
+ + aiosignal==1.4.0
+ + annotated-doc==0.0.5
+ + annotated-types==0.8.0
+ + anyio==4.15.1
+ + attrs==26.1.0
+ + certifi==2026.7.22
+ + charset-normalizer==3.5.1
+ + click==8.5.0
+ + cloudpickle==3.1.2
+ + contourpy==1.4.0
+ + cycler==0.12.1
+ + datasets==4.8.5
+ + dill==0.4.1
+ + editdistance==0.8.1
+ + fonttools==4.65.0
+ + freezegun==1.5.5
+ + frozenlist==1.8.0
+ - fsspec==2026.7.0
+ + fsspec==2026.2.0
+ + grpcio==1.83.1
+ + h11==0.16.0
+ + h2==4.4.1
+ + hf-xet==1.6.0
+ + hpack==4.2.0
+ + httpcore==1.0.9
+ + httpcore2==2.12.0
+ + httpx==0.28.1
+ + httpx2==2.12.0
+ + huggingface-hub==1.11.0
+ + hyperframe==6.1.0
+ + idna==3.19
+ + iniconfig==2.3.0
+ + jiter==0.17.0
+ + joblib==1.6.0
+ + kiwisolver==1.5.1
+ + llmlingua==0.2.2
+ + lxml==6.1.3
+ + markdown-it-py==4.2.0
+ + matplotlib==3.10.9
+ + mdurl==0.1.2
+ + multidict==6.8.0
+ + multiprocess==0.70.19
+ + nltk==3.9.4
+ + numpy==2.3.4
+ + openai==3.13.0
+ + packaging==26.3
+ + pandas==2.3.3
+ + pillow==12.3.0
+ + pluggy==1.6.0
+ + portalocker==3.2.0
+ + propcache==0.5.2
+ + protobuf==7.36.1
+ + psutil==7.2.2
+ + pyarrow==23.0.1
+ + pydantic==2.13.5
+ + pydantic-core==2.46.5
+ + pygments==2.21.0
+ + pyparsing==3.3.2
+ + pytest==9.0.3
+ + pytest-asyncio==1.3.0
+ + python-dateutil==2.9.0.post0
+ + python-docx==1.2.0
+ + python-dotenv==1.2.1
+ + pytz==2026.3.post1
+ + pyyaml==6.0.3
+ + qdrant-client==1.17.1
+ + rank-bm25==0.2.2
+ + regex==2026.9.10
+ + requests==2.32.5
+ + rich==15.0.0
+ + rouge-score==0.1.2
+ + safetensors==0.7.0
+ + scikit-learn==1.8.0
+ + scipy==1.17.0
+ + sentence-transformers==5.4.1
+ + shellingham==1.5.4
+ + six==1.17.0
+ + sniffio==1.3.1
+ + tenacity==9.1.2
+ + threadpoolctl==3.6.0
+ + tiktoken==0.12.0
+ + tokenizers==0.22.2
+ + tqdm==4.67.3
+ + transformers==5.6.2
+ + truststore==0.10.4
+ + typer==0.27.2
+ + typing-inspection==0.4.4
+ + tzdata==2026.4
+ + urllib3==2.7.0
+ + xxhash==4.0.1
+ + yarl==1.24.5
+2026-09-13T14:53:10Z start rest
+2026-09-13T14:53:10Z start pytest
+2026-09-13T14:53:10Z start e11
+2026-09-13T14:53:10Z start msc_test_s3
+2026-09-13T14:53:10Z start e1
+2026-09-13T14:53:10Z start addendum2
+2026-09-13T14:53:39Z done  e11
+2026-09-13T14:53:47Z done  e1
+2026-09-13T14:53:54Z done  msc_test_s3
+2026-09-13T14:54:47Z FAILED pytest (see out/pytest.log)
+2026-09-13T14:58:34Z done  addendum2
+2026-09-13T15:17:48Z done  rest
+2026-09-13T15:17:48Z compare
+[E1_ruler_qa1] manifest.json: DIFFERS .methods[0].first_stage: missing on one side
+[E1_ruler_qa1] per_question.jsonl: DIFFERS [70].top_components[0].P: 0.07023251187307708 vs 0.07023251187307707
+[E1_ruler_qa1] summary.json: equal
+[E1_ruler_qa1] FAIL (3 files, 2 problems)
+[E11_detective_qa] manifest.json: DIFFERS .methods[0].first_stage: missing on one side
+[E11_detective_qa] per_question.jsonl: identical bytes
+[E11_detective_qa] summary.json: equal
+[E11_detective_qa] FAIL (3 files, 1 problems)
+[addendum2] confirm_display_order.json: equal
+[addendum2] factconsolidation_sh_262k/order_best_first/manifest.json: equal
+[addendum2] factconsolidation_sh_262k/order_best_first/per_question.jsonl: identical bytes
+[addendum2] factconsolidation_sh_262k/order_best_first/summary.json: equal
+[addendum2] factconsolidation_sh_262k/order_best_last/manifest.json: equal
+[addendum2] factconsolidation_sh_262k/order_best_last/per_question.jsonl: identical bytes
+[addendum2] factconsolidation_sh_262k/order_best_last/summary.json: equal
+[addendum2] factconsolidation_sh_64k/order_best_first/manifest.json: equal
+[addendum2] factconsolidation_sh_64k/order_best_first/per_question.jsonl: identical bytes
+[addendum2] factconsolidation_sh_64k/order_best_first/summary.json: equal
+[addendum2] factconsolidation_sh_64k/order_best_last/manifest.json: equal
+[addendum2] factconsolidation_sh_64k/order_best_last/per_question.jsonl: identical bytes
+[addendum2] factconsolidation_sh_64k/order_best_last/summary.json: equal
+[addendum2] PASS (13 files, 0 problems)
+[addendum1_msc_test_s3] facts.jsonl: DIFFERS [3].components.R: 0.7736260461397126 vs 0.7736260461397125
+[addendum1_msc_test_s3] manifest.json: equal
+[addendum1_msc_test_s3] FAIL (2 files, 1 problems)
+[addendum1_confirm] confirm_primary.json: DIFFERS .primary_by_split.test[0].delong_p: 7.703624324824103e-05 vs 7.703624324824128e-05
+[addendum1_confirm] confirm_secondary_s4.json: DIFFERS .secondary.embed_0.8.auroc.fifo.delong.se: 0.0031837593597994294 vs 0.003183759359799428
+[addendum1_confirm] FAIL (2 files, 2 problems)
+[E5_judge] items.jsonl: identical bytes
+[E5_judge] manifest.json: equal
+[E5_judge] report.json: equal
+[E5_judge] PASS (3 files, 0 problems)
+[primary_table] primary.json: equal
+[primary_table] PASS (1 files, 0 problems)
+[exploratory_table] exploratory.json: equal
+[exploratory_table] PASS (1 files, 0 problems)
+[text] primary.md: identical (line endings aside)
+[text] exploratory.md: identical (line endings aside)
+[text] supplementary_information.md: identical (line endings aside)
+============ 18 failed, 387 passed, 3 warnings in 89.03s (0:01:29) =============
+      8 "api_calls":0
+2026-09-13T15:17:49Z AUDIT FINISHED

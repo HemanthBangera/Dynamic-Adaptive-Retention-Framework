@@ -1,26 +1,55 @@
 import aiohttp
 import asyncio
 import logging
+import re
 from typing import TYPE_CHECKING, Optional
 
 from config.settings import DARSConfig
+from core.llm_transport import get_default_transport
 
 if TYPE_CHECKING:
     from core.gemini_transport import GovernedGeminiTransport
 
 logger = logging.getLogger(__name__)
 
+# The judge prompt.  Kept at module level so the E5 reliability study
+# (benchmarks/dars_eval/run_judge.py) validates exactly the prompt the system uses.
+PROMPT_TEMPLATE = (
+    "You are the DARS Success Evaluator.\n"
+    "USER QUERY: {query}\n"
+    "AGENT RESPONSE: {response}\n"
+    "RETRIEVED MEMORIES: {memories}\n"
+    "EVALUATION TASK: Did the provided memories actually help the agent "
+    "answer the user query accurately?\n"
+    "Respond ONLY with 'YES' or 'NO'. No explanation."
+)
+
+# A verdict is a whole-word YES or NO at the start of the reply (optionally quoted).
+# "NOT SURE", "NONE" or "NOPE" are not verdicts, so they become NEUTRAL.
+_VERDICT = re.compile(r"^\s*['\"`*]*(YES|NO)\b")
+
+
+def build_judge_prompt(query: str, response: str, memories: str) -> str:
+    return PROMPT_TEMPLATE.format(query=query, response=response, memories=memories)
+
+
+def parse_verdict(raw: Optional[str]) -> str:
+    """'YES', 'NO', or 'NEUTRAL' for anything that is not a clear binary verdict."""
+    m = _VERDICT.match((raw or "").upper())
+    return m.group(1) if m else "NEUTRAL"
+
 
 class SuccessEvaluator:
     """
     The Judge — evaluates whether retrieved memories helped the agent answer correctly.
 
-    Uses Gemini API for binary YES/NO judgment. Returns NEUTRAL on any ambiguity
-    or failure to prevent poisoning the learning loop.
+    Uses an LLM (injected transport, default OpenAI transport, or Gemini REST)
+    for a binary YES/NO judgment. Returns NEUTRAL on any ambiguity or failure
+    to prevent poisoning the learning loop.
     """
 
     def __init__(self, timeout: float = None, transport: Optional["GovernedGeminiTransport"] = None):
-        self.transport = transport
+        self.transport = transport if transport is not None else get_default_transport("aux")
         self.timeout = timeout or DARSConfig.GEMINI_TIMEOUT
         self.max_retries = DARSConfig.GEMINI_MAX_RETRIES
         self.api_key = DARSConfig.GEMINI_API_KEY
@@ -73,24 +102,16 @@ class SuccessEvaluator:
 
     async def evaluate_success(self, query: str, response: str, memories: str) -> str:
         """
-        Uses Gemini to judge if the memories were helpful.
+        Uses the LLM judge to decide whether the memories were helpful.
         Returns 'YES', 'NO', or 'NEUTRAL' on failure/uncertainty.
 
         Raises RuntimeError when no valid API key is configured,
         preventing silent no-op learning.
         """
         if not self.api_key and self.transport is None:
-            raise RuntimeError("Gemini API key is required for Success Evaluator.")
+            raise RuntimeError("An LLM API key is required for Success Evaluator (Gemini or OpenAI).")
 
-        prompt = (
-            "You are the DARS Success Evaluator.\n"
-            f"USER QUERY: {query}\n"
-            f"AGENT RESPONSE: {response}\n"
-            f"RETRIEVED MEMORIES: {memories}\n"
-            "EVALUATION TASK: Did the provided memories actually help the agent "
-            "answer the user query accurately?\n"
-            "Respond ONLY with 'YES' or 'NO'. No explanation."
-        )
+        prompt = build_judge_prompt(query, response, memories)
 
         last_error = None
         for attempt in range(1 + self.max_retries):
@@ -101,16 +122,12 @@ class SuccessEvaluator:
                     logger.warning("Empty evaluator response (attempt %d).", attempt + 1)
                     continue
 
-                verdict = raw.upper().strip()
-                if verdict.startswith("YES"):
-                    return "YES"
-                if verdict.startswith("NO"):
-                    return "NO"
-
-                logger.warning(
-                    "Judge returned non-binary output: '%s'. Defaulting to NEUTRAL.", verdict[:60],
-                )
-                return "NEUTRAL"
+                verdict = parse_verdict(raw)
+                if verdict == "NEUTRAL":
+                    logger.warning(
+                        "Judge returned non-binary output: '%s'. Defaulting to NEUTRAL.", raw.strip()[:60],
+                    )
+                return verdict
 
             except asyncio.TimeoutError:
                 logger.warning("Gemini evaluator timeout (attempt %d).", attempt + 1)

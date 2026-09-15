@@ -1,0 +1,301 @@
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 5922.21it/s]
+C:\Users\Harsh\Desktop\minilunch\Dynamic-Adaptive-Retention-Framework\core\layer_d\embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  return self._model.get_sentence_embedding_dimension()
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 5648.19it/s]
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING:datasets.load:Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\ai-hyz___memory_agent_bench\default\0.0.0\7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:33:40 2026).
+WARNING:datasets.packaged_modules.cache.cache:Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\ai-hyz___memory_agent_bench\default\0.0.0\7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:33:40 2026).
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING:datasets.load:Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\ai-hyz___memory_agent_bench\default\0.0.0\7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:33:40 2026).
+WARNING:datasets.packaged_modules.cache.cache:Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\ai-hyz___memory_agent_bench\default\0.0.0\7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:33:40 2026).
+C:\Users\Harsh\Desktop\minilunch\Dynamic-Adaptive-Retention-Framework\core\layer_d\storage.py:227: UserWarning: Payload indexes have no effect in the local Qdrant. Please use server Qdrant if you need payload indexes.
+  self.client.create_payload_index(
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING:datasets.load:Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\ai-hyz___memory_agent_bench\default\0.0.0\7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:33:40 2026).
+WARNING:datasets.packaged_modules.cache.cache:Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\ai-hyz___memory_agent_bench\default\0.0.0\7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:33:40 2026).
+[transformers] Token indices sequence length is longer than the specified maximum sequence length for this model (261 > 256). Running this sequence through the model will result in indexing errors
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING:datasets.load:Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\ai-hyz___memory_agent_bench\default\0.0.0\7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:33:40 2026).
+WARNING:datasets.packaged_modules.cache.cache:Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\ai-hyz___memory_agent_bench\default\0.0.0\7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:33:40 2026).
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING:datasets.load:Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\ai-hyz___memory_agent_bench\default\0.0.0\7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:33:40 2026).
+WARNING:datasets.packaged_modules.cache.cache:Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\ai-hyz___memory_agent_bench\default\0.0.0\7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:33:40 2026).
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING:datasets.load:Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\ai-hyz___memory_agent_bench\default\0.0.0\7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:33:40 2026).
+WARNING:datasets.packaged_modules.cache.cache:Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\ai-hyz___memory_agent_bench\default\0.0.0\7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:33:40 2026).
+{
+ "items": 146,
+ "semantic_failure_rate": 0.0,
+ "shadow_vector_preserved_rate": 1.0,
+ "semantic": {
+  "n": 146,
+  "compression_ratio": {
+   "mean": 0.5597093741345295,
+   "ci_lo": 0.5191766228918648,
+   "ci_hi": 0.5974987925981142,
+   "n": 146
+  },
+  "answer_retention": {
+   "mean": 0.8333333333333334,
+   "ci_lo": 0.722204641350211,
+   "ci_hi": 0.9097222222222222,
+   "n": 96
+  },
+  "reader_original": {
+   "mean": 0.6438356164383562,
+   "ci_lo": 0.4477460259677224,
+   "ci_hi": 0.8117922256621946,
+   "n": 146
+  },
+  "reader_accuracy": {
+   "mean": 0.589041095890411,
+   "ci_lo": 0.3759163533834587,
+   "ci_hi": 0.7513536947351976,
+   "n": 146
+  },
+  "reader_delta_vs_original": {
+   "diff": -0.0547945205479452,
+   "ci_lo": -0.16327172378385313,
+   "ci_hi": 0.053691275167785234,
+   "p_value": 0.352,
+   "n": 146
+  },
+  "recall@10_kept_vector": {
+   "mean": 0.7945205479452054,
+   "ci_lo": 0.6666666666666666,
+   "ci_hi": 0.8895378909382519,
+   "n": 146
+  },
+  "recall@10_reembedded": {
+   "mean": 0.8698630136986302,
+   "ci_lo": 0.7868852459016393,
+   "ci_hi": 0.9338978458203495,
+   "n": 146
+  },
+  "kept_minus_reembedded": {
+   "diff": -0.07534246575342465,
+   "ci_lo": -0.16541353383458646,
+   "ci_hi": -0.00767482517482527,
+   "p_value": 0.033,
+   "n": 146
+  }
+ },
+ "llmlingua2": {
+  "n": 146,
+  "compression_ratio": {
+   "mean": 0.5066270725544014,
+   "ci_lo": 0.48481790345169506,
+   "ci_hi": 0.531570963959183,
+   "n": 146
+  },
+  "answer_retention": {
+   "mean": 0.8125,
+   "ci_lo": 0.7032818532818533,
+   "ci_hi": 0.9113924050632911,
+   "n": 96
+  },
+  "reader_original": {
+   "mean": 0.6438356164383562,
+   "ci_lo": 0.4477460259677224,
+   "ci_hi": 0.8117922256621946,
+   "n": 146
+  },
+  "reader_accuracy": {
+   "mean": 0.6027397260273972,
+   "ci_lo": 0.41044776119402987,
+   "ci_hi": 0.7616279069767442,
+   "n": 146
+  },
+  "reader_delta_vs_original": {
+   "diff": -0.0410958904109589,
+   "ci_lo": -0.12123525329632195,
+   "ci_hi": 0.037037037037037035,
+   "p_value": 0.348,
+   "n": 146
+  },
+  "recall@10_kept_vector": {
+   "mean": 0.7945205479452054,
+   "ci_lo": 0.6666666666666666,
+   "ci_hi": 0.8895378909382519,
+   "n": 146
+  },
+  "recall@10_reembedded": {
+   "mean": 0.863013698630137,
+   "ci_lo": 0.7572184087989724,
+   "ci_hi": 0.9527106384908398,
+   "n": 146
+  },
+  "kept_minus_reembedded": {
+   "diff": -0.0684931506849315,
+   "ci_lo": -0.2013490474128599,
+   "ci_hi": 0.05063291139240506,
+   "p_value": 0.281,
+   "n": 146
+  }
+ },
+ "extractive": {
+  "n": 146,
+  "compression_ratio": {
+   "mean": 0.4586947811101264,
+   "ci_lo": 0.43323425815493743,
+   "ci_hi": 0.4781307467680107,
+   "n": 146
+  },
+  "answer_retention": {
+   "mean": 0.5625,
+   "ci_lo": 0.3683771929824562,
+   "ci_hi": 0.6938835534213685,
+   "n": 96
+  },
+  "reader_original": {
+   "mean": 0.6438356164383562,
+   "ci_lo": 0.4477460259677224,
+   "ci_hi": 0.8117922256621946,
+   "n": 146
+  },
+  "reader_accuracy": {
+   "mean": 0.3835616438356164,
+   "ci_lo": 0.14631540546174696,
+   "ci_hi": 0.5755905946423314,
+   "n": 146
+  },
+  "reader_delta_vs_original": {
+   "diff": -0.2602739726027397,
+   "ci_lo": -0.4227720450281426,
+   "ci_hi": -0.11641855372285911,
+   "p_value": 0.0,
+   "n": 146
+  },
+  "recall@10_kept_vector": {
+   "mean": 0.7945205479452054,
+   "ci_lo": 0.6666666666666666,
+   "ci_hi": 0.8895378909382519,
+   "n": 146
+  },
+  "recall@10_reembedded": {
+   "mean": 0.636986301369863,
+   "ci_lo": 0.47863247863247865,
+   "ci_hi": 0.7790822705676419,
+   "n": 146
+  },
+  "kept_minus_reembedded": {
+   "diff": 0.15753424657534246,
+   "ci_lo": 0.031245147515527958,
+   "ci_hi": 0.28378596338273754,
+   "p_value": 0.015,
+   "n": 146
+  }
+ },
+ "llmlingua2@matched": {
+  "n": 146,
+  "compression_ratio": {
+   "mean": 0.5718942668707983,
+   "ci_lo": 0.5355140379441892,
+   "ci_hi": 0.6079209499113203,
+   "n": 146
+  },
+  "answer_retention": {
+   "mean": 0.875,
+   "ci_lo": 0.7796547856430708,
+   "ci_hi": 0.9444571865443424,
+   "n": 96
+  },
+  "reader_original": {
+   "mean": 0.6438356164383562,
+   "ci_lo": 0.4477460259677224,
+   "ci_hi": 0.8117922256621946,
+   "n": 146
+  },
+  "reader_accuracy": {
+   "mean": 0.5753424657534246,
+   "ci_lo": 0.38520122026377424,
+   "ci_hi": 0.7322483797178803,
+   "n": 146
+  },
+  "reader_delta_vs_original": {
+   "diff": -0.0684931506849315,
+   "ci_lo": -0.142032967032967,
+   "ci_hi": 0.0,
+   "p_value": 0.073,
+   "n": 146
+  },
+  "recall@10_kept_vector": {
+   "mean": 0.7945205479452054,
+   "ci_lo": 0.6666666666666666,
+   "ci_hi": 0.8895378909382519,
+   "n": 146
+  },
+  "recall@10_reembedded": {
+   "mean": 0.8493150684931506,
+   "ci_lo": 0.7452130463430705,
+   "ci_hi": 0.9383666480290745,
+   "n": 146
+  },
+  "kept_minus_reembedded": {
+   "diff": -0.0547945205479452,
+   "ci_lo": -0.17358987603305778,
+   "ci_hi": 0.05847953216374269,
+   "p_value": 0.369,
+   "n": 146
+  }
+ },
+ "extractive@matched": {
+  "n": 146,
+  "compression_ratio": {
+   "mean": 0.4775892030428985,
+   "ci_lo": 0.4412689172582766,
+   "ci_hi": 0.5115281099306594,
+   "n": 146
+  },
+  "answer_retention": {
+   "mean": 0.5416666666666666,
+   "ci_lo": 0.34998015873015875,
+   "ci_hi": 0.6730978260869565,
+   "n": 96
+  },
+  "reader_original": {
+   "mean": 0.6438356164383562,
+   "ci_lo": 0.4477460259677224,
+   "ci_hi": 0.8117922256621946,
+   "n": 146
+  },
+  "reader_accuracy": {
+   "mean": 0.3698630136986301,
+   "ci_lo": 0.1440375302663439,
+   "ci_hi": 0.5529411764705883,
+   "n": 146
+  },
+  "reader_delta_vs_original": {
+   "diff": -0.273972602739726,
+   "ci_lo": -0.432204756697649,
+   "ci_hi": -0.12877764127764132,
+   "p_value": 0.0,
+   "n": 146
+  },
+  "recall@10_kept_vector": {
+   "mean": 0.7945205479452054,
+   "ci_lo": 0.6666666666666666,
+   "ci_hi": 0.8895378909382519,
+   "n": 146
+  },
+  "recall@10_reembedded": {
+   "mean": 0.6643835616438356,
+   "ci_lo": 0.5227187924016282,
+   "ci_hi": 0.7880628881987576,
+   "n": 146
+  },
+  "kept_minus_reembedded": {
+   "diff": 0.13013698630136986,
+   "ci_lo": 0.020544450656975122,
+   "ci_hi": 0.24475524475524477,
+   "p_value": 0.023,
+   "n": 146
+  }
+ }
+}

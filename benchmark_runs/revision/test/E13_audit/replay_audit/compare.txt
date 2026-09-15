@@ -1,0 +1,41 @@
+[E1_ruler_qa1] manifest.json: DIFFERS .methods[0].first_stage: missing on one side
+[E1_ruler_qa1] per_question.jsonl: DIFFERS [70].top_components[0].P: 0.07023251187307708 vs 0.07023251187307707
+[E1_ruler_qa1] summary.json: equal
+[E1_ruler_qa1] FAIL (3 files, 2 problems)
+[E11_detective_qa] manifest.json: DIFFERS .methods[0].first_stage: missing on one side
+[E11_detective_qa] per_question.jsonl: identical bytes
+[E11_detective_qa] summary.json: equal
+[E11_detective_qa] FAIL (3 files, 1 problems)
+[addendum2] confirm_display_order.json: equal
+[addendum2] factconsolidation_sh_262k/order_best_first/manifest.json: equal
+[addendum2] factconsolidation_sh_262k/order_best_first/per_question.jsonl: identical bytes
+[addendum2] factconsolidation_sh_262k/order_best_first/summary.json: equal
+[addendum2] factconsolidation_sh_262k/order_best_last/manifest.json: equal
+[addendum2] factconsolidation_sh_262k/order_best_last/per_question.jsonl: identical bytes
+[addendum2] factconsolidation_sh_262k/order_best_last/summary.json: equal
+[addendum2] factconsolidation_sh_64k/order_best_first/manifest.json: equal
+[addendum2] factconsolidation_sh_64k/order_best_first/per_question.jsonl: identical bytes
+[addendum2] factconsolidation_sh_64k/order_best_first/summary.json: equal
+[addendum2] factconsolidation_sh_64k/order_best_last/manifest.json: equal
+[addendum2] factconsolidation_sh_64k/order_best_last/per_question.jsonl: identical bytes
+[addendum2] factconsolidation_sh_64k/order_best_last/summary.json: equal
+[addendum2] PASS (13 files, 0 problems)
+[addendum1_msc_test_s3] facts.jsonl: DIFFERS [3].components.R: 0.7736260461397126 vs 0.7736260461397125
+[addendum1_msc_test_s3] manifest.json: equal
+[addendum1_msc_test_s3] FAIL (2 files, 1 problems)
+[addendum1_confirm] confirm_primary.json: DIFFERS .primary_by_split.test[0].delong_p: 7.703624324824103e-05 vs 7.703624324824128e-05
+[addendum1_confirm] confirm_secondary_s4.json: DIFFERS .secondary.embed_0.8.auroc.fifo.delong.se: 0.0031837593597994294 vs 0.003183759359799428
+[addendum1_confirm] FAIL (2 files, 2 problems)
+[E5_judge] items.jsonl: identical bytes
+[E5_judge] manifest.json: equal
+[E5_judge] report.json: equal
+[E5_judge] PASS (3 files, 0 problems)
+[primary_table] primary.json: equal
+[primary_table] PASS (1 files, 0 problems)
+[exploratory_table] exploratory.json: equal
+[exploratory_table] PASS (1 files, 0 problems)
+[text] primary.md: identical (line endings aside)
+[text] exploratory.md: identical (line endings aside)
+[text] supplementary_information.md: identical (line endings aside)
+============ 18 failed, 387 passed, 3 warnings in 89.03s (0:01:29) =============
+      8 "api_calls":0

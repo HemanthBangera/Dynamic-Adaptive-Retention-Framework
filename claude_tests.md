@@ -734,7 +734,12 @@ A memory is **relevant** only if BOTH conditions hold. This prevents:
 
 Group B uses strategic weights to emphasize Utility and Predictive Value:
 
-| Component | Group A (Temporal) | Group B (Strategic) |
+> **Correction (2026-09-11 audit):** the Group A column below was never implemented.
+> `data/groupA` runs with the default weights from `config/settings.py`
+> (w_r = 0.30, w_f = 0.20, w_u = 0.30, w_p = 0.20). Only the Group B weights are
+> applied in code (`data/groupB/train.py: GROUPB_WEIGHTS`).
+
+| Component | Group A (Temporal) — as originally listed, not implemented | Group B (Strategic) |
 |-----------|-------------------|---------------------|
 | Recency ($\omega_r$) | 0.25 | **0.15** |
 | Frequency ($\omega_f$) | 0.25 | **0.15** |

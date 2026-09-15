@@ -1,0 +1,20 @@
+[Unit]
+Description=DARS pre-registered test phase (resumable, cache-backed)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework
+Environment=HOME=/home/ubuntu
+Environment=OMP_NUM_THREADS=4
+Environment=MKL_NUM_THREADS=4
+ExecStart=/bin/bash /home/ubuntu/dars/aws_scripts/run_loop.sh
+# on-abnormal: a crash or OOM kill restarts, but the deliberate exit 1 from the
+# three-barren-failures guard does NOT, so a real bug stays visible instead of looping.
+Restart=on-abnormal
+RestartSec=60
+
+[Install]
+WantedBy=multi-user.target

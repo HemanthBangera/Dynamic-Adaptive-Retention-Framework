@@ -1,0 +1,105 @@
+Using the latest cached version of the dataset since awawa-agi/alfworld-raw couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since awawa-agi/alfworld-raw couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\awawa-agi___alfworld-raw\default\0.0.0\196514ef2e1fcab9a61cd995ede36a0cbb1bc979 (last modified on Sat May  2 13:16:30 2026).
+WARNING Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\awawa-agi___alfworld-raw\default\0.0.0\196514ef2e1fcab9a61cd995ede36a0cbb1bc979 (last modified on Sat May  2 13:16:30 2026).
+Using the latest cached version of the dataset since awawa-agi/alfworld-raw couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since awawa-agi/alfworld-raw couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\awawa-agi___alfworld-raw\default\0.0.0\196514ef2e1fcab9a61cd995ede36a0cbb1bc979 (last modified on Sat May  2 13:16:30 2026).
+WARNING Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\awawa-agi___alfworld-raw\default\0.0.0\196514ef2e1fcab9a61cd995ede36a0cbb1bc979 (last modified on Sat May  2 13:16:30 2026).
+Using the latest cached version of the dataset since awawa-agi/alfworld-raw couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since awawa-agi/alfworld-raw couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\awawa-agi___alfworld-raw\default\0.0.0\196514ef2e1fcab9a61cd995ede36a0cbb1bc979 (last modified on Sat May  2 13:16:30 2026).
+WARNING Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\awawa-agi___alfworld-raw\default\0.0.0\196514ef2e1fcab9a61cd995ede36a0cbb1bc979 (last modified on Sat May  2 13:16:30 2026).
+INFO Loading embedding model: all-MiniLM-L6-v2 ...
+INFO No device provided, using cpu
+INFO Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 6330.05it/s]
+C:\Users\Harsh\Desktop\minilunch\Dynamic-Adaptive-Retention-Framework\core\layer_d\embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  return self._model.get_sentence_embedding_dimension()
+INFO Embedding model loaded. Dimension: 384
+INFO Embedding cache enabled at benchmark_runs/_emb_cache/minilm.sqlite (all-MiniLM-L6-v2|rev=1110a243fdf4706b3f48f1d95db1a4f5529b4d41|max_seq_length=256)
+C:\Users\Harsh\Desktop\minilunch\Dynamic-Adaptive-Retention-Framework\core\layer_d\storage.py:227: UserWarning: Payload indexes have no effect in the local Qdrant. Please use server Qdrant if you need payload indexes.
+  self.client.create_payload_index(
+INFO ALFWorld stream: 250/3198 tasks, 2052 memories (3s)
+INFO ALFWorld stream: 500/3198 tasks, 3988 memories (9s)
+INFO ALFWorld stream: 750/3198 tasks, 5912 memories (17s)
+INFO ALFWorld stream: 1000/3198 tasks, 7821 memories (27s)
+INFO ALFWorld stream: 1250/3198 tasks, 9712 memories (39s)
+INFO ALFWorld stream: 1500/3198 tasks, 11598 memories (50s)
+INFO ALFWorld stream: 1750/3198 tasks, 13483 memories (66s)
+INFO ALFWorld stream: 2000/3198 tasks, 15387 memories (83s)
+INFO ALFWorld stream: 2250/3198 tasks, 17291 memories (100s)
+INFO ALFWorld stream: 2500/3198 tasks, 19184 memories (120s)
+C:\Users\Harsh\Desktop\minilunch\Dynamic-Adaptive-Retention-Framework\core\layer_d\storage.py:430: UserWarning: Local mode is not recommended for collections with more than 20,000 points. Current collection contains 20007 points. Consider using Qdrant in Docker or Qdrant Cloud for better performance with large datasets.
+  self.client.upsert(
+INFO ALFWorld stream: 2750/3198 tasks, 21071 memories (139s)
+INFO ALFWorld stream: 3000/3198 tasks, 22972 memories (162s)
+{"stream_tasks": 3198, "dev_tasks": 355, "eval_sets": {"dev": 355, "test_in": 140, "test_out": 134}, "memories": 24464, "stream_stats": {"tasks": 3198, "adjudicated": 37822, "failure": 31014, "accesses": 62349, "success": 6808}, "elapsed_s": 185.92391800880432}
+INFO Loading embedding model: all-MiniLM-L6-v2 ...
+INFO No device provided, using cpu
+INFO Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 8262.03it/s]
+C:\Users\Harsh\Desktop\minilunch\Dynamic-Adaptive-Retention-Framework\core\layer_d\embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  return self._model.get_sentence_embedding_dimension()
+INFO Embedding model loaded. Dimension: 384
+INFO Embedding cache enabled at benchmark_runs/_emb_cache/minilm.sqlite (all-MiniLM-L6-v2|rev=1110a243fdf4706b3f48f1d95db1a4f5529b4d41|max_seq_length=256)
+split=test_in tasks=140 reachable=140
+  H3 selected     MRR=0.510 [0.455,0.566]  vs similarity +0.077 p=0.0096
+  H3 similarity   MRR=0.433 [0.382,0.486]
+  H3 count_prior  MRR=0.626 [0.569,0.684]  vs similarity +0.193 p=0
+  H3 default_rrf  MRR=0.427 [0.379,0.478]  vs similarity -0.006 p=0.761
+  H5 selected       harmful=0.096
+  H5 default        harmful=0.395  selected minus default: -0.299 p=0
+  H5 recency_lru    harmful=1.000  selected minus recency_lru: -0.904 p=0
+  H5 fifo           harmful=0.994  selected minus fifo: -0.898 p=0
+  H5 frequency_lfu  harmful=0.330  selected minus frequency_lfu: -0.233 p=0
+split=test_in tasks=140 reachable=140 mean_candidates=7.3
+  count_prior            MRR=0.626 [0.569,0.684] hit@1=0.436  vs sim p=0
+  frequency              MRR=0.511 [0.453,0.569] hit@1=0.321  vs sim p=0.0512
+  dars_rrf_minus_U       MRR=0.449 [0.400,0.501] hit@1=0.200  vs sim p=0.417
+  dars_wrrf_b0.5         MRR=0.438 [0.388,0.489] hit@1=0.193  vs sim p=0.572
+  dars_rrf_minus_R       MRR=0.437 [0.387,0.488] hit@1=0.193  vs sim p=0.84
+  utility                MRR=0.435 [0.381,0.490] hit@1=0.221  vs sim p=0.957
+  similarity             MRR=0.433 [0.382,0.486] hit@1=0.200
+  dars_blend_a0.5        MRR=0.433 [0.381,0.487] hit@1=0.214  vs sim p=0.977
+  dars_rrf               MRR=0.427 [0.379,0.478] hit@1=0.186  vs sim p=0.761
+  dars_rrf_minus_F       MRR=0.425 [0.375,0.477] hit@1=0.193  vs sim p=0.67
+  dars_score_only        MRR=0.421 [0.370,0.473] hit@1=0.193  vs sim p=0.672
+  dars_rrf_minus_P       MRR=0.418 [0.368,0.471] hit@1=0.193  vs sim p=0.34
+  keep 0.25: harmful deletion dars=0.762, recency_lru=1.000, fifo=1.000, frequency_lfu=0.635, random=0.833
+  keep 0.5: harmful deletion dars=0.395, recency_lru=1.000, fifo=0.994, frequency_lfu=0.330, random=0.612
+  keep 0.75: harmful deletion dars=0.227, recency_lru=0.990, fifo=0.958, frequency_lfu=0.185, random=0.208
+INFO Loading embedding model: all-MiniLM-L6-v2 ...
+INFO No device provided, using cpu
+INFO Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 8324.28it/s]
+C:\Users\Harsh\Desktop\minilunch\Dynamic-Adaptive-Retention-Framework\core\layer_d\embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  return self._model.get_sentence_embedding_dimension()
+INFO Embedding model loaded. Dimension: 384
+INFO Embedding cache enabled at benchmark_runs/_emb_cache/minilm.sqlite (all-MiniLM-L6-v2|rev=1110a243fdf4706b3f48f1d95db1a4f5529b4d41|max_seq_length=256)
+split=test_out tasks=134 reachable=131
+  H3 selected     MRR=0.485 [0.429,0.542]  vs similarity +0.116 p=0
+  H3 similarity   MRR=0.369 [0.326,0.413]
+  H3 count_prior  MRR=0.650 [0.589,0.710]  vs similarity +0.281 p=0
+  H3 default_rrf  MRR=0.392 [0.343,0.442]  vs similarity +0.023 p=0.223
+  H5 selected       harmful=0.138
+  H5 default        harmful=0.442  selected minus default: -0.303 p=0
+  H5 recency_lru    harmful=1.000  selected minus recency_lru: -0.862 p=0
+  H5 fifo           harmful=1.000  selected minus fifo: -0.862 p=0
+  H5 frequency_lfu  harmful=0.374  selected minus frequency_lfu: -0.236 p=0
+split=test_out tasks=134 reachable=131 mean_candidates=7.4
+  count_prior            MRR=0.650 [0.589,0.710] hit@1=0.489  vs sim p=0
+  frequency              MRR=0.469 [0.411,0.527] hit@1=0.260  vs sim p=0.0062
+  dars_rrf_minus_U       MRR=0.410 [0.362,0.458] hit@1=0.153  vs sim p=0.0308
+  utility                MRR=0.400 [0.344,0.457] hit@1=0.206  vs sim p=0.295
+  dars_rrf_minus_R       MRR=0.398 [0.349,0.447] hit@1=0.153  vs sim p=0.136
+  dars_rrf               MRR=0.392 [0.343,0.442] hit@1=0.153  vs sim p=0.223
+  dars_score_only        MRR=0.387 [0.337,0.437] hit@1=0.160  vs sim p=0.532
+  dars_rrf_minus_F       MRR=0.377 [0.327,0.428] hit@1=0.153  vs sim p=0.676
+  dars_blend_a0.5        MRR=0.370 [0.324,0.417] hit@1=0.122  vs sim p=0.956
+  dars_wrrf_b0.5         MRR=0.369 [0.330,0.412] hit@1=0.084  vs sim p=0.92
+  similarity             MRR=0.369 [0.326,0.413] hit@1=0.107
+  dars_rrf_minus_P       MRR=0.360 [0.314,0.409] hit@1=0.137  vs sim p=0.631
+  keep 0.25: harmful deletion dars=0.728, recency_lru=1.000, fifo=1.000, frequency_lfu=0.660, random=0.786
+  keep 0.5: harmful deletion dars=0.442, recency_lru=1.000, fifo=1.000, frequency_lfu=0.374, random=0.541
+  keep 0.75: harmful deletion dars=0.220, recency_lru=1.000, fifo=0.974, frequency_lfu=0.189, random=0.224

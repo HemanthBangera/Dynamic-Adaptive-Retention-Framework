@@ -1,0 +1,88 @@
+{
+ "experiment": "E10_alfworld",
+ "stream_tasks": 3198,
+ "dev_tasks": 355,
+ "eval_sets": {
+  "dev": 355,
+  "test_in": 140,
+  "test_out": 134
+ },
+ "memories": 24464,
+ "stream_stats": {
+  "tasks": 3198,
+  "adjudicated": 37818,
+  "failure": 31012,
+  "accesses": 62345,
+  "success": 6806
+ },
+ "weights": [
+  0.3,
+  0.2,
+  0.3,
+  0.2
+ ],
+ "decay_lambda_per_hour": 0.005,
+ "task_step_s": 3600.0,
+ "retrieval_k": 10,
+ "now": 1711512800.0,
+ "location_query": "Where can I find a <Object>?",
+ "goal": "ALFWorld preset",
+ "elapsed_s": 212.94655561447144,
+ "provenance": {
+  "preregistration_sha256": "a3dec99a953600c37efae8e572528c4f5059b95c87869460a0a4d1df3a965270",
+  "embedding_cache": {
+   "path": "benchmark_runs\\_emb_cache\\minilm.sqlite",
+   "namespace": "all-MiniLM-L6-v2|rev=1110a243fdf4706b3f48f1d95db1a4f5529b4d41|max_seq_length=256",
+   "hits": 31488,
+   "misses": 0
+  },
+  "created_unix": 1789279126.99514,
+  "git": {
+   "commit": "7b26e6bdb1bb1f97aa1753f27c0694a47ad288e7",
+   "branch": "improvement",
+   "dirty": true
+  },
+  "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "processor": "Intel64 Family 6 Model 154 Stepping 3, GenuineIntel",
+  "cpu_count": 16,
+  "packages": {
+   "qdrant-client": "1.17.1",
+   "sentence-transformers": "5.4.1",
+   "transformers": "5.6.2",
+   "torch": "2.11.0",
+   "numpy": "2.3.4",
+   "openai": "3.13.0",
+   "tiktoken": "0.12.0",
+   "nltk": "3.9.4",
+   "datasets": "4.8.5",
+   "rank-bm25": "0.2.2",
+   "rouge-score": "0.1.2"
+  },
+  "hf_snapshots": {
+   "memoryagentbench": "7ea066982b140a19337e17e60d45d4076e042faf",
+   "squad_v2": "3ffb306f725f7d2ce8394bc1873b24868140c412",
+   "hotpot_qa": "1908d6afbbead072334abe2965f91bd2709910ab",
+   "alfworld": "196514ef2e1fcab9a61cd995ede36a0cbb1bc979",
+   "msc": "78b67491c43823fc169cab827ab3f82805e0235b",
+   "embedding_model": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41"
+  },
+  "dars_settings": {
+   "weights": {
+    "w_r": 0.3,
+    "w_f": 0.2,
+    "w_u": 0.3,
+    "w_p": 0.2
+   },
+   "recency_decay_lambda_per_hour": 0.005,
+   "frequency_cap": 50,
+   "threshold_retain": 0.7,
+   "threshold_compress": 0.3,
+   "grace_period_seconds": 86400.0,
+   "embedding_model": "all-MiniLM-L6-v2",
+   "goal_description": "Effective action sequences, object locations, and task completion strategies for interactive household environments",
+   "openai_reader_model": "gpt-4o-mini-2024-07-18",
+   "openai_aux_model": "gpt-4.1-nano-2025-04-14"
+  }
+ }
+}

@@ -1,0 +1,9 @@
+# Files whose SHA-256 is recorded (the frozen pre-registration, both addenda, the addendum configuration and the
+# post-freeze deviations log) and all run artifacts must keep their exact bytes on every platform, so git must not
+# convert their line endings.
+experiments/preregistration*.md -text
+experiments/*.sha256 -text
+experiments/addendum_config.json -text
+experiments/deviations_post_freeze.md -text
+experiments/deviations_post_freeze.sha256.log -text
+benchmark_runs/** -text

@@ -1,0 +1,146 @@
+INFO Loading embedding model: all-MiniLM-L6-v2 ...
+INFO No device provided, using cpu
+INFO Loading embedding model: all-MiniLM-L6-v2 ...
+INFO No device provided, using cpu
+INFO Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+INFO Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 14731.41it/s]
+Loading weights: 100%|██████████| 103/103 [00:00<00:00, 10855.70it/s]
+/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  return self._model.get_sentence_embedding_dimension()
+INFO Embedding model loaded. Dimension: 384
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+WARNING Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  return self._model.get_sentence_embedding_dimension()
+INFO Embedding model loaded. Dimension: 384
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+WARNING Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/storage.py:227: UserWarning: Payload indexes have no effect in the local Qdrant. Please use server Qdrant if you need payload indexes.
+  self.client.create_payload_index(
+INFO Embedding cache enabled at benchmark_runs/_emb_cache/minilm.sqlite (all-MiniLM-L6-v2|rev=1110a243fdf4706b3f48f1d95db1a4f5529b4d41|max_seq_length=256)
+Batches:   0%|          | 0/37 [00:00<?, ?it/s]/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/storage.py:227: UserWarning: Payload indexes have no effect in the local Qdrant. Please use server Qdrant if you need payload indexes.
+  self.client.create_payload_index(
+INFO Embedding cache enabled at benchmark_runs/_emb_cache/minilm.sqlite (all-MiniLM-L6-v2|rev=1110a243fdf4706b3f48f1d95db1a4f5529b4d41|max_seq_length=256)
+INFO Loading embedding model: all-MiniLM-L6-v2 ...
+INFO No device provided, using cpu
+INFO Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 10313.78it/s]
+INFO Loading embedding model: all-MiniLM-L6-v2 ...
+INFO No device provided, using cpu
+INFO Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  return self._model.get_sentence_embedding_dimension()
+INFO Embedding model loaded. Dimension: 384
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+WARNING Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 21964.17it/s]
+/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  return self._model.get_sentence_embedding_dimension()
+INFO Embedding model loaded. Dimension: 384
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+WARNING Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+Batches:   3%|▎         | 1/37 [00:00<00:09,  3.72it/s]/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/storage.py:227: UserWarning: Payload indexes have no effect in the local Qdrant. Please use server Qdrant if you need payload indexes.
+  self.client.create_payload_index(
+INFO Embedding cache enabled at benchmark_runs/_emb_cache/minilm.sqlite (all-MiniLM-L6-v2|rev=1110a243fdf4706b3f48f1d95db1a4f5529b4d41|max_seq_length=256)
+/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/storage.py:227: UserWarning: Payload indexes have no effect in the local Qdrant. Please use server Qdrant if you need payload indexes.
+  self.client.create_payload_index(
+INFO Embedding cache enabled at benchmark_runs/_emb_cache/minilm.sqlite (all-MiniLM-L6-v2|rev=1110a243fdf4706b3f48f1d95db1a4f5529b4d41|max_seq_length=256)
+Batches:   0%|          | 0/37 [00:00<?, ?it/s]Batches:   5%|▌         | 2/37 [00:00<00:08,  4.18it/s]Batches:   3%|▎         | 1/37 [00:00<00:09,  3.65it/s]Batches:   8%|▊         | 3/37 [00:00<00:08,  4.22it/s]Batches:   5%|▌         | 2/37 [00:00<00:08,  4.07it/s]Batches:  11%|█         | 4/37 [00:00<00:07,  4.62it/s]Batches:  14%|█▎        | 5/37 [00:01<00:06,  4.79it/s]Batches:   8%|▊         | 3/37 [00:00<00:08,  4.19it/s]Batches:  11%|█         | 4/37 [00:00<00:07,  4.52it/s]Batches:  16%|█▌        | 6/37 [00:01<00:06,  4.76it/s]Batches:  19%|█▉        | 7/37 [00:01<00:05,  5.06it/s]Batches:  14%|█▎        | 5/37 [00:01<00:06,  4.78it/s]Batches:  22%|██▏       | 8/37 [00:01<00:05,  5.14it/s]Batches:  16%|█▌        | 6/37 [00:01<00:06,  4.79it/s]Batches:  24%|██▍       | 9/37 [00:01<00:05,  5.36it/s]Batches:  19%|█▉        | 7/37 [00:01<00:05,  5.03it/s]Batches:  27%|██▋       | 10/37 [00:02<00:04,  5.50it/s]Batches:  22%|██▏       | 8/37 [00:01<00:05,  5.18it/s]Batches:  30%|██▉       | 11/37 [00:02<00:04,  5.62it/s]Batches:  24%|██▍       | 9/37 [00:01<00:05,  5.45it/s]Batches:  27%|██▋       | 10/37 [00:02<00:04,  5.68it/s]Batches:  32%|███▏      | 12/37 [00:02<00:04,  5.43it/s]Batches:  35%|███▌      | 13/37 [00:02<00:04,  5.65it/s]Batches:  30%|██▉       | 11/37 [00:02<00:04,  5.82it/s]Batches:  38%|███▊      | 14/37 [00:02<00:04,  5.73it/s]Batches:  32%|███▏      | 12/37 [00:02<00:04,  5.72it/s]Batches:  41%|████      | 15/37 [00:02<00:03,  5.88it/s]Batches:  35%|███▌      | 13/37 [00:02<00:04,  5.90it/s]Batches:  38%|███▊      | 14/37 [00:02<00:03,  6.04it/s]Batches:  43%|████▎     | 16/37 [00:03<00:03,  5.77it/s]Batches:  41%|████      | 15/37 [00:02<00:03,  6.05it/s]Batches:  46%|████▌     | 17/37 [00:03<00:03,  5.94it/s]Batches:  43%|████▎     | 16/37 [00:02<00:03,  5.95it/s]Batches:  49%|████▊     | 18/37 [00:03<00:03,  5.93it/s]Batches:  46%|████▌     | 17/37 [00:03<00:03,  6.14it/s]Batches:  51%|█████▏    | 19/37 [00:03<00:02,  6.08it/s]Batches:  54%|█████▍    | 20/37 [00:03<00:02,  6.13it/s]Batches:  49%|████▊     | 18/37 [00:03<00:03,  6.11it/s]Batches:  51%|█████▏    | 19/37 [00:03<00:02,  6.33it/s]Batches:  57%|█████▋    | 21/37 [00:03<00:02,  6.27it/s]Batches:  54%|█████▍    | 20/37 [00:03<00:02,  6.45it/s]Batches:  59%|█████▉    | 22/37 [00:03<00:02,  6.42it/s]Batches:  57%|█████▋    | 21/37 [00:03<00:02,  6.61it/s]Batches:  62%|██████▏   | 23/37 [00:04<00:02,  6.49it/s]Batches:  59%|█████▉    | 22/37 [00:03<00:02,  6.71it/s]Batches:  65%|██████▍   | 24/37 [00:04<00:01,  6.56it/s]Batches:  62%|██████▏   | 23/37 [00:04<00:02,  6.65it/s]Batches:  68%|██████▊   | 25/37 [00:04<00:01,  6.52it/s]Batches:  65%|██████▍   | 24/37 [00:04<00:01,  6.64it/s]Batches:  70%|███████   | 26/37 [00:04<00:01,  6.43it/s]Batches:  68%|██████▊   | 25/37 [00:04<00:01,  6.71it/s]Batches:  73%|███████▎  | 27/37 [00:04<00:01,  6.67it/s]Batches:  70%|███████   | 26/37 [00:04<00:01,  6.59it/s]Batches:  76%|███████▌  | 28/37 [00:04<00:01,  6.71it/s]Batches:  73%|███████▎  | 27/37 [00:04<00:01,  6.85it/s]Batches:  78%|███████▊  | 29/37 [00:05<00:01,  6.89it/s]Batches:  81%|████████  | 30/37 [00:05<00:01,  6.94it/s]Batches:  76%|███████▌  | 28/37 [00:04<00:01,  6.64it/s]Batches:  84%|████████▍ | 31/37 [00:05<00:00,  6.93it/s]Batches:  78%|███████▊  | 29/37 [00:04<00:01,  6.61it/s]Batches:  86%|████████▋ | 32/37 [00:05<00:00,  6.95it/s]Batches:  81%|████████  | 30/37 [00:05<00:01,  6.63it/s]Batches:  89%|████████▉ | 33/37 [00:05<00:00,  6.97it/s]Batches:  84%|████████▍ | 31/37 [00:05<00:00,  6.64it/s]Batches:  92%|█████████▏| 34/37 [00:05<00:00,  6.97it/s]Batches:  86%|████████▋ | 32/37 [00:05<00:00,  6.72it/s]Batches:  95%|█████████▍| 35/37 [00:05<00:00,  6.98it/s]Batches:  89%|████████▉ | 33/37 [00:05<00:00,  6.76it/s]Batches:  97%|█████████▋| 36/37 [00:06<00:00,  7.12it/s]Batches: 100%|██████████| 37/37 [00:06<00:00,  6.13it/s]
+Batches:  92%|█████████▏| 34/37 [00:05<00:00,  6.71it/s]Batches:  95%|█████████▍| 35/37 [00:05<00:00,  6.74it/s]Batches: 100%|██████████| 37/37 [00:05<00:00,  9.60it/s]Batches: 100%|██████████| 37/37 [00:05<00:00,  6.23it/s]
+bm25|none|test                                recall=1.0 precedence=0.23809523809523808 precedence_rank=0.23809523809523808 reader_acc=0.8857142857142857
+bm25_dars_wrrf_k50_b0.5|none|test             recall=1.0 precedence=0.9523809523809523 precedence_rank=0.9523809523809523 reader_acc=0.0
+dars_rrf_k50|none|test                        recall=0.8571428571428571 precedence=0.8571428571428571 precedence_rank=0.9761904761904762 reader_acc=0.6
+similarity|none|test                          recall=1.0 precedence=0.35714285714285715 precedence_rank=0.35714285714285715 reader_acc=0.7571428571428571
+bm25|none|test                                recall=1.0 precedence=0.23809523809523808 precedence_rank=0.23809523809523808 reader_acc=0.0
+bm25_dars_wrrf_k50_b0.5|none|test             recall=1.0 precedence=0.9523809523809523 precedence_rank=0.9523809523809523 reader_acc=0.0
+dars_rrf_k50|none|test                        recall=0.8571428571428571 precedence=0.8571428571428571 precedence_rank=0.9761904761904762 reader_acc=0.0
+similarity|none|test                          recall=1.0 precedence=0.35714285714285715 precedence_rank=0.35714285714285715 reader_acc=0.0
+bm25|none|test                                recall=1.0 precedence=0.23809523809523808 precedence_rank=0.23809523809523808 reader_acc=0.0
+bm25_dars_wrrf_k50_b0.5|none|test             recall=1.0 precedence=0.9523809523809523 precedence_rank=0.9523809523809523 reader_acc=0.0
+dars_rrf_k50|none|test                        recall=0.9857142857142858 precedence=0.9761904761904762 precedence_rank=0.9761904761904762 reader_acc=0.0
+similarity|none|test                          recall=1.0 precedence=0.2619047619047619 precedence_rank=0.2619047619047619 reader_acc=0.0
+bm25|none|test                                recall=1.0 precedence=0.23809523809523808 precedence_rank=0.23809523809523808 reader_acc=0.0
+bm25_dars_wrrf_k50_b0.5|none|test             recall=1.0 precedence=0.9523809523809523 precedence_rank=0.9523809523809523 reader_acc=0.0
+dars_rrf_k50|none|test                        recall=0.9857142857142858 precedence=0.9761904761904762 precedence_rank=0.9761904761904762 reader_acc=0.0
+similarity|none|test                          recall=1.0 precedence=0.2619047619047619 precedence_rank=0.2619047619047619 reader_acc=0.0
+INFO Loading embedding model: all-MiniLM-L6-v2 ...
+INFO Loading embedding model: all-MiniLM-L6-v2 ...
+INFO Loading embedding model: all-MiniLM-L6-v2 ...
+INFO Loading embedding model: all-MiniLM-L6-v2 ...
+INFO No device provided, using cpu
+INFO No device provided, using cpu
+INFO No device provided, using cpu
+INFO No device provided, using cpu
+INFO Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+INFO Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+INFO Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+INFO Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 15335.39it/s]
+Loading weights: 100%|██████████| 103/103 [00:00<00:00, 41155.88it/s]
+Loading weights: 100%|██████████| 103/103 [00:00<00:00, 12702.91it/s]
+Loading weights: 100%|██████████| 103/103 [00:00<00:00, 20518.32it/s]
+/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  return self._model.get_sentence_embedding_dimension()
+INFO Embedding model loaded. Dimension: 384
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+WARNING Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  return self._model.get_sentence_embedding_dimension()
+/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  return self._model.get_sentence_embedding_dimension()
+INFO Embedding model loaded. Dimension: 384
+INFO Embedding model loaded. Dimension: 384
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+WARNING Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+WARNING Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  return self._model.get_sentence_embedding_dimension()
+INFO Embedding model loaded. Dimension: 384
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+WARNING Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/storage.py:227: UserWarning: Payload indexes have no effect in the local Qdrant. Please use server Qdrant if you need payload indexes.
+  self.client.create_payload_index(
+INFO Embedding cache enabled at benchmark_runs/_emb_cache/minilm.sqlite (all-MiniLM-L6-v2|rev=1110a243fdf4706b3f48f1d95db1a4f5529b4d41|max_seq_length=256)
+/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/storage.py:227: UserWarning: Payload indexes have no effect in the local Qdrant. Please use server Qdrant if you need payload indexes.
+  self.client.create_payload_index(
+INFO Embedding cache enabled at benchmark_runs/_emb_cache/minilm.sqlite (all-MiniLM-L6-v2|rev=1110a243fdf4706b3f48f1d95db1a4f5529b4d41|max_seq_length=256)
+/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/storage.py:227: UserWarning: Payload indexes have no effect in the local Qdrant. Please use server Qdrant if you need payload indexes.
+  self.client.create_payload_index(
+INFO Embedding cache enabled at benchmark_runs/_emb_cache/minilm.sqlite (all-MiniLM-L6-v2|rev=1110a243fdf4706b3f48f1d95db1a4f5529b4d41|max_seq_length=256)
+/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/storage.py:227: UserWarning: Payload indexes have no effect in the local Qdrant. Please use server Qdrant if you need payload indexes.
+  self.client.create_payload_index(
+INFO Embedding cache enabled at benchmark_runs/_emb_cache/minilm.sqlite (all-MiniLM-L6-v2|rev=1110a243fdf4706b3f48f1d95db1a4f5529b4d41|max_seq_length=256)
+bm25|none|test                                recall=0.08571428571428572 precedence=0.0 precedence_rank=0.16 reader_acc=0.0
+bm25_dars_wrrf_k50_b0.5|none|test             recall=0.11428571428571428 precedence=0.06 precedence_rank=0.26 reader_acc=0.0
+dars_rrf_k50|none|test                        recall=0.15714285714285714 precedence=0.18 precedence_rank=0.56 reader_acc=0.0
+similarity|none|test                          recall=0.12857142857142856 precedence=0.1 precedence_rank=0.44 reader_acc=0.0
+bm25|none|test                                recall=0.08571428571428572 precedence=0.0 precedence_rank=0.16 reader_acc=0.0
+bm25_dars_wrrf_k50_b0.5|none|test             recall=0.11428571428571428 precedence=0.06 precedence_rank=0.26 reader_acc=0.0
+dars_rrf_k50|none|test                        recall=0.15714285714285714 precedence=0.18 precedence_rank=0.56 reader_acc=0.0
+similarity|none|test                          recall=0.12857142857142856 precedence=0.1 precedence_rank=0.44 reader_acc=0.0
+bm25|none|test                                recall=0.08571428571428572 precedence=0.0 precedence_rank=0.16 reader_acc=0.07142857142857142
+bm25_dars_wrrf_k50_b0.5|none|test             recall=0.1 precedence=0.06 precedence_rank=0.28 reader_acc=0.0
+dars_rrf_k50|none|test                        recall=0.15714285714285714 precedence=0.18 precedence_rank=0.64 reader_acc=0.08571428571428572
+similarity|none|test                          recall=0.1 precedence=0.08 precedence_rank=0.54 reader_acc=0.04285714285714286
+bm25|none|test                                recall=0.08571428571428572 precedence=0.0 precedence_rank=0.16 reader_acc=0.0
+bm25_dars_wrrf_k50_b0.5|none|test             recall=0.1 precedence=0.06 precedence_rank=0.28 reader_acc=0.0
+dars_rrf_k50|none|test                        recall=0.15714285714285714 precedence=0.18 precedence_rank=0.64 reader_acc=0.0
+similarity|none|test                          recall=0.1 precedence=0.08 precedence_rank=0.54 reader_acc=0.0

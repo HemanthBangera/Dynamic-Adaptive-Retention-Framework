@@ -1,0 +1,36 @@
+2026-09-13T05:43:25Z collect lme_layera
+2026-09-13T05:44:29Z batch lme_layera (2 request files, 1889 requests)
+1889 request(s) still need answers (cached ones skipped)
+  submitted batch_6aa638451280819085c54770d2b683d9: 158 requests, ~899,639 tokens (in flight ~899,639)
+  submitted batch_6aa638477e3881908746cf9354b5a62e: 157 requests, ~898,023 tokens (in flight ~1,797,662)
+  batch_6aa638477e3881908746cf9354b5a62e: completed, cached 157
+  submitted batch_6aa638b16c148190873acc92fd7ba7d4: 157 requests, ~896,892 tokens (in flight ~1,796,531)
+  batch_6aa638451280819085c54770d2b683d9: completed, cached 158
+  submitted batch_6aa638dc33ec8190beca7c62a924feea: 157 requests, ~895,548 tokens (in flight ~1,792,440)
+  batch_6aa638b16c148190873acc92fd7ba7d4: completed, cached 157
+  submitted batch_6aa6391bede88190a5a57b149fb8b2cc: 156 requests, ~897,635 tokens (in flight ~1,793,183)
+  batch_6aa638dc33ec8190beca7c62a924feea: completed, cached 157
+  submitted batch_6aa63946df3c8190a229cdd36af6ed5a: 157 requests, ~895,737 tokens (in flight ~1,793,372)
+  batch_6aa63946df3c8190a229cdd36af6ed5a: completed, cached 157
+  submitted batch_6aa6399b7b84819090a2837e82312d07: 159 requests, ~898,978 tokens (in flight ~1,796,613)
+  batch_6aa6391bede88190a5a57b149fb8b2cc: completed, cached 156
+  submitted batch_6aa639b1fc2c8190b64c3e9415f08de9: 156 requests, ~895,197 tokens (in flight ~1,794,175)
+  batch_6aa6399b7b84819090a2837e82312d07: completed, cached 159
+  submitted batch_6aa63a0667788190b6387aff440e4275: 156 requests, ~895,406 tokens (in flight ~1,790,603)
+  batch_6aa639b1fc2c8190b64c3e9415f08de9: completed, cached 156
+  submitted batch_6aa63a313fb48190a608aa3b5a2ead47: 155 requests, ~895,297 tokens (in flight ~1,790,703)
+  batch_6aa63a0667788190b6387aff440e4275: completed, cached 156
+  submitted batch_6aa63a70c60c8190bf6d97b6b5b8f12d: 158 requests, ~897,267 tokens (in flight ~1,792,564)
+  batch_6aa63a313fb48190a608aa3b5a2ead47: completed, cached 155
+  submitted batch_6aa63a9c613481908de7e8b4de796e57: 156 requests, ~899,836 tokens (in flight ~1,797,103)
+  submitted batch_6aa63a9cd30881908f9b415026df25e7: 7 requests, ~39,933 tokens (in flight ~1,837,036)
+  batch_6aa63a70c60c8190bf6d97b6b5b8f12d: completed, cached 158
+  batch_6aa63a9cd30881908f9b415026df25e7: completed, cached 7
+  batch_6aa63a9c613481908de7e8b4de796e57: completed, cached 156
+batches=13 cached=1889 unusable=0 pending=0
+2026-09-13T05:56:19Z replay lme_layera
+2026-09-13T05:57:09Z lme_layera DONE
+2026-09-13T06:19:39Z batch lme_layera (1889 requests)
+0 request(s) still need answers (cached ones skipped)
+2026-09-13T06:19:39Z replay lme_layera
+2026-09-13T06:20:30Z lme_layera DONE

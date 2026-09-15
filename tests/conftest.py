@@ -1,33 +1,52 @@
 """
-DARS Test Infrastructure — Real API Fixtures
-=============================================
-All fixtures connect to real Qdrant and Gemini.  No mocks.
+DARS Test Infrastructure
+========================
+Vector store: an in-process local Qdrant store by default, so the suite runs
+without cloud credentials.  Set ``DARS_TEST_BACKEND=remote`` (with
+``QDRANT_URL`` / ``QDRANT_API_KEY``) to run the same tests against Qdrant Cloud.
 
-Tests use gemini-2.5-flash-lite (15 RPM / 1000 RPD free tier) to avoid
-rate-limit failures that plague gemini-2.5-flash (10 RPM / 250 RPD).
+LLM: live LLM tests use whichever provider is configured (see
+``core.llm_transport.resolve_provider``): OpenAI (``gpt-4.1-nano`` for the
+judge / compressor / reformulator) or Gemini (``gemini-2.5-flash-lite``).
+Responses are cached under ``benchmark_runs/_llm_cache/tests`` so re-runs are
+deterministic and free.  No network call happens at import time.
 """
 
 import os
 import time
 import uuid
+from pathlib import Path
+
 import pytest
+
 from config.settings import DARSConfig
+from core.llm_transport import resolve_provider
 from core.layer_d.storage import MemoryVault
 from core.layer_d.schema import MemoryPayload, MemoryPoint
 from core.layer_d.embedding import EmbeddingEngine
 
-# Use the cheapest model for tests to avoid rate-limit storms.
-TEST_GEMINI_MODEL = "gemini-2.5-flash-lite"
-os.environ["GEMINI_MODEL"] = TEST_GEMINI_MODEL
-DARSConfig.GEMINI_MODEL = TEST_GEMINI_MODEL
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+os.environ.setdefault(
+    "DARS_LLM_CACHE_DIR", str(PROJECT_ROOT / "benchmark_runs" / "_llm_cache" / "tests")
+)
 
+LLM_PROVIDER = resolve_provider()
+
+if LLM_PROVIDER == "gemini":
+    # Use the cheapest Gemini model for tests to avoid rate-limit storms.
+    TEST_GEMINI_MODEL = "gemini-2.5-flash-lite"
+    os.environ["GEMINI_MODEL"] = TEST_GEMINI_MODEL
+    DARSConfig.GEMINI_MODEL = TEST_GEMINI_MODEL
+
+_REMOTE = os.getenv("DARS_TEST_BACKEND", "").lower() == "remote" and bool(DARSConfig.QDRANT_URL)
+TEST_LOCATION = None if _REMOTE else ":memory:"
 TEST_COLLECTION = f"dars_test_{uuid.uuid4().hex[:8]}"
 
 
 @pytest.fixture(scope="session")
 def vault():
-    """Session-scoped MemoryVault pointing at a disposable test collection."""
-    v = MemoryVault(collection_name=TEST_COLLECTION)
+    """Session-scoped MemoryVault on a disposable collection (local store by default)."""
+    v = MemoryVault(collection_name=TEST_COLLECTION, location=TEST_LOCATION)
     v.initialize_collection(recreate=True)
     yield v
     try:
@@ -59,8 +78,10 @@ def _clean_collection(vault, request):
 
 @pytest.fixture(autouse=True)
 def _gemini_rate_limit_pause(request):
-    """4-second pause after every Gemini test to stay within 15 RPM."""
+    """Gemini free tier only: 4-second pause after async tests to stay within 15 RPM."""
     yield
+    if LLM_PROVIDER != "gemini":
+        return
     markers = [m.name for m in request.node.iter_markers()]
     if "asyncio" in markers:
         time.sleep(4)
@@ -74,45 +95,10 @@ def _seed_memory(vault: MemoryVault, text: str, **overrides) -> str:
     return pid
 
 
-# ── Gemini reachability probe ────────────────────────────────────────────────
-
-def _gemini_reachable() -> bool:
-    cfg = DARSConfig()
-    if not cfg.GEMINI_API_KEY:
-        return False
-
-    import urllib.request
-    import urllib.error
-    import json as _json
-
-    url = (
-        f"https://generativelanguage.googleapis.com/v1beta/models/"
-        f"{TEST_GEMINI_MODEL}:generateContent"
-    )
-    body = _json.dumps({"contents": [{"parts": [{"text": "Reply OK"}]}]}).encode()
-    req = urllib.request.Request(
-        url, data=body, method="POST",
-        headers={
-            "Content-Type": "application/json",
-            "X-goog-api-key": cfg.GEMINI_API_KEY,
-        },
-    )
-    for attempt in range(3):
-        try:
-            with urllib.request.urlopen(req, timeout=20) as resp:
-                return resp.status == 200
-        except urllib.error.HTTPError as e:
-            if e.code in (429, 503):
-                import time as _t
-                _t.sleep(3 * (attempt + 1))
-                continue
-            return False
-        except Exception:
-            return False
-    return True  # 429/503 after retries means API is reachable, just busy
-
-
-requires_gemini = pytest.mark.skipif(
-    not _gemini_reachable(),
-    reason="Gemini API unreachable or key invalid — skipping live LLM tests.",
+# Live-LLM tests run only when a provider is configured (decided by key presence).
+requires_llm = pytest.mark.skipif(
+    LLM_PROVIDER == "none",
+    reason="No LLM credentials configured (OpenAI or Gemini) — skipping live LLM tests.",
 )
+# Backwards-compatible name used by the existing test modules.
+requires_gemini = requires_llm

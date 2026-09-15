@@ -1,0 +1,68 @@
+{
+ "source_dev": "experiments/preregistration.md section 11",
+ "rows": [
+  {
+   "selection": "H2 FC-sh rank precedence (dars_rrf_k50, lambda 0.001)",
+   "dev": 0.952,
+   "test": 0.9761904761904762,
+   "test_minus_dev": 0.024190476190476207,
+   "test_worse_than_dev": false
+  },
+  {
+   "selection": "H2 FC-mh rank precedence",
+   "dev": 0.611,
+   "test": 0.64,
+   "test_minus_dev": 0.029000000000000026,
+   "test_worse_than_dev": false
+  },
+  {
+   "selection": "H3 ALFWorld location MRR (test in)",
+   "dev": 0.502,
+   "test": 0.5099860853432283,
+   "test_minus_dev": 0.00798608534322831,
+   "test_worse_than_dev": false
+  },
+  {
+   "selection": "H3 ALFWorld location MRR (test out)",
+   "dev": 0.502,
+   "test": 0.4845331725102718,
+   "test_minus_dev": -0.01746682748972822,
+   "test_worse_than_dev": true
+  },
+  {
+   "selection": "H4 MSC AUROC",
+   "dev": 0.894,
+   "test": 0.890635766021679,
+   "test_minus_dev": -0.003364233978320974,
+   "test_worse_than_dev": true
+  },
+  {
+   "selection": "H5 MSC harmful deletion",
+   "dev": 0.102,
+   "test": 0.0944414655719934,
+   "test_minus_dev": -0.007558534428006594,
+   "test_worse_than_dev": false
+  },
+  {
+   "selection": "H5 ALFWorld harmful deletion (test in)",
+   "dev": 0.09,
+   "test": 0.09642857142857142,
+   "test_minus_dev": 0.006428571428571422,
+   "test_worse_than_dev": true
+  },
+  {
+   "selection": "H5 ALFWorld harmful deletion (test out)",
+   "dev": 0.09,
+   "test": 0.13805970149253732,
+   "test_minus_dev": 0.04805970149253733,
+   "test_worse_than_dev": true
+  },
+  {
+   "selection": "H5 LongMemEval harmful deletion",
+   "dev": 0.05,
+   "test": 0.07132352941176472,
+   "test_minus_dev": 0.021323529411764713,
+   "test_worse_than_dev": true
+  }
+ ]
+}

@@ -42,9 +42,13 @@ def _cosine(a, b) -> float:
 class GroupATrainer:
     """Runs the full Group A training pipeline on extracted dialogues."""
 
-    def __init__(self, collection_name: Optional[str] = None):
+    def __init__(
+        self,
+        collection_name: Optional[str] = None,
+        vault: Optional[MemoryVault] = None,
+    ):
         self.collection_name = collection_name or f"{COLLECTION_PREFIX}_{int(time.time())}"
-        self.vault = MemoryVault(collection_name=self.collection_name)
+        self.vault = vault or MemoryVault(collection_name=self.collection_name)
         self.embedder = EmbeddingEngine()
         self.vault.initialize_collection(recreate=True)
         self._pid_map: Dict[str, str] = {}
@@ -72,10 +76,10 @@ class GroupATrainer:
     def _simulate_time_jump(self, hours: float = SESSION_GAP_HOURS):
         """Shift all memories' recency backward to simulate passage of time."""
         shift = hours * 3600
-        all_mems = self.vault.get_all_memories(limit=500)
-        for mem in all_mems:
-            new_recency = mem.payload.recency - shift
-            self.vault.patch_payload(mem.point_id, {"recency": new_recency})
+        for chunk, _next in self.vault.get_all_memories(limit=256, scroll_yield=True):
+            for mem in chunk:
+                new_recency = mem.payload.recency - shift
+                self.vault.patch_payload(mem.point_id, {"recency": new_recency})
 
     def _run_feedback(
         self,

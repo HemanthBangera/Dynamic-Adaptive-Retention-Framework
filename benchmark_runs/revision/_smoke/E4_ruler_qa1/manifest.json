@@ -1,0 +1,204 @@
+{
+ "experiment": "E4_p_variants",
+ "sources": [
+  "ruler_qa1_197K"
+ ],
+ "split": "dev",
+ "budgets": [
+  256,
+  512,
+  1024,
+  2048,
+  5120
+ ],
+ "variants": [
+  "none",
+  "as_submitted",
+  "task",
+  "dynamic",
+  "oracle"
+ ],
+ "window": 10,
+ "fetch_k": 50,
+ "methods": [
+  {
+   "name": "dars_rrf_k15",
+   "kind": "dars",
+   "rank_mode": "rrf",
+   "weights": [
+    0.3,
+    0.2,
+    0.3,
+    0.2
+   ],
+   "fetch_k": 15,
+   "rrf_k": 60,
+   "beta_sim": 1.0,
+   "beta_dars": 1.0,
+   "alpha": 0.5,
+   "seed": 0
+  },
+  {
+   "name": "dars_rrf_k50",
+   "kind": "dars",
+   "rank_mode": "rrf",
+   "weights": [
+    0.3,
+    0.2,
+    0.3,
+    0.2
+   ],
+   "fetch_k": 50,
+   "rrf_k": 60,
+   "beta_sim": 1.0,
+   "beta_dars": 1.0,
+   "alpha": 0.5,
+   "seed": 0
+  },
+  {
+   "name": "dars_wrrf_k50_b0.5",
+   "kind": "dars",
+   "rank_mode": "wrrf",
+   "weights": [
+    0.3,
+    0.2,
+    0.3,
+    0.2
+   ],
+   "fetch_k": 50,
+   "rrf_k": 60,
+   "beta_sim": 1.0,
+   "beta_dars": 0.5,
+   "alpha": 0.5,
+   "seed": 0
+  },
+  {
+   "name": "dars_blend_a0.5",
+   "kind": "dars",
+   "rank_mode": "blend",
+   "weights": [
+    0.3,
+    0.2,
+    0.3,
+    0.2
+   ],
+   "fetch_k": 50,
+   "rrf_k": 60,
+   "beta_sim": 1.0,
+   "beta_dars": 1.0,
+   "alpha": 0.5,
+   "seed": 0
+  },
+  {
+   "name": "dars_blend_a0.8",
+   "kind": "dars",
+   "rank_mode": "blend",
+   "weights": [
+    0.3,
+    0.2,
+    0.3,
+    0.2
+   ],
+   "fetch_k": 50,
+   "rrf_k": 60,
+   "beta_sim": 1.0,
+   "beta_dars": 1.0,
+   "alpha": 0.8,
+   "seed": 0
+  }
+ ],
+ "static_time": 1700000000.0,
+ "task_goals": {
+  "eventqa": "Events, character actions and plot developments in the storyline of a novel",
+  "ruler_qa": "Encyclopedic passages that state facts answering factual questions",
+  "longmemeval": "Personal information, preferences, plans and events a user shared in past conversations with an assistant",
+  "factconsolidation": "Current factual attributes of entities, where newer facts supersede older ones"
+ },
+ "p_spread": [
+  {
+   "source": "ruler_qa1_197K",
+   "context": 0,
+   "units": 1489,
+   "questions": 30,
+   "fallbacks": {},
+   "none": {
+    "store_mean": 0.0,
+    "store_std": 0.0,
+    "store_max": 0.0
+   },
+   "as_submitted": {
+    "store_mean": 0.02332635619192828,
+    "store_std": 0.03971859956758005,
+    "store_max": 0.25844444497320906
+   },
+   "task": {
+    "store_mean": 0.07703586199935974,
+    "store_std": 0.06581322258793602,
+    "store_max": 0.3274221182586129
+   },
+   "dynamic": {
+    "store_std_mean_over_questions": 0.10188983875356375
+   },
+   "oracle": {
+    "store_std_mean_over_questions": 0.10251105727887316
+   }
+  }
+ ],
+ "elapsed_s": 148.19868969917297,
+ "provenance": {
+  "embedding_cache": {
+   "path": "benchmark_runs\\_emb_cache\\minilm.sqlite",
+   "namespace": "all-MiniLM-L6-v2|rev=1110a243fdf4706b3f48f1d95db1a4f5529b4d41|max_seq_length=256",
+   "hits": 0,
+   "misses": 1591
+  },
+  "created_unix": 1789131677.1390636,
+  "git": {
+   "commit": "f16c8c9c85932e54e9ff46b8c7715b4c7a303d26",
+   "branch": "revision/scirep-r1",
+   "dirty": true
+  },
+  "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "processor": "Intel64 Family 6 Model 154 Stepping 3, GenuineIntel",
+  "cpu_count": 16,
+  "packages": {
+   "qdrant-client": "1.17.1",
+   "sentence-transformers": "5.4.1",
+   "transformers": "5.6.2",
+   "torch": "2.11.0",
+   "numpy": "2.3.4",
+   "openai": "3.13.0",
+   "tiktoken": "0.12.0",
+   "nltk": "3.9.4",
+   "datasets": "4.8.5",
+   "rank-bm25": "0.2.2",
+   "rouge-score": "0.1.2"
+  },
+  "hf_snapshots": {
+   "memoryagentbench": "7ea066982b140a19337e17e60d45d4076e042faf",
+   "squad_v2": "3ffb306f725f7d2ce8394bc1873b24868140c412",
+   "hotpot_qa": "1908d6afbbead072334abe2965f91bd2709910ab",
+   "alfworld": "196514ef2e1fcab9a61cd995ede36a0cbb1bc979",
+   "msc": "78b67491c43823fc169cab827ab3f82805e0235b",
+   "embedding_model": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41"
+  },
+  "dars_settings": {
+   "weights": {
+    "w_r": 0.3,
+    "w_f": 0.2,
+    "w_u": 0.3,
+    "w_p": 0.2
+   },
+   "recency_decay_lambda_per_hour": 0.005,
+   "frequency_cap": 50,
+   "threshold_retain": 0.7,
+   "threshold_compress": 0.3,
+   "grace_period_seconds": 86400.0,
+   "embedding_model": "all-MiniLM-L6-v2",
+   "goal_description": "Effective action sequences, object locations, and task completion strategies for interactive household environments",
+   "openai_reader_model": "gpt-4o-mini-2024-07-18",
+   "openai_aux_model": "gpt-4.1-nano-2025-04-14"
+  }
+ }
+}

@@ -1,0 +1,246 @@
+{
+ "archive_sha256": "3568685e55a8f5b5d7512135b57d4acda0bbe89cbb881a43ad4b4de8f7158ca1",
+ "archive_files_unpacked": 138862,
+ "environment": "fresh directory and virtual environment (uv; Python 3.14.3; torch 2.11.0 CPU; experiments/requirements-vm.txt); network blocked through an unreachable proxy; placeholder API key; DARS_LLM_OFFLINE=1 for the replays",
+ "archive_checks": {
+  "llm_cache_records": 137802,
+  "unredacted_cache_records": 0,
+  "blocking_secret_findings": 0,
+  "placeholder_secret_findings": 6,
+  "novel_context_overlap_files": 73,
+  "novel_context_longest_words": 26,
+  "novel_context_files_over_50_words": 0
+ },
+ "replayed_manifests_api_calls": [
+  "8 \"api_calls\":0"
+ ],
+ "stages": {
+  "E1_ruler_qa1": {
+   "manifest.json": "DIFFERS .methods[0].first_stage: missing on one side",
+   "per_question.jsonl": "DIFFERS [70].top_components[0].P: 0.07023251187307708 vs 0.07023251187307707",
+   "summary.json": "equal"
+  },
+  "E11_detective_qa": {
+   "manifest.json": "DIFFERS .methods[0].first_stage: missing on one side",
+   "per_question.jsonl": "identical bytes",
+   "summary.json": "equal"
+  },
+  "addendum2": {
+   "confirm_display_order.json": "equal",
+   "factconsolidation_sh_262k/order_best_first/manifest.json": "equal",
+   "factconsolidation_sh_262k/order_best_first/per_question.jsonl": "identical bytes",
+   "factconsolidation_sh_262k/order_best_first/summary.json": "equal",
+   "factconsolidation_sh_262k/order_best_last/manifest.json": "equal",
+   "factconsolidation_sh_262k/order_best_last/per_question.jsonl": "identical bytes",
+   "factconsolidation_sh_262k/order_best_last/summary.json": "equal",
+   "factconsolidation_sh_64k/order_best_first/manifest.json": "equal",
+   "factconsolidation_sh_64k/order_best_first/per_question.jsonl": "identical bytes",
+   "factconsolidation_sh_64k/order_best_first/summary.json": "equal",
+   "factconsolidation_sh_64k/order_best_last/manifest.json": "equal",
+   "factconsolidation_sh_64k/order_best_last/per_question.jsonl": "identical bytes",
+   "factconsolidation_sh_64k/order_best_last/summary.json": "equal"
+  },
+  "addendum1_msc_test_s3": {
+   "facts.jsonl": "DIFFERS [3].components.R: 0.7736260461397126 vs 0.7736260461397125",
+   "manifest.json": "equal"
+  },
+  "addendum1_confirm": {
+   "confirm_primary.json": "DIFFERS .primary_by_split.test[0].delong_p: 7.703624324824103e-05 vs 7.703624324824128e-05",
+   "confirm_secondary_s4.json": "DIFFERS .secondary.embed_0.8.auroc.fifo.delong.se: 0.0031837593597994294 vs 0.003183759359799428"
+  },
+  "E5_judge": {
+   "items.jsonl": "identical bytes",
+   "manifest.json": "equal",
+   "report.json": "equal"
+  },
+  "primary_table": {
+   "primary.json": "equal"
+  },
+  "exploratory_table": {
+   "exploratory.json": "equal"
+  },
+  "text": {
+   "primary.md": "identical (line endings aside)",
+   "exploratory.md": "identical (line endings aside)",
+   "supplementary_information.md": "identical (line endings aside)"
+  }
+ },
+ "numeric_differences": {
+  "E1_per_question": {
+   "leaves": 127381,
+   "numeric_diffs": 1708,
+   "max_abs": 6.456630519124928e-08,
+   "max_rel": 9.257350534860796e-08,
+   "non_numeric_count": 1026,
+   "non_numeric": [
+    "[280].reader[0].cached: 'False' vs 'True'",
+    "[280].reader[1].cached: 'False' vs 'True'",
+    "[280].reader[2].cached: 'False' vs 'True'",
+    "[281].reader[0].cached: 'False' vs 'True'",
+    "[281].reader[1].cached: 'False' vs 'True'"
+   ],
+   "structural_count": 0,
+   "structural": []
+  },
+  "E1_manifest": {
+   "leaves": 153,
+   "numeric_diffs": 0,
+   "max_abs": 0.0,
+   "max_rel": 0.0,
+   "non_numeric_count": 0,
+   "non_numeric": [],
+   "structural_count": 9,
+   "structural": [
+    ".methods[0].first_stage: present on one side only",
+    ".methods[1].first_stage: present on one side only",
+    ".methods[2].first_stage: present on one side only",
+    ".methods[3].first_stage: present on one side only",
+    ".methods[4].first_stage: present on one side only"
+   ]
+  },
+  "E11_manifest": {
+   "leaves": 155,
+   "numeric_diffs": 0,
+   "max_abs": 0.0,
+   "max_rel": 0.0,
+   "non_numeric_count": 0,
+   "non_numeric": [],
+   "structural_count": 4,
+   "structural": [
+    ".methods[0].first_stage: present on one side only",
+    ".methods[1].first_stage: present on one side only",
+    ".methods[2].first_stage: present on one side only",
+    ".methods[3].first_stage: present on one side only"
+   ]
+  },
+  "msc_test_s3_facts": {
+   "leaves": 137936,
+   "numeric_diffs": 3022,
+   "max_abs": 2,
+   "max_rel": 0.1,
+   "non_numeric_count": 0,
+   "non_numeric": [],
+   "structural_count": 0,
+   "structural": []
+  },
+  "confirm_primary": {
+   "leaves": 2084,
+   "numeric_diffs": 91,
+   "max_abs": 6.906199642164879e-07,
+   "max_rel": 1.6970591398790393e-06,
+   "non_numeric_count": 0,
+   "non_numeric": [],
+   "structural_count": 0,
+   "structural": []
+  },
+  "confirm_secondary_s4": {
+   "leaves": 1550,
+   "numeric_diffs": 77,
+   "max_abs": 2.500072955324839e-07,
+   "max_rel": 4.3448959076352907e-07,
+   "non_numeric_count": 0,
+   "non_numeric": [],
+   "structural_count": 0,
+   "structural": []
+  }
+ },
+ "pytest": {
+  "no_key_network_blocked": {
+   "passed": 378,
+   "skipped": 27
+  },
+  "placeholder_key_archived_cache_network_blocked": {
+   "passed": 405
+  },
+  "first_run_with_offline_mode_forced_for_all_tests": {
+   "failed": 18,
+   "passed": 387
+  },
+  "note": "The first run exported DARS_LLM_OFFLINE=1 for the whole suite, which contradicts 18 transport unit tests that exercise the online path against a mocked API; they pass without that override. One LLM-backed test lacked its requires_llm marker and failed without a key; the marker was added."
+ },
+ "tie_and_ranking_checks": {
+  "msc_facts_with_count_differences": 2,
+  "msc_count_difference_dialogues": [
+   "test:301"
+  ],
+  "msc_write_or_label_fields_differing": 0,
+  "e1_non_numeric_difference_fields": {
+   ".reader[].cached": 1026
+  },
+  "e1_ranked_lists_identical": true
+ },
+ "validation_s3_checks": {
+  "facts": [
+   9819,
+   9819
+  ],
+  "facts_with_count_differences": 0,
+  "dialogues": [],
+  "write_or_label_fields_differing": 0,
+  "component_values_differing": 5379,
+  "component_max_abs": 1.1102230246251565e-16
+ },
+ "numeric_differences_by_field": {
+  "E1_per_question": {
+   "[].top_components[].P": {
+    "count": 1022,
+    "max_abs": 5.551115123125783e-17
+   },
+   "[].top_components[].sim": {
+    "count": 686,
+    "max_abs": 6.456630519124928e-08
+   }
+  },
+  "msc_test_s3_facts": {
+   "[].components.R": {
+    "count": 119,
+    "max_abs": 1.1102230246251565e-16
+   },
+   "[].components.P": {
+    "count": 2895,
+    "max_abs": 1.1102230246251565e-16
+   },
+   "[].components.F": {
+    "count": 2,
+    "max_abs": 0.025454704227978686
+   },
+   "[].components.U": {
+    "count": 2,
+    "max_abs": 0.00454545454545463
+   },
+   "[].frequency": {
+    "count": 2,
+    "max_abs": 2
+   },
+   "[].success": {
+    "count": 2,
+    "max_abs": 2
+   }
+  }
+ },
+ "final_archive_check": {
+  "archive_sha256": "fb6178de151f99a455b5ddac070fda26eec7c7595103bf9b855b35e87956f4a5",
+  "checksum_mismatches": 0,
+  "pytest_placeholder_key_archived_cache": {
+   "passed": 407
+  },
+  "pytest_no_key": {
+   "passed": 380,
+   "skipped": 27
+  },
+  "si_regenerated_identically": true
+ },
+ "confirm_from_replayed_data": {
+  "facts_archived": 15251,
+  "facts_replayed": 15251,
+  "confirmed_archived": 11,
+  "confirmed_replayed": 11,
+  "family_size": 11,
+  "decisions_changed": [],
+  "values_changed_at_3dp": [
+   "test:C1a.ci_lo 0.02346 -> 0.02353"
+  ],
+  "max_abs_difference": 0.00015572643415551202,
+  "summary": "11 of 11 comparisons confirmed, as archived (11); 0 decisions changed overall or per split; largest difference in any AUROC, effect, interval bound or Holm p 1.6e-04; 1 values change at three decimals."
+ }
+}

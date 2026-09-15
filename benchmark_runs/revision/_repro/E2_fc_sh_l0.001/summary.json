@@ -1,0 +1,124 @@
+{
+ "dars_rrf_k50|none|dev": {
+  "group_recall": {
+   "mean": 0.8333333333333334,
+   "ci_lo": 0.7,
+   "ci_hi": 0.9341666666666669,
+   "n": 30
+  },
+  "all_covered": {
+   "mean": 0.8333333333333334,
+   "ci_lo": 0.7,
+   "ci_hi": 0.9341666666666669,
+   "n": 30
+  },
+  "mrr": {
+   "mean": 0.4084656084656084,
+   "ci_lo": 0.29076521164021163,
+   "ci_hi": 0.5335410052910053,
+   "n": 30
+  },
+  "ndcg": {
+   "mean": 0.5093919071704142,
+   "ci_lo": 0.3975604682339001,
+   "ci_hi": 0.624376094188422,
+   "n": 30
+  },
+  "precedence": {
+   "mean": 0.9047619047619048,
+   "ci_lo": 0.8083333333333336,
+   "ci_hi": 1.0,
+   "n": 21
+  },
+  "precedence_rank": {
+   "mean": 0.9523809523809523,
+   "ci_lo": 0.8571428571428571,
+   "ci_hi": 1.0,
+   "n": 21
+  },
+  "dyn_std_R": {
+   "mean": 0.2365764332218435,
+   "ci_lo": 0.22837837673474942,
+   "ci_hi": 0.24486542938955375,
+   "n": 30
+  },
+  "dyn_std_F": {
+   "mean": 0.0,
+   "ci_lo": 0.0,
+   "ci_hi": 0.0,
+   "n": 30
+  },
+  "dyn_std_U": {
+   "mean": 0.0,
+   "ci_lo": 0.0,
+   "ci_hi": 0.0,
+   "n": 30
+  },
+  "dyn_std_P": {
+   "mean": 0.02879974260274203,
+   "ci_lo": 0.025516195804728317,
+   "ci_hi": 0.03210081902093069,
+   "n": 30
+  },
+  "dyn_topk_differs_from_similarity": {
+   "mean": 1.0,
+   "ci_lo": 1.0,
+   "ci_hi": 1.0,
+   "n": 30
+  },
+  "dyn_kendall_tau_vs_similarity": {
+   "mean": 0.5005714285714286,
+   "ci_lo": 0.48826938775510204,
+   "ci_hi": 0.5129306122448979,
+   "n": 30
+  },
+  "dyn_neutral_changes_topk_R": {
+   "mean": 1.0,
+   "ci_lo": 1.0,
+   "ci_hi": 1.0,
+   "n": 30
+  },
+  "dyn_neutral_changes_topk_F": {
+   "mean": 0.0,
+   "ci_lo": 0.0,
+   "ci_hi": 0.0,
+   "n": 30
+  },
+  "dyn_neutral_changes_topk_U": {
+   "mean": 0.0,
+   "ci_lo": 0.0,
+   "ci_hi": 0.0,
+   "n": 30
+  },
+  "dyn_neutral_changes_topk_P": {
+   "mean": 0.4,
+   "ci_lo": 0.23333333333333334,
+   "ci_hi": 0.5666666666666667,
+   "n": 30
+  },
+  "dyn_loo_changes_topk_R": {
+   "mean": 1.0,
+   "ci_lo": 1.0,
+   "ci_hi": 1.0,
+   "n": 30
+  },
+  "dyn_loo_changes_topk_F": {
+   "mean": 0.0,
+   "ci_lo": 0.0,
+   "ci_hi": 0.0,
+   "n": 30
+  },
+  "dyn_loo_changes_topk_U": {
+   "mean": 0.0,
+   "ci_lo": 0.0,
+   "ci_hi": 0.0,
+   "n": 30
+  },
+  "dyn_loo_changes_topk_P": {
+   "mean": 0.4,
+   "ci_lo": 0.23333333333333334,
+   "ci_hi": 0.5666666666666667,
+   "n": 30
+  }
+ }
+}

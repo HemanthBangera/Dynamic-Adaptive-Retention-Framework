@@ -1,0 +1,267 @@
+{
+ "split": "dev",
+ "label": "lex_0.5",
+ "facts": 5812,
+ "dialogues": 300,
+ "base_rate": 0.4573296627666896,
+ "h4": {
+  "config": {
+   "lambda": 0.05,
+   "weights": [
+    0.2,
+    0.0,
+    0.8,
+    0.0
+   ]
+  },
+  "primary_comparators": [
+   "recency_lru",
+   "frequency_lfu"
+  ],
+  "auroc_selected": {
+   "auc": 0.8936618518746484,
+   "ci_lo": 0.8847564292669742,
+   "ci_hi": 0.9025672744823227,
+   "se": 0.004543666454036449,
+   "n_pos": 2658,
+   "n_neg": 3154
+  },
+  "auroc_default": {
+   "auc": 0.7105925782254596,
+   "ci_lo": 0.697257430922278,
+   "ci_hi": 0.7239277255286413,
+   "se": 0.006803771604155762,
+   "n_pos": 2658,
+   "n_neg": 3154
+  },
+  "comparators": {
+   "recency_lru": {
+    "auc": 0.6573852735404013,
+    "ci_lo": 0.6434596220365477,
+    "ci_hi": 0.6713109250442549,
+    "se": 0.007105054793709174,
+    "n_pos": 2658,
+    "n_neg": 3154
+   },
+   "frequency_lfu": {
+    "auc": 0.24479371686579993,
+    "ci_lo": 0.2326632547911287,
+    "ci_hi": 0.25692417894047115,
+    "se": 0.006189124989211418,
+    "n_pos": 2658,
+    "n_neg": 3154
+   },
+   "fifo": {
+    "auc": 0.8647484079122716,
+    "ci_lo": 0.855528448389445,
+    "ci_hi": 0.8739683674350982,
+    "se": 0.004704147420846754,
+    "n_pos": 2658,
+    "n_neg": 3154
+   },
+   "utility": {
+    "auc": 0.8796011538133048,
+    "ci_lo": 0.8706187344185098,
+    "ci_hi": 0.8885835732080999,
+    "se": 0.004582951250965432,
+    "n_pos": 2658,
+    "n_neg": 3154
+   },
+   "mention_count": {
+    "auc": 0.7505892048650822,
+    "ci_lo": 0.7395967696461172,
+    "ci_hi": 0.7615816400840472,
+    "se": 0.005608488373088455,
+    "n_pos": 2658,
+    "n_neg": 3154
+   }
+  },
+  "paired": {
+   "recency_lru": {
+    "auc_a": 0.8936618518746484,
+    "auc_b": 0.6573852735404013,
+    "diff": 0.2362765783342471,
+    "z": 31.725345179914527,
+    "p_value": 6.949320077089989e-221
+   },
+   "frequency_lfu": {
+    "auc_a": 0.8936618518746484,
+    "auc_b": 0.24479371686579993,
+    "diff": 0.6488681350088485,
+    "z": 85.64674954702168,
+    "p_value": 0.0
+   },
+   "fifo": {
+    "auc_a": 0.8936618518746484,
+    "auc_b": 0.8647484079122716,
+    "diff": 0.028913443962376828,
+    "z": 5.803202096715848,
+    "p_value": 6.506029458597499e-09
+   },
+   "utility": {
+    "auc_a": 0.8936618518746484,
+    "auc_b": 0.8796011538133048,
+    "diff": 0.01406069806134358,
+    "z": 9.826002818995018,
+    "p_value": 8.700373735068897e-23
+   },
+   "mention_count": {
+    "auc_a": 0.8936618518746484,
+    "auc_b": 0.7505892048650822,
+    "diff": 0.14307264700956623,
+    "z": 26.528844251176377,
+    "p_value": 4.506230160698424e-155
+   }
+  },
+  "paired_default": {
+   "auc_a": 0.8936618518746484,
+   "auc_b": 0.7105925782254596,
+   "diff": 0.1830692736491888,
+   "z": 33.42698307826893,
+   "p_value": 5.560572955524461e-245
+  }
+ },
+ "h5": {
+  "config": {
+   "lambda": 0.0005,
+   "weights": [
+    0.3,
+    0.0,
+    0.7,
+    0.0
+   ]
+  },
+  "keep": 0.5,
+  "primary_comparators": [
+   "recency_lru",
+   "fifo"
+  ],
+  "selected": {
+   "mean": 0.10156731231731232,
+   "ci_lo": 0.09088530127280127,
+   "ci_hi": 0.11292463231213233,
+   "n": 300
+  },
+  "comparators": {
+   "default": {
+    "mean": 0.3281207681207681,
+    "ci_lo": 0.31316977096977094,
+    "ci_hi": 0.34311806665556666,
+    "n": 300
+   },
+   "recency_lru": {
+    "mean": 0.38821516446516446,
+    "ci_lo": 0.37276272801272803,
+    "ci_hi": 0.4037005212380212,
+    "n": 300
+   },
+   "fifo": {
+    "mean": 0.13144553594553596,
+    "ci_lo": 0.11974626669626669,
+    "ci_hi": 0.14340681725681725,
+    "n": 300
+   },
+   "frequency_lfu": {
+    "mean": 0.7006063381063381,
+    "ci_lo": 0.6876123362748363,
+    "ci_hi": 0.7138154017279018,
+    "n": 300
+   },
+   "mention_count": {
+    "mean": 0.27699107374107373,
+    "ci_lo": 0.261848328985829,
+    "ci_hi": 0.2919796462796463,
+    "n": 300
+   }
+  },
+  "paired": {
+   "default": {
+    "diff": -0.22655345580345576,
+    "ci_lo": -0.2432588464775965,
+    "ci_hi": -0.2103276672401673,
+    "p_value": 0.0,
+    "n": 300
+   },
+   "recency_lru": {
+    "diff": -0.2866478521478521,
+    "ci_lo": -0.3039765452140452,
+    "ci_hi": -0.2695604615292114,
+    "p_value": 0.0,
+    "n": 300
+   },
+   "fifo": {
+    "diff": -0.029878223628223625,
+    "ci_lo": -0.04069229289229289,
+    "ci_hi": -0.019048483923483923,
+    "p_value": 0.0,
+    "n": 300
+   },
+   "frequency_lfu": {
+    "diff": -0.5990390257890258,
+    "ci_lo": -0.6170742116679616,
+    "ci_hi": -0.58124778994154,
+    "p_value": 0.0,
+    "n": 300
+   },
+   "mention_count": {
+    "diff": -0.17542376142376143,
+    "ci_lo": -0.1923483676046176,
+    "ci_hi": -0.15849329513079513,
+    "p_value": 0.0,
+    "n": 300
+   }
+  }
+ },
+ "provenance": {
+  "preregistration_sha256": "216510841764d187895219b94bdbe74aae205a043a46c0f5f73840de73afbe92",
+  "embedding_cache": null,
+  "created_unix": 1789149174.1468186,
+  "git": {
+   "commit": "7b26e6bdb1bb1f97aa1753f27c0694a47ad288e7",
+   "branch": "improvement",
+   "dirty": true
+  },
+  "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "processor": "Intel64 Family 6 Model 154 Stepping 3, GenuineIntel",
+  "cpu_count": 16,
+  "packages": {
+   "qdrant-client": "1.17.1",
+   "sentence-transformers": "5.4.1",
+   "transformers": "5.6.2",
+   "torch": "2.11.0",
+   "numpy": "2.3.4",
+   "openai": "3.13.0",
+   "tiktoken": "0.12.0",
+   "nltk": "3.9.4",
+   "datasets": "4.8.5",
+   "rank-bm25": "0.2.2",
+   "rouge-score": "0.1.2"
+  },
+  "hf_snapshots": {
+   "memoryagentbench": "7ea066982b140a19337e17e60d45d4076e042faf",
+   "squad_v2": "3ffb306f725f7d2ce8394bc1873b24868140c412",
+   "hotpot_qa": "1908d6afbbead072334abe2965f91bd2709910ab",
+   "alfworld": "196514ef2e1fcab9a61cd995ede36a0cbb1bc979",
+   "msc": "78b67491c43823fc169cab827ab3f82805e0235b",
+   "embedding_model": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41"
+  },
+  "dars_settings": {
+   "weights": {
+    "w_r": 0.3,
+    "w_f": 0.2,
+    "w_u": 0.3,
+    "w_p": 0.2
+   },
+   "recency_decay_lambda_per_hour": 0.005,
+   "frequency_cap": 50,
+   "threshold_retain": 0.7,
+   "threshold_compress": 0.3,
+   "grace_period_seconds": 86400.0,
+   "embedding_model": "all-MiniLM-L6-v2",
+   "goal_description": "Effective action sequences, object locations, and task completion strategies for interactive household environments",
+   "openai_reader_model": "gpt-4o-mini-2024-07-18",
+   "openai_aux_model": "gpt-4.1-nano-2025-04-14"
+  }
+ }
+}

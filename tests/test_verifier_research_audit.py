@@ -4,11 +4,13 @@ from unittest.mock import AsyncMock, Mock, patch
 
 import pytest
 
+from config.settings import DARSConfig
 from core.layer_a.gateway import CognitiveGateway
 from core.layer_a.reformulator import QueryReformulator
 from core.layer_b.engine import LearningEngine
 from core.layer_c.janitor import DecisionEngine
 from core.layer_c.triage import TriageOrchestrator
+from core.layer_d.storage import MemoryVault
 
 
 # -----------------------------------------------------------------------------
@@ -39,23 +41,20 @@ async def test_reformulator_empty_generation_falls_back_to_raw_query():
 
 @pytest.mark.asyncio
 async def test_ingest_new_facts_predictive_value_is_bounded():
-    """Layer B should keep predictive value in [0, 1] before persisting to Layer D."""
-    evaluator = Mock()
-    evaluator.evaluate_success = AsyncMock(return_value="YES")
+    """Layer B → D: a new fact's persisted predictive value stays in [0, 1],
+    even when the goal vector is exactly anti-aligned with the fact (cosine = −1)."""
+    vault = MemoryVault(collection_name="verifier_p_bound", location=":memory:")
+    vault.initialize_collection(recreate=True)
+    fact = "negative alignment fact"
+    anti_goal = [-x for x in vault.embedder.encode(fact)]
 
-    embedder = Mock()
-    embedder.encode = Mock(return_value=[[-1.0, 0.0]])
+    engine = LearningEngine(evaluator=Mock(), vault=vault, embedder=Mock())
+    with patch.object(DARSConfig, "get_goal_vector", return_value=anti_goal):
+        await engine.ingest_new_facts([fact])
 
-    vault = Mock()
-    vault.store_memory = Mock(return_value="pid-1")
-
-    engine = LearningEngine(evaluator=evaluator, vault=vault, embedder=embedder)
-
-    with patch("config.settings.DARSConfig.GOAL_VECTOR", [1.0, 0.0]):
-        await engine.ingest_new_facts(["negative alignment fact"])
-
-    _, kwargs = vault.store_memory.call_args
-    assert 0.0 <= kwargs["predictive_value"] <= 1.0
+    stored = vault.get_all_memories(limit=10)
+    assert len(stored) == 1
+    assert 0.0 <= stored[0].payload.predictive <= 1.0
 
 
 @pytest.mark.asyncio
@@ -150,8 +149,9 @@ async def test_feedback_loop_patches_all_retrieved_memories():
 
     await engine.process_feedback_loop("q", "r", memories)
 
-    assert vault.patch_payload.call_count == 2
-    for call in vault.patch_payload.call_args_list:
-        updates = call.args[1]
-        assert "frequency" in updates
-        assert "recency" in updates
+    # Every retrieved memory receives all three version-guarded Layer D updates.
+    for method in ("update_utility", "increment_frequency", "update_recency"):
+        called_ids = [c.args[0] for c in getattr(vault, method).call_args_list]
+        assert called_ids == ["m-1", "m-2"], method
+    assert all(c.args[1] is True for c in vault.update_utility.call_args_list)
+    assert vault.patch_payload.call_count == 0  # no unguarded writes on the feedback path

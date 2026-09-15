@@ -319,6 +319,7 @@ class GroupBEvaluator:
         vault: MemoryVault,
         ood_tasks: List[ProcessedTask],
         n_samples: int = 5,
+        seed: int = 42,
     ) -> float:
         """Measure if DARS ranks relevant memories above irrelevant ones
         for OOD goals.  Cooling delta > 0 = DARS suppresses noise."""
@@ -326,7 +327,7 @@ class GroupBEvaluator:
         if not all_mems or not ood_tasks:
             return 0.0
 
-        samples = random.sample(ood_tasks, min(n_samples, len(ood_tasks)))
+        samples = random.Random(seed).sample(ood_tasks, min(n_samples, len(ood_tasks)))
         deltas: List[float] = []
 
         for task in samples:

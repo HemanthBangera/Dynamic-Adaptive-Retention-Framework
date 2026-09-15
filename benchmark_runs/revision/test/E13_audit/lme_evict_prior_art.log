@@ -1,0 +1,181 @@
+INFO Loading embedding model: all-MiniLM-L6-v2 ...
+INFO No device provided, using cpu
+INFO Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 30948.73it/s]
+/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  return self._model.get_sentence_embedding_dimension()
+INFO Embedding model loaded. Dimension: 384
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+WARNING Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+[transformers] Token indices sequence length is longer than the specified maximum sequence length for this model (428 > 256). Running this sequence through the model will result in indexing errors
+INFO Loading embedding model: all-MiniLM-L6-v2 ...
+INFO No device provided, using cpu
+INFO Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 6259.52it/s]
+/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  return self._model.get_sentence_embedding_dimension()
+INFO Embedding model loaded. Dimension: 384
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+WARNING Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+[transformers] Token indices sequence length is longer than the specified maximum sequence length for this model (428 > 256). Running this sequence through the model will result in indexing errors
+INFO Loading embedding model: all-MiniLM-L6-v2 ...
+INFO No device provided, using cpu
+INFO Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 30600.18it/s]
+/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  return self._model.get_sentence_embedding_dimension()
+INFO Embedding model loaded. Dimension: 384
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+WARNING Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+[transformers] Token indices sequence length is longer than the specified maximum sequence length for this model (428 > 256). Running this sequence through the model will result in indexing errors
+INFO Loading embedding model: all-MiniLM-L6-v2 ...
+INFO No device provided, using cpu
+INFO Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+INFO Loading embedding model: all-MiniLM-L6-v2 ...
+INFO No device provided, using cpu
+INFO Loading embedding model: all-MiniLM-L6-v2 ...
+INFO No device provided, using cpu
+INFO Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]INFO Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+Loading weights: 100%|██████████| 103/103 [00:00<00:00, 16642.14it/s]
+/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  return self._model.get_sentence_embedding_dimension()
+INFO Embedding model loaded. Dimension: 384
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+WARNING Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 20001.54it/s]
+Loading weights: 100%|██████████| 103/103 [00:00<00:00, 37274.66it/s]
+/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  return self._model.get_sentence_embedding_dimension()
+INFO Embedding model loaded. Dimension: 384
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+WARNING Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  return self._model.get_sentence_embedding_dimension()
+INFO Embedding model loaded. Dimension: 384
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+WARNING Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:04:27 2026).
+[transformers] Token indices sequence length is longer than the specified maximum sequence length for this model (428 > 256). Running this sequence through the model will result in indexing errors
+[transformers] Token indices sequence length is longer than the specified maximum sequence length for this model (428 > 256). Running this sequence through the model will result in indexing errors
+[transformers] Token indices sequence length is longer than the specified maximum sequence length for this model (428 > 256). Running this sequence through the model will result in indexing errors
+/home/ubuntu/.local/share/uv/python/cpython-3.14.3-linux-x86_64-gnu/lib/python3.14/multiprocessing/resource_tracker.py:396: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown: {'/loky-21562-67bj9l5k'}
+  warnings.warn(
+/home/ubuntu/.local/share/uv/python/cpython-3.14.3-linux-x86_64-gnu/lib/python3.14/multiprocessing/resource_tracker.py:396: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown: {'/loky-21561-xh9yu0lh'}
+  warnings.warn(
+/home/ubuntu/.local/share/uv/python/cpython-3.14.3-linux-x86_64-gnu/lib/python3.14/multiprocessing/resource_tracker.py:396: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown: {'/loky-21560-jws2xlon'}
+  warnings.warn(
+/home/ubuntu/.local/share/uv/python/cpython-3.14.3-linux-x86_64-gnu/lib/python3.14/multiprocessing/resource_tracker.py:396: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown: {'/loky-21565-rdaf47m8'}
+  warnings.warn(
+/home/ubuntu/.local/share/uv/python/cpython-3.14.3-linux-x86_64-gnu/lib/python3.14/multiprocessing/resource_tracker.py:396: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown: {'/loky-21564-ljmfuvm4'}
+  warnings.warn(
+/home/ubuntu/.local/share/uv/python/cpython-3.14.3-linux-x86_64-gnu/lib/python3.14/multiprocessing/resource_tracker.py:396: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown: {'/loky-21563-ltfjykhm'}
+  warnings.warn(
+INFO Loading embedding model: all-MiniLM-L6-v2 ...
+INFO No device provided, using cpu
+INFO Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 45856.42it/s]
+INFO Loading embedding model: all-MiniLM-L6-v2 ...
+INFO No device provided, using cpu
+INFO Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+INFO Loading embedding model: all-MiniLM-L6-v2 ...
+INFO No device provided, using cpu
+INFO Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 41333.08it/s]
+/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  return self._model.get_sentence_embedding_dimension()
+INFO Embedding model loaded. Dimension: 384
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Sun Sep 13 06:43:37 2026).
+WARNING Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Sun Sep 13 06:43:37 2026).
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 5013.44it/s]
+/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  return self._model.get_sentence_embedding_dimension()
+INFO Embedding model loaded. Dimension: 384
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Sun Sep 13 06:43:37 2026).
+WARNING Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Sun Sep 13 06:43:37 2026).
+[transformers] Token indices sequence length is longer than the specified maximum sequence length for this model (428 > 256). Running this sequence through the model will result in indexing errors
+/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  return self._model.get_sentence_embedding_dimension()
+INFO Embedding model loaded. Dimension: 384
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Sun Sep 13 06:43:37 2026).
+WARNING Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Sun Sep 13 06:43:37 2026).
+INFO Loading embedding model: all-MiniLM-L6-v2 ...
+INFO No device provided, using cpu
+INFO Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+INFO Loading embedding model: all-MiniLM-L6-v2 ...
+INFO No device provided, using cpu
+[transformers] Token indices sequence length is longer than the specified maximum sequence length for this model (428 > 256). Running this sequence through the model will result in indexing errors
+INFO Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+[transformers] Token indices sequence length is longer than the specified maximum sequence length for this model (428 > 256). Running this sequence through the model will result in indexing errors
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 33471.24it/s]
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 49599.69it/s]
+/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  return self._model.get_sentence_embedding_dimension()
+INFO Embedding model loaded. Dimension: 384
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Sun Sep 13 06:43:37 2026).
+WARNING Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Sun Sep 13 06:43:37 2026).
+INFO Loading embedding model: all-MiniLM-L6-v2 ...
+INFO No device provided, using cpu
+/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  return self._model.get_sentence_embedding_dimension()
+INFO Embedding model loaded. Dimension: 384
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Sun Sep 13 06:43:37 2026).
+WARNING Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Sun Sep 13 06:43:37 2026).
+INFO Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+[transformers] Token indices sequence length is longer than the specified maximum sequence length for this model (428 > 256). Running this sequence through the model will result in indexing errors
+[transformers] Token indices sequence length is longer than the specified maximum sequence length for this model (428 > 256). Running this sequence through the model will result in indexing errors
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 34113.50it/s]
+/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  return self._model.get_sentence_embedding_dimension()
+INFO Embedding model loaded. Dimension: 384
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Sun Sep 13 06:43:37 2026).
+WARNING Found the latest cached dataset configuration 'default' at /home/ubuntu/.cache/huggingface/datasets/ai-hyz___memory_agent_bench/default/0.0.0/7ea066982b140a19337e17e60d45d4076e042faf (last modified on Sun Sep 13 06:43:37 2026).
+[transformers] Token indices sequence length is longer than the specified maximum sequence length for this model (428 > 256). Running this sequence through the model will result in indexing errors
+/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/storage.py:227: UserWarning: Payload indexes have no effect in the local Qdrant. Please use server Qdrant if you need payload indexes.
+  self.client.create_payload_index(
+INFO Embedding cache enabled at benchmark_runs/_emb_cache/minilm.sqlite (all-MiniLM-L6-v2|rev=1110a243fdf4706b3f48f1d95db1a4f5529b4d41|max_seq_length=256)
+/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/storage.py:227: UserWarning: Payload indexes have no effect in the local Qdrant. Please use server Qdrant if you need payload indexes.
+  self.client.create_payload_index(
+INFO Embedding cache enabled at benchmark_runs/_emb_cache/minilm.sqlite (all-MiniLM-L6-v2|rev=1110a243fdf4706b3f48f1d95db1a4f5529b4d41|max_seq_length=256)
+/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/storage.py:227: UserWarning: Payload indexes have no effect in the local Qdrant. Please use server Qdrant if you need payload indexes.
+  self.client.create_payload_index(
+INFO Embedding cache enabled at benchmark_runs/_emb_cache/minilm.sqlite (all-MiniLM-L6-v2|rev=1110a243fdf4706b3f48f1d95db1a4f5529b4d41|max_seq_length=256)
+/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/storage.py:227: UserWarning: Payload indexes have no effect in the local Qdrant. Please use server Qdrant if you need payload indexes.
+  self.client.create_payload_index(
+INFO Embedding cache enabled at benchmark_runs/_emb_cache/minilm.sqlite (all-MiniLM-L6-v2|rev=1110a243fdf4706b3f48f1d95db1a4f5529b4d41|max_seq_length=256)
+/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/storage.py:227: UserWarning: Payload indexes have no effect in the local Qdrant. Please use server Qdrant if you need payload indexes.
+  self.client.create_payload_index(
+INFO Embedding cache enabled at benchmark_runs/_emb_cache/minilm.sqlite (all-MiniLM-L6-v2|rev=1110a243fdf4706b3f48f1d95db1a4f5529b4d41|max_seq_length=256)
+/home/ubuntu/dars/Dynamic-Adaptive-Retention-Framework/core/layer_d/storage.py:227: UserWarning: Payload indexes have no effect in the local Qdrant. Please use server Qdrant if you need payload indexes.
+  self.client.create_payload_index(
+INFO Embedding cache enabled at benchmark_runs/_emb_cache/minilm.sqlite (all-MiniLM-L6-v2|rev=1110a243fdf4706b3f48f1d95db1a4f5529b4d41|max_seq_length=256)
+dars_blend_a0.5|oracle|test                   recall=0.6062908496732027 precedence=None precedence_rank=None reader_acc=None
+dars_blend_a0.5|oracle|test                   recall=0.5183823529411765 precedence=None precedence_rank=None reader_acc=None
+dars_blend_a0.5|oracle|test                   recall=0.6030228758169934 precedence=None precedence_rank=None reader_acc=None
+dars_blend_a0.5|oracle|test                   recall=0.5906045751633986 precedence=None precedence_rank=None reader_acc=None
+dars_blend_a0.5|oracle|test                   recall=0.5906045751633986 precedence=None precedence_rank=None reader_acc=None
+dars_blend_a0.5|oracle|test                   recall=0.4799836601307189 precedence=None precedence_rank=None reader_acc=None
+prior-art eviction finished 2026-09-13T06:54:24Z

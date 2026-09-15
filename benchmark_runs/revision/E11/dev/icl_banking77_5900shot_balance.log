@@ -1,0 +1,267 @@
+INFO Loading embedding model: all-MiniLM-L6-v2 ...
+INFO No device provided, using cpu
+INFO Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 8368.78it/s]
+C:\Users\Harsh\Desktop\minilunch\Dynamic-Adaptive-Retention-Framework\core\layer_d\embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  return self._model.get_sentence_embedding_dimension()
+INFO Embedding model loaded. Dimension: 384
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\ai-hyz___memory_agent_bench\default\0.0.0\7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 23:17:37 2026).
+WARNING Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\ai-hyz___memory_agent_bench\default\0.0.0\7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 23:17:37 2026).
+Filter:   0%|          | 0/6 [00:00<?, ? examples/s]Filter: 100%|██████████| 6/6 [00:00<00:00, 128.47 examples/s]
+INFO Embedding cache enabled at benchmark_runs/_emb_cache/minilm.sqlite (all-MiniLM-L6-v2|rev=1110a243fdf4706b3f48f1d95db1a4f5529b4d41|max_seq_length=256)
+Batches:   0%|          | 0/91 [00:00<?, ?it/s]Batches:   1%|          | 1/91 [00:01<01:53,  1.26s/it]Batches:   2%|▏         | 2/91 [00:01<01:21,  1.09it/s]Batches:   3%|▎         | 3/91 [00:02<01:09,  1.28it/s]Batches:   4%|▍         | 4/91 [00:03<01:07,  1.28it/s]Batches:   5%|▌         | 5/91 [00:04<01:06,  1.29it/s]Batches:   7%|▋         | 6/91 [00:04<01:04,  1.32it/s]Batches:   8%|▊         | 7/91 [00:05<00:54,  1.54it/s]Batches:   9%|▉         | 8/91 [00:05<00:48,  1.69it/s]Batches:  10%|▉         | 9/91 [00:06<00:43,  1.88it/s]Batches:  11%|█         | 10/91 [00:06<00:38,  2.11it/s]Batches:  12%|█▏        | 11/91 [00:06<00:36,  2.17it/s]Batches:  13%|█▎        | 12/91 [00:07<00:33,  2.36it/s]Batches:  14%|█▍        | 13/91 [00:07<00:30,  2.53it/s]Batches:  15%|█▌        | 14/91 [00:07<00:29,  2.65it/s]Batches:  16%|█▋        | 15/91 [00:08<00:27,  2.81it/s]Batches:  18%|█▊        | 16/91 [00:08<00:25,  2.92it/s]Batches:  19%|█▊        | 17/91 [00:08<00:24,  3.04it/s]Batches:  20%|█▉        | 18/91 [00:09<00:24,  2.99it/s]Batches:  21%|██        | 19/91 [00:09<00:24,  2.98it/s]Batches:  22%|██▏       | 20/91 [00:09<00:23,  2.99it/s]Batches:  23%|██▎       | 21/91 [00:10<00:24,  2.88it/s]Batches:  24%|██▍       | 22/91 [00:10<00:25,  2.69it/s]Batches:  25%|██▌       | 23/91 [00:11<00:26,  2.59it/s]Batches:  26%|██▋       | 24/91 [00:11<00:27,  2.45it/s]Batches:  27%|██▋       | 25/91 [00:11<00:26,  2.45it/s]Batches:  29%|██▊       | 26/91 [00:12<00:27,  2.36it/s]Batches:  30%|██▉       | 27/91 [00:12<00:28,  2.28it/s]Batches:  31%|███       | 28/91 [00:13<00:25,  2.48it/s]Batches:  32%|███▏      | 29/91 [00:13<00:22,  2.74it/s]Batches:  33%|███▎      | 30/91 [00:13<00:20,  2.97it/s]Batches:  34%|███▍      | 31/91 [00:13<00:18,  3.17it/s]Batches:  35%|███▌      | 32/91 [00:14<00:16,  3.48it/s]Batches:  36%|███▋      | 33/91 [00:14<00:16,  3.55it/s]Batches:  37%|███▋      | 34/91 [00:14<00:16,  3.51it/s]Batches:  38%|███▊      | 35/91 [00:15<00:16,  3.35it/s]Batches:  40%|███▉      | 36/91 [00:15<00:15,  3.53it/s]Batches:  41%|████      | 37/91 [00:15<00:15,  3.47it/s]Batches:  42%|████▏     | 38/91 [00:15<00:14,  3.71it/s]Batches:  43%|████▎     | 39/91 [00:16<00:12,  4.02it/s]Batches:  44%|████▍     | 40/91 [00:16<00:13,  3.92it/s]Batches:  45%|████▌     | 41/91 [00:16<00:12,  4.09it/s]Batches:  46%|████▌     | 42/91 [00:16<00:11,  4.19it/s]Batches:  47%|████▋     | 43/91 [00:17<00:12,  3.79it/s]Batches:  48%|████▊     | 44/91 [00:17<00:13,  3.39it/s]Batches:  49%|████▉     | 45/91 [00:17<00:14,  3.16it/s]Batches:  51%|█████     | 46/91 [00:18<00:15,  2.96it/s]Batches:  52%|█████▏    | 47/91 [00:18<00:15,  2.88it/s]Batches:  53%|█████▎    | 48/91 [00:18<00:15,  2.82it/s]Batches:  54%|█████▍    | 49/91 [00:19<00:13,  3.02it/s]Batches:  55%|█████▍    | 50/91 [00:19<00:12,  3.23it/s]Batches:  56%|█████▌    | 51/91 [00:19<00:11,  3.36it/s]Batches:  57%|█████▋    | 52/91 [00:20<00:11,  3.53it/s]Batches:  58%|█████▊    | 53/91 [00:20<00:09,  3.87it/s]Batches:  59%|█████▉    | 54/91 [00:20<00:09,  3.91it/s]Batches:  60%|██████    | 55/91 [00:20<00:09,  3.92it/s]Batches:  62%|██████▏   | 56/91 [00:20<00:08,  4.00it/s]Batches:  63%|██████▎   | 57/91 [00:21<00:08,  4.05it/s]Batches:  64%|██████▎   | 58/91 [00:21<00:07,  4.15it/s]Batches:  65%|██████▍   | 59/91 [00:21<00:07,  4.38it/s]Batches:  66%|██████▌   | 60/91 [00:21<00:06,  4.46it/s]Batches:  67%|██████▋   | 61/91 [00:22<00:06,  4.76it/s]Batches:  68%|██████▊   | 62/91 [00:22<00:06,  4.59it/s]Batches:  69%|██████▉   | 63/91 [00:22<00:06,  4.45it/s]Batches:  70%|███████   | 64/91 [00:22<00:06,  4.46it/s]Batches:  71%|███████▏  | 65/91 [00:22<00:05,  4.49it/s]Batches:  73%|███████▎  | 66/91 [00:23<00:05,  4.84it/s]Batches:  74%|███████▎  | 67/91 [00:23<00:04,  5.08it/s]Batches:  75%|███████▍  | 68/91 [00:23<00:04,  4.72it/s]Batches:  76%|███████▌  | 69/91 [00:23<00:04,  4.88it/s]Batches:  77%|███████▋  | 70/91 [00:23<00:04,  4.57it/s]Batches:  78%|███████▊  | 71/91 [00:24<00:04,  4.04it/s]Batches:  79%|███████▉  | 72/91 [00:24<00:05,  3.80it/s]Batches:  80%|████████  | 73/91 [00:24<00:05,  3.54it/s]Batches:  81%|████████▏ | 74/91 [00:25<00:04,  3.78it/s]Batches:  82%|████████▏ | 75/91 [00:25<00:03,  4.23it/s]Batches:  84%|████████▎ | 76/91 [00:25<00:03,  4.61it/s]Batches:  85%|████████▍ | 77/91 [00:25<00:02,  4.78it/s]Batches:  86%|████████▌ | 78/91 [00:25<00:02,  5.14it/s]Batches:  87%|████████▋ | 79/91 [00:26<00:02,  5.24it/s]Batches:  88%|████████▊ | 80/91 [00:26<00:01,  5.53it/s]Batches:  89%|████████▉ | 81/91 [00:26<00:01,  5.45it/s]Batches:  90%|█████████ | 82/91 [00:26<00:01,  5.35it/s]Batches:  91%|█████████ | 83/91 [00:26<00:01,  5.18it/s]Batches:  92%|█████████▏| 84/91 [00:26<00:01,  5.55it/s]Batches:  93%|█████████▎| 85/91 [00:27<00:01,  5.89it/s]Batches:  95%|█████████▍| 86/91 [00:27<00:00,  5.60it/s]Batches:  96%|█████████▌| 87/91 [00:27<00:00,  5.95it/s]Batches:  97%|█████████▋| 88/91 [00:27<00:00,  6.15it/s]Batches:  98%|█████████▊| 89/91 [00:27<00:00,  6.25it/s]Batches:  99%|█████████▉| 90/91 [00:27<00:00,  6.78it/s]Batches: 100%|██████████| 91/91 [00:27<00:00,  3.26it/s]
+C:\Users\Harsh\Desktop\minilunch\Dynamic-Adaptive-Retention-Framework\core\layer_d\storage.py:227: UserWarning: Payload indexes have no effect in the local Qdrant. Please use server Qdrant if you need payload indexes.
+  self.client.create_payload_index(
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00,  2.70it/s]Batches: 100%|██████████| 1/1 [00:00<00:00,  2.69it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.458000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 0.723000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 0.670000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 0.579000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.362000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.157000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.458000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.458000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 0.854000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.488000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.332000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.315000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.332000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.315000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.332000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.332000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.332000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.332000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 0.519000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.506000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.475000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.299000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.543000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.436000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.299000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.543000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.299000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.543000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.299000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.543000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.299000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.543000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 0.475000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.498000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.489000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.449000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.498000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.489000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.449000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.498000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.489000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.425000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.496000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.421000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.279000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.421000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.496000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.421000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.421000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.421000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.421000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.421000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 0.888000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.421000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.494000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.421000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.421000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.421000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.299000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.453000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.323000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.423000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.323000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.323000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+INFO Retrying request in 1.323000 seconds
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"

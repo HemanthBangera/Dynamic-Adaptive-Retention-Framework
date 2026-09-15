@@ -1,0 +1,330 @@
+============================= test session starts ==============================
+platform linux -- Python 3.14.3, pytest-9.0.3, pluggy-1.6.0
+rootdir: /home/ubuntu/replay_audit/dars_archive
+configfile: pyproject.toml
+testpaths: tests
+plugins: anyio-4.15.1, asyncio-1.3.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 405 items
+
+tests/test_alfworld_walkthrough_unit.py .....                            [  1%]
+tests/test_batch_run_unit.py FFF......                                   [  3%]
+tests/test_bm25_first_stage_unit.py ....                                 [  4%]
+tests/test_bug_fixes.py ...........................                      [ 11%]
+tests/test_build_archive_unit.py ......                                  [ 12%]
+tests/test_build_docx_unit.py .........                                  [ 14%]
+tests/test_clustered_auroc_unit.py .....                                 [ 16%]
+tests/test_confirm_msc_unit.py ......                                    [ 17%]
+tests/test_cross_layer.py .........                                      [ 19%]
+tests/test_dars_eval_unit.py ........................................    [ 29%]
+tests/test_e11_sources_unit.py ...                                       [ 30%]
+tests/test_efficiency_unit.py ...                                        [ 31%]
+tests/test_embedding.py .........                                        [ 33%]
+tests/test_embedding_cache.py ...                                        [ 34%]
+tests/test_evaluate_fixed_unit.py ...                                    [ 34%]
+tests/test_feedback_threshold_unit.py .........                          [ 37%]
+tests/test_full_pipeline.py .....                                        [ 38%]
+tests/test_gemini_transport_unit.py .......                              [ 40%]
+tests/test_importance_unit.py ..                                         [ 40%]
+tests/test_judge_agreement_unit.py ...                                   [ 41%]
+tests/test_judge_items_unit.py ...                                       [ 41%]
+tests/test_judge_parse_unit.py ..................                        [ 46%]
+tests/test_layer_a_gateway.py ..............                             [ 49%]
+tests/test_layer_b_learning.py ............                              [ 52%]
+tests/test_layer_c_maintenance.py ............                           [ 55%]
+tests/test_layer_d_storage.py .......................................... [ 66%]
+............                                                             [ 69%]
+tests/test_layera_unit.py .....                                          [ 70%]
+tests/test_layerc_unit.py ....                                           [ 71%]
+tests/test_llm_transport_unit.py FFFF.FFF..                              [ 73%]
+tests/test_mab_loader_filter_unit.py .                                   [ 74%]
+tests/test_make_figures_unit.py ..                                       [ 74%]
+tests/test_make_tables_unit.py ..                                        [ 75%]
+tests/test_memory_agent_bench_smoke.py ..                                [ 75%]
+tests/test_noninferiority_unit.py ....                                   [ 76%]
+tests/test_p_variants_unit.py ...                                        [ 77%]
+tests/test_rank_prefix_unit.py .......                                   [ 79%]
+tests/test_rate_limiter_unit.py ......                                   [ 80%]
+tests/test_redact_cache_unit.py ..                                       [ 80%]
+tests/test_retention_signals_unit.py ...................                 [ 85%]
+tests/test_static_baselines_unit.py ....                                 [ 86%]
+tests/test_storage_revision.py ...................                       [ 91%]
+tests/test_stream_attribution_unit.py .......                            [ 93%]
+tests/test_stream_dynamics_unit.py ..                                    [ 93%]
+tests/test_stream_evict_unit.py ......                                   [ 95%]
+tests/test_thresholds_unit.py .....                                      [ 96%]
+tests/test_transport_coalesce_unit.py FFF.                               [ 97%]
+tests/test_transport_transient_unit.py FFFFF                             [ 98%]
+tests/test_verifier_research_audit.py ......                             [100%]
+
+=================================== FAILURES ===================================
+_________ test_collect_mode_writes_the_exact_request_and_makes_no_call _________
+tests/test_batch_run_unit.py:24: in test_collect_mode_writes_the_exact_request_and_makes_no_call
+    out = await t.complete("what is 6*7?", system="Be terse.", seed=2, max_tokens=17)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+core/llm_transport.py:435: in complete
+    raise LLMCacheMiss(f"Offline mode: no cached response for request {key[:12]}")
+E   core.llm_transport.LLMCacheMiss: Offline mode: no cached response for request be2ae460486a
+------------------------------ Captured log setup ------------------------------
+WARNING  core.layer_d.storage:storage.py:196 Recreating collection: dars_test_50ebdbbc
+________________ test_collect_mode_can_be_limited_to_one_model _________________
+tests/test_batch_run_unit.py:41: in test_collect_mode_can_be_limited_to_one_model
+    assert (await reader.complete("q"))["collected"] is True
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+core/llm_transport.py:435: in complete
+    raise LLMCacheMiss(f"Offline mode: no cached response for request {key[:12]}")
+E   core.llm_transport.LLMCacheMiss: Offline mode: no cached response for request baa999cff171
+------------------------------ Captured log setup ------------------------------
+WARNING  core.layer_d.storage:storage.py:196 Recreating collection: dars_test_50ebdbbc
+______________ test_a_batched_response_is_replayed_as_a_cache_hit ______________
+tests/test_batch_run_unit.py:55: in test_a_batched_response_is_replayed_as_a_cache_hit
+    first = await t.complete("explain recall", system="Be brief.")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+core/llm_transport.py:435: in complete
+    raise LLMCacheMiss(f"Offline mode: no cached response for request {key[:12]}")
+E   core.llm_transport.LLMCacheMiss: Offline mode: no cached response for request 3f45396db273
+------------------------------ Captured log setup ------------------------------
+WARNING  core.layer_d.storage:storage.py:196 Recreating collection: dars_test_50ebdbbc
+____________________ test_cache_hit_avoids_second_api_call _____________________
+tests/test_llm_transport_unit.py:70: in test_cache_hit_avoids_second_api_call
+    first = await t.complete("What is 6*7?", system="Be terse.")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+core/llm_transport.py:435: in complete
+    raise LLMCacheMiss(f"Offline mode: no cached response for request {key[:12]}")
+E   core.llm_transport.LLMCacheMiss: Offline mode: no cached response for request 32e89a9b964f
+---------------------------- Captured stderr setup -----------------------------
+WARNING Recreating collection: dars_test_50ebdbbc
+INFO Collection created: dars_test_50ebdbbc  (dim=384, distance=Cosine)
+------------------------------ Captured log setup ------------------------------
+WARNING  core.layer_d.storage:storage.py:196 Recreating collection: dars_test_50ebdbbc
+INFO     core.layer_d.storage:storage.py:216 Collection created: dars_test_50ebdbbc  (dim=384, distance=Cosine)
+___________________ test_request_is_deterministic_by_default ___________________
+tests/test_llm_transport_unit.py:82: in test_request_is_deterministic_by_default
+    await _transport(tmp_path).complete("q")
+core/llm_transport.py:435: in complete
+    raise LLMCacheMiss(f"Offline mode: no cached response for request {key[:12]}")
+E   core.llm_transport.LLMCacheMiss: Offline mode: no cached response for request baa999cff171
+---------------------------- Captured stderr setup -----------------------------
+WARNING Recreating collection: dars_test_50ebdbbc
+INFO Collection created: dars_test_50ebdbbc  (dim=384, distance=Cosine)
+------------------------------ Captured log setup ------------------------------
+WARNING  core.layer_d.storage:storage.py:196 Recreating collection: dars_test_50ebdbbc
+INFO     core.layer_d.storage:storage.py:216 Collection created: dars_test_50ebdbbc  (dim=384, distance=Cosine)
+__________________ test_different_seeds_are_cached_separately __________________
+tests/test_llm_transport_unit.py:92: in test_different_seeds_are_cached_separately
+    await t.complete("q", seed=1)
+core/llm_transport.py:435: in complete
+    raise LLMCacheMiss(f"Offline mode: no cached response for request {key[:12]}")
+E   core.llm_transport.LLMCacheMiss: Offline mode: no cached response for request b4cc8532d1eb
+---------------------------- Captured stderr setup -----------------------------
+WARNING Recreating collection: dars_test_50ebdbbc
+INFO Collection created: dars_test_50ebdbbc  (dim=384, distance=Cosine)
+------------------------------ Captured log setup ------------------------------
+WARNING  core.layer_d.storage:storage.py:196 Recreating collection: dars_test_50ebdbbc
+INFO     core.layer_d.storage:storage.py:216 Collection created: dars_test_50ebdbbc  (dim=384, distance=Cosine)
+_____________________ test_failure_is_loud_and_not_cached ______________________
+tests/test_llm_transport_unit.py:102: in test_failure_is_loud_and_not_cached
+    await t.complete("q")
+core/llm_transport.py:435: in complete
+    raise LLMCacheMiss(f"Offline mode: no cached response for request {key[:12]}")
+E   core.llm_transport.LLMCacheMiss: Offline mode: no cached response for request baa999cff171
+
+During handling of the above exception, another exception occurred:
+tests/test_llm_transport_unit.py:101: in test_failure_is_loud_and_not_cached
+    with pytest.raises(LLMCallError, match="failed after retries"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: Regex pattern did not match.
+E     Expected regex: 'failed after retries'
+E     Actual message: 'Offline mode: no cached response for request baa999cff171'
+---------------------------- Captured stderr setup -----------------------------
+WARNING Recreating collection: dars_test_50ebdbbc
+INFO Collection created: dars_test_50ebdbbc  (dim=384, distance=Cosine)
+------------------------------ Captured log setup ------------------------------
+WARNING  core.layer_d.storage:storage.py:196 Recreating collection: dars_test_50ebdbbc
+INFO     core.layer_d.storage:storage.py:216 Collection created: dars_test_50ebdbbc  (dim=384, distance=Cosine)
+___________________________ test_missing_key_raises ____________________________
+tests/test_llm_transport_unit.py:119: in test_missing_key_raises
+    await t.complete("q")
+core/llm_transport.py:435: in complete
+    raise LLMCacheMiss(f"Offline mode: no cached response for request {key[:12]}")
+E   core.llm_transport.LLMCacheMiss: Offline mode: no cached response for request 0feff1905de1
+
+During handling of the above exception, another exception occurred:
+tests/test_llm_transport_unit.py:118: in test_missing_key_raises
+    with pytest.raises(LLMCallError, match="No OpenAI API key"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: Regex pattern did not match.
+E     Expected regex: 'No OpenAI API key'
+E     Actual message: 'Offline mode: no cached response for request 0feff1905de1'
+---------------------------- Captured stderr setup -----------------------------
+WARNING Recreating collection: dars_test_50ebdbbc
+INFO Collection created: dars_test_50ebdbbc  (dim=384, distance=Cosine)
+------------------------------ Captured log setup ------------------------------
+WARNING  core.layer_d.storage:storage.py:196 Recreating collection: dars_test_50ebdbbc
+INFO     core.layer_d.storage:storage.py:216 Collection created: dars_test_50ebdbbc  (dim=384, distance=Cosine)
+_______________________ test_key_never_in_repr_or_cache ________________________
+tests/test_llm_transport_unit.py:126: in test_key_never_in_repr_or_cache
+    await t.complete("q")
+core/llm_transport.py:435: in complete
+    raise LLMCacheMiss(f"Offline mode: no cached response for request {key[:12]}")
+E   core.llm_transport.LLMCacheMiss: Offline mode: no cached response for request baa999cff171
+---------------------------- Captured stderr setup -----------------------------
+WARNING Recreating collection: dars_test_50ebdbbc
+INFO Collection created: dars_test_50ebdbbc  (dim=384, distance=Cosine)
+------------------------------ Captured log setup ------------------------------
+WARNING  core.layer_d.storage:storage.py:196 Recreating collection: dars_test_50ebdbbc
+INFO     core.layer_d.storage:storage.py:216 Collection created: dars_test_50ebdbbc  (dim=384, distance=Cosine)
+_________________________ test_generate_text_interface _________________________
+tests/test_llm_transport_unit.py:136: in test_generate_text_interface
+    text, idx = await _transport(tmp_path).generate_text("q")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+core/llm_transport.py:541: in generate_text
+    out = await self.complete(prompt_text, system=system, seed=seed, max_tokens=max_tokens)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+core/llm_transport.py:435: in complete
+    raise LLMCacheMiss(f"Offline mode: no cached response for request {key[:12]}")
+E   core.llm_transport.LLMCacheMiss: Offline mode: no cached response for request baa999cff171
+---------------------------- Captured stderr setup -----------------------------
+WARNING Recreating collection: dars_test_50ebdbbc
+INFO Collection created: dars_test_50ebdbbc  (dim=384, distance=Cosine)
+------------------------------ Captured log setup ------------------------------
+WARNING  core.layer_d.storage:storage.py:196 Recreating collection: dars_test_50ebdbbc
+INFO     core.layer_d.storage:storage.py:216 Collection created: dars_test_50ebdbbc  (dim=384, distance=Cosine)
+______________ test_concurrent_duplicates_make_one_call_and_agree ______________
+tests/test_transport_coalesce_unit.py:60: in test_concurrent_duplicates_make_one_call_and_agree
+    results = await asyncio.gather(*(t.complete("same question") for _ in range(5)))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+core/llm_transport.py:435: in complete
+    raise LLMCacheMiss(f"Offline mode: no cached response for request {key[:12]}")
+E   core.llm_transport.LLMCacheMiss: Offline mode: no cached response for request d10aa49e7323
+---------------------------- Captured stderr setup -----------------------------
+WARNING Recreating collection: dars_test_50ebdbbc
+INFO Collection created: dars_test_50ebdbbc  (dim=384, distance=Cosine)
+------------------------------ Captured log setup ------------------------------
+WARNING  core.layer_d.storage:storage.py:196 Recreating collection: dars_test_50ebdbbc
+INFO     core.layer_d.storage:storage.py:216 Collection created: dars_test_50ebdbbc  (dim=384, distance=Cosine)
+________________ test_distinct_requests_still_run_concurrently _________________
+tests/test_transport_coalesce_unit.py:71: in test_distinct_requests_still_run_concurrently
+    results = await asyncio.gather(*(t.complete(f"q{i}") for i in range(4)))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+core/llm_transport.py:435: in complete
+    raise LLMCacheMiss(f"Offline mode: no cached response for request {key[:12]}")
+E   core.llm_transport.LLMCacheMiss: Offline mode: no cached response for request 3efedfe1333a
+---------------------------- Captured stderr setup -----------------------------
+WARNING Recreating collection: dars_test_50ebdbbc
+INFO Collection created: dars_test_50ebdbbc  (dim=384, distance=Cosine)
+------------------------------ Captured log setup ------------------------------
+WARNING  core.layer_d.storage:storage.py:196 Recreating collection: dars_test_50ebdbbc
+INFO     core.layer_d.storage:storage.py:216 Collection created: dars_test_50ebdbbc  (dim=384, distance=Cosine)
+_______________ test_a_later_duplicate_is_served_from_the_cache ________________
+tests/test_transport_coalesce_unit.py:81: in test_a_later_duplicate_is_served_from_the_cache
+    first = await t.complete("q")
+            ^^^^^^^^^^^^^^^^^^^^^
+core/llm_transport.py:435: in complete
+    raise LLMCacheMiss(f"Offline mode: no cached response for request {key[:12]}")
+E   core.llm_transport.LLMCacheMiss: Offline mode: no cached response for request baa999cff171
+---------------------------- Captured stderr setup -----------------------------
+WARNING Recreating collection: dars_test_50ebdbbc
+INFO Collection created: dars_test_50ebdbbc  (dim=384, distance=Cosine)
+------------------------------ Captured log setup ------------------------------
+WARNING  core.layer_d.storage:storage.py:196 Recreating collection: dars_test_50ebdbbc
+INFO     core.layer_d.storage:storage.py:216 Collection created: dars_test_50ebdbbc  (dim=384, distance=Cosine)
+________________ test_connection_drop_is_retried_then_succeeds _________________
+tests/test_transport_transient_unit.py:73: in test_connection_drop_is_retried_then_succeeds
+    out = await t.complete("q")
+          ^^^^^^^^^^^^^^^^^^^^^
+core/llm_transport.py:435: in complete
+    raise LLMCacheMiss(f"Offline mode: no cached response for request {key[:12]}")
+E   core.llm_transport.LLMCacheMiss: Offline mode: no cached response for request baa999cff171
+---------------------------- Captured stderr setup -----------------------------
+WARNING Recreating collection: dars_test_50ebdbbc
+INFO Collection created: dars_test_50ebdbbc  (dim=384, distance=Cosine)
+------------------------------ Captured log setup ------------------------------
+WARNING  core.layer_d.storage:storage.py:196 Recreating collection: dars_test_50ebdbbc
+INFO     core.layer_d.storage:storage.py:216 Collection created: dars_test_50ebdbbc  (dim=384, distance=Cosine)
+_________________________ test_server_error_is_retried _________________________
+tests/test_transport_transient_unit.py:83: in test_server_error_is_retried
+    assert (await t.complete("q"))["text"] == "ok"
+            ^^^^^^^^^^^^^^^^^^^^^
+core/llm_transport.py:435: in complete
+    raise LLMCacheMiss(f"Offline mode: no cached response for request {key[:12]}")
+E   core.llm_transport.LLMCacheMiss: Offline mode: no cached response for request baa999cff171
+---------------------------- Captured stderr setup -----------------------------
+WARNING Recreating collection: dars_test_50ebdbbc
+INFO Collection created: dars_test_50ebdbbc  (dim=384, distance=Cosine)
+------------------------------ Captured log setup ------------------------------
+WARNING  core.layer_d.storage:storage.py:196 Recreating collection: dars_test_50ebdbbc
+INFO     core.layer_d.storage:storage.py:216 Collection created: dars_test_50ebdbbc  (dim=384, distance=Cosine)
+_____________ test_outage_longer_than_the_budget_still_fails_loud ______________
+tests/test_transport_transient_unit.py:92: in test_outage_longer_than_the_budget_still_fails_loud
+    await t.complete("q")
+core/llm_transport.py:435: in complete
+    raise LLMCacheMiss(f"Offline mode: no cached response for request {key[:12]}")
+E   core.llm_transport.LLMCacheMiss: Offline mode: no cached response for request baa999cff171
+
+During handling of the above exception, another exception occurred:
+tests/test_transport_transient_unit.py:91: in test_outage_longer_than_the_budget_still_fails_loud
+    with pytest.raises(LLMCallError, match="APIConnectionError"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: Regex pattern did not match.
+E     Expected regex: 'APIConnectionError'
+E     Actual message: 'Offline mode: no cached response for request baa999cff171'
+---------------------------- Captured stderr setup -----------------------------
+WARNING Recreating collection: dars_test_50ebdbbc
+INFO Collection created: dars_test_50ebdbbc  (dim=384, distance=Cosine)
+------------------------------ Captured log setup ------------------------------
+WARNING  core.layer_d.storage:storage.py:196 Recreating collection: dars_test_50ebdbbc
+INFO     core.layer_d.storage:storage.py:216 Collection created: dars_test_50ebdbbc  (dim=384, distance=Cosine)
+___________________ test_a_real_error_is_still_fatal_at_once ___________________
+tests/test_transport_transient_unit.py:104: in test_a_real_error_is_still_fatal_at_once
+    assert completions.calls == 1 and t.ledger.transient_retries == 0
+E   assert (0 == 1)
+E    +  where 0 = <tests.test_transport_transient_unit.FlakyCompletions object at 0x7a0741fa3490>.calls
+---------------------------- Captured stderr setup -----------------------------
+WARNING Recreating collection: dars_test_50ebdbbc
+INFO Collection created: dars_test_50ebdbbc  (dim=384, distance=Cosine)
+------------------------------ Captured log setup ------------------------------
+WARNING  core.layer_d.storage:storage.py:196 Recreating collection: dars_test_50ebdbbc
+INFO     core.layer_d.storage:storage.py:216 Collection created: dars_test_50ebdbbc  (dim=384, distance=Cosine)
+_________________ test_retry_budget_comes_from_the_environment _________________
+tests/test_transport_transient_unit.py:115: in test_retry_budget_comes_from_the_environment
+    assert completions.calls == 2
+E   assert 0 == 2
+E    +  where 0 = <tests.test_transport_transient_unit.FlakyCompletions object at 0x7a0741fa35c0>.calls
+---------------------------- Captured stderr setup -----------------------------
+WARNING Recreating collection: dars_test_50ebdbbc
+INFO Collection created: dars_test_50ebdbbc  (dim=384, distance=Cosine)
+------------------------------ Captured log setup ------------------------------
+WARNING  core.layer_d.storage:storage.py:196 Recreating collection: dars_test_50ebdbbc
+INFO     core.layer_d.storage:storage.py:216 Collection created: dars_test_50ebdbbc  (dim=384, distance=Cosine)
+=============================== warnings summary ===============================
+tests/test_alfworld_walkthrough_unit.py::test_canonical_name_prefers_a_trailing_type_segment
+  /home/ubuntu/replay_audit/dars_archive/core/layer_d/storage.py:227: UserWarning: Payload indexes have no effect in the local Qdrant. Please use server Qdrant if you need payload indexes.
+    self.client.create_payload_index(
+
+tests/test_bm25_first_stage_unit.py::test_with_constant_lifecycle_signals_rrf_reproduces_bm25_order
+tests/test_embedding.py::TestEmbeddingEngine::test_dimension_is_384
+  /home/ubuntu/replay_audit/dars_archive/core/layer_d/embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+    return self._model.get_sentence_embedding_dimension()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_batch_run_unit.py::test_collect_mode_writes_the_exact_request_and_makes_no_call
+FAILED tests/test_batch_run_unit.py::test_collect_mode_can_be_limited_to_one_model
+FAILED tests/test_batch_run_unit.py::test_a_batched_response_is_replayed_as_a_cache_hit
+FAILED tests/test_llm_transport_unit.py::test_cache_hit_avoids_second_api_call
+FAILED tests/test_llm_transport_unit.py::test_request_is_deterministic_by_default
+FAILED tests/test_llm_transport_unit.py::test_different_seeds_are_cached_separately
+FAILED tests/test_llm_transport_unit.py::test_failure_is_loud_and_not_cached
+FAILED tests/test_llm_transport_unit.py::test_missing_key_raises - AssertionE...
+FAILED tests/test_llm_transport_unit.py::test_key_never_in_repr_or_cache - co...
+FAILED tests/test_llm_transport_unit.py::test_generate_text_interface - core....
+FAILED tests/test_transport_coalesce_unit.py::test_concurrent_duplicates_make_one_call_and_agree
+FAILED tests/test_transport_coalesce_unit.py::test_distinct_requests_still_run_concurrently
+FAILED tests/test_transport_coalesce_unit.py::test_a_later_duplicate_is_served_from_the_cache
+FAILED tests/test_transport_transient_unit.py::test_connection_drop_is_retried_then_succeeds
+FAILED tests/test_transport_transient_unit.py::test_server_error_is_retried
+FAILED tests/test_transport_transient_unit.py::test_outage_longer_than_the_budget_still_fails_loud
+FAILED tests/test_transport_transient_unit.py::test_a_real_error_is_still_fatal_at_once
+FAILED tests/test_transport_transient_unit.py::test_retry_budget_comes_from_the_environment
+============ 18 failed, 387 passed, 3 warnings in 89.03s (0:01:29) =============

@@ -1,0 +1,194 @@
+{
+ "split": "dev",
+ "h3": {
+  "config": {
+   "lambda": 0.0005,
+   "mode": "score_only",
+   "param": 0.0,
+   "weights": [
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ]
+  },
+  "tasks": 355,
+  "reachable_with_alternatives": 351,
+  "mrr": {
+   "selected": {
+    "mean": 0.5018849463293907,
+    "ci_lo": 0.4659406180239513,
+    "ci_hi": 0.5379514801042579,
+    "n": 351
+   },
+   "similarity": {
+    "mean": 0.44865823476934585,
+    "ci_lo": 0.4148858163441498,
+    "ci_hi": 0.48248280783003006,
+    "n": 351
+   },
+   "count_prior": {
+    "mean": 0.6294001266223489,
+    "ci_lo": 0.5940168679057567,
+    "ci_hi": 0.6637195032333922,
+    "n": 351
+   },
+   "default_rrf": {
+    "mean": 0.4488098321431655,
+    "ci_lo": 0.4139838864838865,
+    "ci_hi": 0.4843582369276814,
+    "n": 351
+   }
+  },
+  "paired_vs_similarity": {
+   "selected": {
+    "diff": 0.05322671156004489,
+    "ci_lo": 0.01899847580403137,
+    "ci_hi": 0.08915810783866339,
+    "p_value": 0.0032,
+    "n": 351
+   },
+   "count_prior": {
+    "diff": 0.180741891853003,
+    "ci_lo": 0.13839991798325132,
+    "ci_hi": 0.22277266971711415,
+    "p_value": 0.0,
+    "n": 351
+   },
+   "default_rrf": {
+    "diff": 0.00015159737381959556,
+    "ci_lo": -0.02458499576555131,
+    "ci_hi": 0.02512221060832172,
+    "p_value": 0.9804,
+    "n": 351
+   }
+  }
+ },
+ "h5": {
+  "config": {
+   "lambda": 0.0005,
+   "weights": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ]
+  },
+  "keep": 0.5,
+  "tasks_with_needed": 355,
+  "harmful_deletion": {
+   "selected": {
+    "mean": 0.09014084507042253,
+    "ci_lo": 0.0732394366197183,
+    "ci_hi": 0.10845070422535211,
+    "n": 355
+   },
+   "default": {
+    "mean": 0.4211267605633803,
+    "ci_lo": 0.3910798122065728,
+    "ci_hi": 0.4507042253521127,
+    "n": 355
+   },
+   "recency_lru": {
+    "mean": 0.9985915492957746,
+    "ci_lo": 0.995774647887324,
+    "ci_hi": 1.0,
+    "n": 355
+   },
+   "fifo": {
+    "mean": 0.9910798122065727,
+    "ci_lo": 0.984037558685446,
+    "ci_hi": 0.9971830985915493,
+    "n": 355
+   },
+   "frequency_lfu": {
+    "mean": 0.3413145539906103,
+    "ci_lo": 0.315962441314554,
+    "ci_hi": 0.36666666666666664,
+    "n": 355
+   }
+  },
+  "paired_vs_selected": {
+   "default": {
+    "diff": -0.33098591549295775,
+    "ci_lo": -0.3615023474178403,
+    "ci_hi": -0.3,
+    "p_value": 0.0,
+    "n": 355
+   },
+   "recency_lru": {
+    "diff": -0.9084507042253521,
+    "ci_lo": -0.9258215962441315,
+    "ci_hi": -0.8901408450704226,
+    "p_value": 0.0,
+    "n": 355
+   },
+   "fifo": {
+    "diff": -0.9009389671361502,
+    "ci_lo": -0.91924882629108,
+    "ci_hi": -0.8816901408450705,
+    "p_value": 0.0,
+    "n": 355
+   },
+   "frequency_lfu": {
+    "diff": -0.25117370892018775,
+    "ci_lo": -0.2755868544600939,
+    "ci_hi": -0.22676056338028164,
+    "p_value": 0.0,
+    "n": 355
+   }
+  }
+ },
+ "provenance": {
+  "preregistration_sha256": "216510841764d187895219b94bdbe74aae205a043a46c0f5f73840de73afbe92",
+  "embedding_cache": null,
+  "created_unix": 1789149181.5669029,
+  "git": {
+   "commit": "7b26e6bdb1bb1f97aa1753f27c0694a47ad288e7",
+   "branch": "improvement",
+   "dirty": true
+  },
+  "python": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "processor": "Intel64 Family 6 Model 154 Stepping 3, GenuineIntel",
+  "cpu_count": 16,
+  "packages": {
+   "qdrant-client": "1.17.1",
+   "sentence-transformers": "5.4.1",
+   "transformers": "5.6.2",
+   "torch": "2.11.0",
+   "numpy": "2.3.4",
+   "openai": "3.13.0",
+   "tiktoken": "0.12.0",
+   "nltk": "3.9.4",
+   "datasets": "4.8.5",
+   "rank-bm25": "0.2.2",
+   "rouge-score": "0.1.2"
+  },
+  "hf_snapshots": {
+   "memoryagentbench": "7ea066982b140a19337e17e60d45d4076e042faf",
+   "squad_v2": "3ffb306f725f7d2ce8394bc1873b24868140c412",
+   "hotpot_qa": "1908d6afbbead072334abe2965f91bd2709910ab",
+   "alfworld": "196514ef2e1fcab9a61cd995ede36a0cbb1bc979",
+   "msc": "78b67491c43823fc169cab827ab3f82805e0235b",
+   "embedding_model": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41"
+  },
+  "dars_settings": {
+   "weights": {
+    "w_r": 0.3,
+    "w_f": 0.2,
+    "w_u": 0.3,
+    "w_p": 0.2
+   },
+   "recency_decay_lambda_per_hour": 0.005,
+   "frequency_cap": 50,
+   "threshold_retain": 0.7,
+   "threshold_compress": 0.3,
+   "grace_period_seconds": 86400.0,
+   "embedding_model": "all-MiniLM-L6-v2",
+   "goal_description": "Effective action sequences, object locations, and task completion strategies for interactive household environments",
+   "openai_reader_model": "gpt-4o-mini-2024-07-18",
+   "openai_aux_model": "gpt-4.1-nano-2025-04-14"
+  }
+ }
+}

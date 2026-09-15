@@ -1,0 +1,861 @@
+INFO Loading embedding model: all-MiniLM-L6-v2 ...
+INFO No device provided, using cpu
+INFO Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 6179.30it/s]
+C:\Users\Harsh\Desktop\minilunch\Dynamic-Adaptive-Retention-Framework\core\layer_d\embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  return self._model.get_sentence_embedding_dimension()
+INFO Embedding model loaded. Dimension: 384
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\ai-hyz___memory_agent_bench\default\0.0.0\7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 23:34:27 2026).
+WARNING Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\ai-hyz___memory_agent_bench\default\0.0.0\7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 23:34:27 2026).
+[transformers] Token indices sequence length is longer than the specified maximum sequence length for this model (268 > 256). Running this sequence through the model will result in indexing errors
+C:\Users\Harsh\Desktop\minilunch\Dynamic-Adaptive-Retention-Framework\core\layer_d\storage.py:227: UserWarning: Payload indexes have no effect in the local Qdrant. Please use server Qdrant if you need payload indexes.
+  self.client.create_payload_index(
+INFO Embedding cache enabled at benchmark_runs/_emb_cache/minilm.sqlite (all-MiniLM-L6-v2|rev=1110a243fdf4706b3f48f1d95db1a4f5529b4d41|max_seq_length=256)
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+INFO E7: eventqa_65536 context 0 done
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+INFO E7: eventqa_65536 context 1 done
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m18 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m18 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m18 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m18 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m18 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m18 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m18 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m18 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m18 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m18 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m18 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m18 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+INFO E7: eventqa_65536 context 2 done
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m23 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+INFO E7: eventqa_65536 context 3 done
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m21 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m20 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m19 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO E7: eventqa_65536 context 4 done
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+WARNING Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\ai-hyz___memory_agent_bench\default\0.0.0\7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 23:34:27 2026).
+WARNING Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\ai-hyz___memory_agent_bench\default\0.0.0\7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 23:34:27 2026).
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 25.13it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 39.52it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 21.55it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 26.41it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 84.25it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 65.02it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 35.82it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 49.10it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 34.30it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 50.80it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 49.46it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 60.40it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 27.42it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 48.30it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 41.35it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 30.02it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 62.22it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 33.08it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 50.69it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 56.24it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 43.20it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 51.80it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 35.77it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 14.21it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 51.05it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 63.11it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 58.92it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 69.74it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 52.59it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|██████████| 1/1 [00:00<00:00, 65.50it/s]
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m27 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m23 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m25 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m25 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m23 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m27 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m26 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m26 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m26 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m26 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m25 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m27 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m26 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m23 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m22 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m24 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m26 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m24 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m25 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m26 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m26 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m27 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m26 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m25 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m25 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m26 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m25 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m27 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m25 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m28 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m26 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m26 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m26 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m28 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m24 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m24 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m25 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m26 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m26 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m25 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m26 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m24 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m26 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m29 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m27 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m28 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m26 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m25 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m27 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m24 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m28 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m27 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m26 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m23 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m24 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m27 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m26 due to MAX_PROMPT_CHARS limit.
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m26 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m29 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING dars_gateway_context_truncated_total: Skipped adding memory m27 due to MAX_PROMPT_CHARS limit.
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO E7: ruler_qa1_197K context 0 done
+raw|mab|best_first             acc=0.883 [0.822,0.939] recall=1.000
+raw|mab|best_last              acc=0.861 [0.806,0.917] recall=1.000
+raw|xml|best_first             acc=0.872 [0.806,0.933] recall=1.000
+raw|xml|best_last              acc=0.861 [0.800,0.917] recall=1.000
+reform|mab|best_first          acc=0.861 [0.806,0.917] recall=0.967
+reform|mab|best_last           acc=0.861 [0.789,0.928] recall=0.967
+reform|xml|best_first          acc=0.872 [0.806,0.928] recall=0.967
+reform|xml|best_last           acc=0.867 [0.789,0.939] recall=0.967
+raw|xml_capped|best_first      acc=0.867 [0.800,0.928] recall=0.967
+reform|xml_capped|best_first   acc=0.856 [0.789,0.917] recall=0.900
+reformulation (mab, best_first)          diff=-0.022 [-0.083,+0.033] p=0.594
+xml vs mab (raw, best_first)             diff=-0.011 [-0.083,+0.067] p=0.786
+best_last vs best_first (raw, mab)       diff=-0.022 [-0.083,+0.039] p=0.563
+gateway cap vs uncapped (raw, xml, best_first) diff=-0.006 [-0.033,+0.028] p=0.865
+gateway as implemented vs direct (best_first) diff=-0.028 [-0.106,+0.056] p=0.55

@@ -4,6 +4,7 @@ import logging
 from typing import TYPE_CHECKING, Optional
 
 from config.settings import DARSConfig
+from core.llm_transport import get_default_transport
 
 if TYPE_CHECKING:
     from core.gemini_transport import GovernedGeminiTransport
@@ -13,14 +14,15 @@ logger = logging.getLogger(__name__)
 
 class QueryReformulator:
     """
-    Expands underspecified queries into descriptive search vectors via Gemini API.
+    Expands underspecified queries into descriptive search vectors via an LLM
+    (an injected transport, the default OpenAI transport, or the Gemini REST API).
 
     Fail-open design: any API failure, timeout, or invalid response falls back
     to the raw user query so the pipeline never blocks.
     """
 
     def __init__(self, timeout: float = None, transport: Optional["GovernedGeminiTransport"] = None):
-        self.transport = transport
+        self.transport = transport if transport is not None else get_default_transport("aux")
         self.timeout = timeout or DARSConfig.GEMINI_TIMEOUT
         self.max_retries = DARSConfig.GEMINI_MAX_RETRIES
         self.max_expansion_chars = DARSConfig.GEMINI_MAX_EXPANSION_CHARS
@@ -80,8 +82,8 @@ class QueryReformulator:
         Transforms underspecified queries into descriptive search vectors.
         Falls back to the raw query on timeout, failure, or empty response.
         """
-        if not self.api_key:
-            logger.warning("No Gemini API key found. Falling back to raw query.")
+        if not self.api_key and self.transport is None:
+            logger.warning("No LLM credentials found. Falling back to raw query.")
             return raw_query
 
         prompt = (

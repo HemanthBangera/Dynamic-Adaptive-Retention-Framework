@@ -1,0 +1,35 @@
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 2316.14it/s]
+C:\Users\Harsh\Desktop\minilunch\Dynamic-Adaptive-Retention-Framework\core\layer_d\embedding.py:175: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  return self._model.get_sentence_embedding_dimension()
+Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+09/11/2026 18:28:49 - WARNING - datasets.load - Using the latest cached version of the dataset since ai-hyz/MemoryAgentBench couldn't be found on the Hugging Face Hub (offline mode is enabled).
+Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\ai-hyz___memory_agent_bench\default\0.0.0\7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:26:17 2026).
+09/11/2026 18:28:49 - WARNING - datasets.packaged_modules.cache.cache - Found the latest cached dataset configuration 'default' at C:\Users\Harsh\.cache\huggingface\datasets\ai-hyz___memory_agent_bench\default\0.0.0\7ea066982b140a19337e17e60d45d4076e042faf (last modified on Fri Sep 11 18:26:17 2026).
+C:\Users\Harsh\Desktop\minilunch\Dynamic-Adaptive-Retention-Framework\core\layer_d\storage.py:227: UserWarning: Payload indexes have no effect in the local Qdrant. Please use server Qdrant if you need payload indexes.
+  self.client.create_payload_index(
+== ruler_qa1_197K
+  none|dars_rrf_k15                  top10_changed=0.000  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  none|dars_rrf_k50                  top10_changed=0.000  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  none|dars_wrrf_k50_b0.5            top10_changed=0.000  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  none|dars_blend_a0.5               top10_changed=0.000  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  none|dars_blend_a0.8               top10_changed=0.000  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  as_submitted|dars_rrf_k15          top10_changed=0.090  group_recall@1024 diff=-0.067 [-0.167,+0.000]
+  as_submitted|dars_rrf_k50          top10_changed=0.200  group_recall@1024 diff=-0.067 [-0.167,+0.000]
+  as_submitted|dars_wrrf_k50_b0.5    top10_changed=0.083  group_recall@1024 diff=-0.067 [-0.167,+0.000]
+  as_submitted|dars_blend_a0.5       top10_changed=0.003  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  as_submitted|dars_blend_a0.8       top10_changed=0.000  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  task|dars_rrf_k15                  top10_changed=0.153  group_recall@1024 diff=-0.033 [-0.151,+0.067]
+  task|dars_rrf_k50                  top10_changed=0.407  group_recall@1024 diff=-0.200 [-0.367,-0.033]
+  task|dars_wrrf_k50_b0.5            top10_changed=0.183  group_recall@1024 diff=-0.033 [-0.167,+0.067]
+  task|dars_blend_a0.5               top10_changed=0.030  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  task|dars_blend_a0.8               top10_changed=0.003  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  dynamic|dars_rrf_k15               top10_changed=0.147  group_recall@1024 diff=-0.033 [-0.100,+0.000]
+  dynamic|dars_rrf_k50               top10_changed=0.323  group_recall@1024 diff=-0.067 [-0.233,+0.067]
+  dynamic|dars_wrrf_k50_b0.5         top10_changed=0.190  group_recall@1024 diff=-0.033 [-0.100,+0.000]
+  dynamic|dars_blend_a0.5            top10_changed=0.057  group_recall@1024 diff=-0.033 [-0.100,+0.000]
+  dynamic|dars_blend_a0.8            top10_changed=0.007  group_recall@1024 diff=+0.000 [+0.000,+0.000]
+  oracle|dars_rrf_k15                top10_changed=0.143  group_recall@1024 diff=+0.033 [-0.084,+0.133]
+  oracle|dars_rrf_k50                top10_changed=0.283  group_recall@1024 diff=+0.033 [-0.133,+0.167]
+  oracle|dars_wrrf_k50_b0.5          top10_changed=0.177  group_recall@1024 diff=+0.033 [-0.084,+0.133]
+  oracle|dars_blend_a0.5             top10_changed=0.047  group_recall@1024 diff=+0.000 [-0.100,+0.100]
+  oracle|dars_blend_a0.8             top10_changed=0.007  group_recall@1024 diff=+0.000 [+0.000,+0.000]

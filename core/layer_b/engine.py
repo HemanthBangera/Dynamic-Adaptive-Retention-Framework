@@ -1,7 +1,7 @@
 import asyncio
 import functools
 import logging
-from typing import List
+from typing import List, Optional
 
 from core.layer_b.evaluator import SuccessEvaluator
 from core.layer_b.calculator import ScoreCalculator
@@ -22,30 +22,57 @@ class LearningEngine:
         self.vault = vault
         self.embedder = embedder or EmbeddingEngine()
 
-    async def process_feedback_loop(self, query: str, response: str, retrieved_memories: List[dict]):
+    async def process_feedback_loop(
+        self,
+        query: str,
+        response: str,
+        retrieved_memories: List[dict],
+        current_time: Optional[float] = None,
+    ) -> str:
         """
         Triggered asynchronously after user response to judge utility and
         execute atomic DB patches using optimistic-locked operations.
+
+        Returns the judge verdict ("YES", "NO" or "NEUTRAL").
         """
         memory_texts = "\n".join([m.get("payload", {}).get("text_content", "") for m in retrieved_memories])
         judgment = await self.evaluator.evaluate_success(query, response, memory_texts)
 
         if judgment == "NEUTRAL":
             logger.info("Feedback loop received NEUTRAL evaluation. Skipping metadata patching.")
-            return
+            return judgment
 
-        success = (judgment == "YES")
+        await self.apply_feedback(
+            [m.get("id") for m in retrieved_memories],
+            success=(judgment == "YES"),
+            current_time=current_time,
+        )
+        return judgment
+
+    async def apply_feedback(
+        self,
+        point_ids: List[str],
+        success: bool,
+        current_time: Optional[float] = None,
+    ) -> None:
+        """Apply one success/failure signal to each memory (utility, frequency, recency).
+
+        Used by the judge-driven loop above and by experiments that supply the
+        feedback signal from another source (e.g. benchmark ground truth).
+        Best-effort: every memory is attempted; the first error is re-raised afterwards.
+        """
         loop = asyncio.get_running_loop()
 
         errors = []
-        for mem in retrieved_memories:
-            pid = mem.get("id")
+        for pid in point_ids:
             if not pid:
                 continue
             try:
                 await loop.run_in_executor(None, self.vault.update_utility, pid, success)
                 await loop.run_in_executor(None, self.vault.increment_frequency, pid)
-                await loop.run_in_executor(None, self.vault.update_recency, pid)
+                await loop.run_in_executor(
+                    None, functools.partial(self.vault.update_recency, pid, current_time=current_time)
+                )
                 logger.info("Atomically updated memory %s (success=%s).", pid, success)
             except Exception as e:
                 logger.warning("Failed to update memory %s: %s. Continuing loop.", pid, e)

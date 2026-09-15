@@ -142,27 +142,23 @@ configuration produced the reported numbers.
 
 ## Results
 
-MemoryAgentBench, **Accurate Retrieval** split, direct-retrieval configuration (`--path b`),
-`gemini-2.5-flash` reader, `all-MiniLM-L6-v2` embeddings.
+**The results previously shown here have been withdrawn.** They came from the originally submitted
+evaluation: 25 EventQA and 5 RulerQA1 questions, a single session, and the direct-retrieval path. The
+"token reduction" figures (80.95% and 93.93%) followed arithmetically from retrieving three
+4,096-token chunks; they did not measure efficiency, and each chunk was about 16 times longer than the
+embedder's 256-wordpiece window.
 
-| Source | n | Exact Match | Token F1 | ROUGE-L F1 | Context → retrieved | Reduction |
-|--------|---|-------------|----------|------------|---------------------|-----------|
-| EventQA-65K | 25 | 0.640 | 0.7635 | 0.7880 | 65,536 → 12,484 | 80.95% |
-| RulerQA1-197K | 5 | 0.200 | 0.3747 | 0.3489 | 202,010 → 12,266 | 93.93% |
+The revision replaces that evaluation with a pre-registered study:
+- `experiments/preregistration.md`, frozen, with its SHA-256 recorded in every run manifest;
+- the post-freeze deviations log, `experiments/deviations_post_freeze.md`;
+- a confirmatory addendum on untouched MSC data, `experiments/preregistration_addendum.md`.
 
-These two operating points characterise an accuracy–efficiency trade-off rather than a uniform
-gain: at moderate reduction the retrieved subset preserves most answer-bearing content, while at
-94% reduction the probability of retaining the exact answer span falls sharply.
+Its results are reported in the revised manuscript once it is accepted, and every number regenerates
+from `benchmarks/dars_eval/make_tables.py`.
 
-> **Two token-savings conventions appear in this repository.** The table above uses
-> $1 - \texttt{input\_len}/\texttt{context\_tokens}$, where `input_len` is the retrieved memories
-> plus the query as presented to the reader. The `token_savings_ratio` field logged in
-> `audit.jsonl` uses the retrieved memories alone, giving 81.29% and 93.95% respectively. The two
-> differ by the length of the query.
+## Scope and limitations of the originally submitted evaluation
 
-## Scope and limitations of the reported evaluation
-
-Stated plainly, because it affects how the numbers above should be read:
+These limitations explain why the numbers above were withdrawn:
 
 - **Direct-retrieval configuration.** All reported runs used `--path b`, which exercises the Memory
   Vault and its hybrid ranking. The Cognitive Gateway, Learning Engine and Maintenance Manager were
@@ -179,8 +175,9 @@ Stated plainly, because it affects how the numbers above should be read:
   the incremental contribution of each scoring term is unquantified.
 - **Goal-vector domain mismatch.** $P$ was computed against the ALFWorld preset while evaluating
   EventQA and RulerQA1, yielding small, near-constant values (mean $P \approx 0.06$ and $0.03$).
-- **One competency split.** Exploratory runs on the remaining MemoryAgentBench splits produced
-  empty reader outputs under the current answer-formatting configuration and are not reported.
+- **One competency split.** The "empty outputs" on the other MemoryAgentBench splits were reader API
+  failures (every output was the fallback string), not an answer-formatting issue. The revision re-ran
+  those competencies with a fail-loud transport.
 
 ## Tests
 
@@ -189,10 +186,16 @@ pytest tests/ -v                                    # full suite
 pytest tests/test_verifier_research_audit.py -v     # cross-layer contract tests
 ```
 
-The suite requires a reachable Qdrant instance and valid credentials in `.env`; tests will error at
-fixture setup without them. `tests/test_verifier_research_audit.py` holds six contract tests
+The suite runs locally with Qdrant's local in-memory mode and mocked or cached LLM responses. Tests
+of the LLM-backed layers are marked `requires_llm`: without a provider key they are skipped. With a
+key, they use the response cache (`benchmark_runs/_llm_cache`) and send any uncached request to the
+provider. The archived cache holds every request they make, so the whole suite passes with network
+access blocked. `tests/test_verifier_research_audit.py` holds six contract tests
 covering the A→B→C→D handoff invariants; see `docs/verifier_research_audit.md` for what each one
 checks and the three issues the suite originally exposed.
+
+These tests verify that the software behaves as specified. They are not evidence that the method is
+effective; that evidence comes from the pre-registered evaluation under `benchmarks/dars_eval/`.
 
 ## Datasets
 
